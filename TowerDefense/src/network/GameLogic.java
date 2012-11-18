@@ -15,7 +15,6 @@ public class GameLogic extends Observable {
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 	public ObjectOutputStream outputToLiasonLoop; // stream to server
 	private ObjectInputStream inputFromServerLoop; // stream from server
-	private String message;
 
 	// State of the game
 	boolean gameOver = false;
@@ -141,7 +140,7 @@ public class GameLogic extends Observable {
 			frameCounter = 0;
 			// Update message when 60 frames have passed
 			/* gui.update("This is second: "+secondCounter); */
-			sendMessage("This is second: " + secondCounter);
+			//sendMessage("This is second: " + secondCounter);
 		}
 	}
 

@@ -24,6 +24,8 @@ public class Server extends Thread {
 	// change these constants if needed
 	public static final int PORT_NUMBER = 4009;
 	public static final String HOST_NAME = "localhost";
+	public static final int SERVER_PLAYER = 1;
+	public static final int CLIENT_PLAYER = 2;
 	private ServerSocket myServerSocket; // client request source
 	private Vector<String> connectedClients;
 	private ArrayList<ObjectOutputStream> listOutputStreams = new ArrayList<ObjectOutputStream>();

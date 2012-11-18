@@ -84,6 +84,9 @@ public class GameGUI extends JFrame implements Observer{
 	private class ChatAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String input = chatBar.getText();
+			game.sendMessage(input);
+			chatBar.setText("");
 		}
 	}
 
@@ -94,7 +97,6 @@ public class GameGUI extends JFrame implements Observer{
 			JButton clickButton = (JButton) theEvent.getSource();
 			String text = clickButton.getText();
 			game.sendMessage(text);
-			System.out.println(text);
 		}
 	}
 

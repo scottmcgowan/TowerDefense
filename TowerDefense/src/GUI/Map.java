@@ -2,11 +2,15 @@ package GUI;
 
 public class Map {
 
+	public enum Tile {
+		ENVIRONMENT, START, GOAL, PATH, TOWER
+	}
+
 	private int rowCount = 12;
 	private int colCount = 16;
 	Tile[][] map = new Tile[rowCount][colCount];
 	int[][] path =  new int[rowCount][colCount];
-	
+
 	public Map() {
 		//Initialize path
 		for(int row = 0; row < path.length; row++) {
@@ -14,14 +18,14 @@ public class Map {
 				path[row][col] = 0;
 			}
 		}
-		
+
 		//Initialize Map
 		setPath(path);
 	}
-	
+
 	public void setPath(int[][] path) {
 		this.path = path;
-		
+
 		for(int row = 0; row < path.length; row++) {
 			for(int col = 0; col < path[row].length; col++) {
 				if(path[row][col] != 0) {
@@ -37,11 +41,11 @@ public class Map {
 			}
 		}
 	}
-	
+
 	public int getRow() {
 		return rowCount;
 	}
-	
+
 	public int getCol() {
 		return colCount;
 	}

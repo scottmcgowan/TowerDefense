@@ -1,11 +1,7 @@
 package GUI;
 
 public class Map {
-	
-	public enum Tile {
-		ENVIRONMENT, START, GOAL, PATH, TOWER
-	}
-	
+
 	private int rowCount = 12;
 	private int colCount = 16;
 	Tile[][] map = new Tile[rowCount][colCount];

@@ -18,7 +18,7 @@ public class GameMain extends JFrame {
 	// State of the game
 	boolean gameOver = false;
 	boolean gamePaused = false;
-	public GameGUI gui;
+	public GameGUI_DEPRECATED gui;
 	public int frameCounter = 0;
 	public int secondCounter = 0;
 	// To start and re-start the game.
@@ -31,7 +31,7 @@ public class GameMain extends JFrame {
 	}
 	
 	public void gameStart() {
-		gui =  new GameGUI();
+		gui =  new GameGUI_DEPRECATED();
 		// Create a new thread
 		Thread gameThread = new Thread() {
 			// Override run() to provide the running behavior of this thread.

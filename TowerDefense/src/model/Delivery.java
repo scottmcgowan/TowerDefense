@@ -1,6 +1,11 @@
-package network;
+package model;
 
-public class Delivery {
+import java.io.Serializable;
+
+//An entity that contains a message, the intended audience for the message, and a possible 
+//purchaseOrder that comes with.
+
+public class Delivery implements Serializable{
 	private String message;
 	private PurchaseOrder po;
 	public boolean messageForSelf;

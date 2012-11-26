@@ -8,6 +8,10 @@ import java.util.Observable;
 
 import javax.swing.JFrame;
 
+import model.Delivery;
+
+//Runs the updating logic of the game, like a game controller
+//Receives info sent from the server
 public class GameLogic extends Observable {
 
 	// main game class
@@ -19,7 +23,6 @@ public class GameLogic extends Observable {
 	// State of the game
 	boolean gameOver = false;
 	boolean gamePaused = false;
-	// public GameGUI gui;
 	public int frameCounter = 0;
 	public int secondCounter = 0;
 
@@ -36,6 +39,15 @@ public class GameLogic extends Observable {
 	public void sendMessage(String text) {
 		try {
 			outputToLiasonLoop.writeObject(text);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendDelivery(Delivery d) {
+		try {
+			outputToLiasonLoop.writeObject(d);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,8 +72,9 @@ public class GameLogic extends Observable {
 				connectToServer();
 				try {
 					while (true) {
-						String outputMessage = (String) inputFromServerLoop
+						Delivery d = (Delivery) inputFromServerLoop
 								.readObject();
+						String outputMessage = d.getMessage();
 						// Does not update if message is empty, otherwise alerts
 						// gui to update with the message.
 						if (!outputMessage.trim().equals("")) {
@@ -82,32 +95,10 @@ public class GameLogic extends Observable {
 			}
 		};
 
-		/*
-		Thread senderThread = new Thread() {
-			@Override
-			public void run() {
-				while (true) {
-					// System.out.println("Wrote some stuff");
-					if (message != null) {
-						try {
-							outputToLiasonLoop.writeObject(message);
-							message = null;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}else{
-						System.out.print("");
-					}
-				}
-			}
-		};*/
-
 		// Start the thread. start() calls run(), which in turn calls
 		// gameLoop().
 		gameThread.start();
 		clientThread.start();
-		//senderThread.start();
 	}
 
 	public void connectToServer() {
@@ -138,9 +129,6 @@ public class GameLogic extends Observable {
 		if (frameCounter == 60) {
 			secondCounter++;
 			frameCounter = 0;
-			// Update message when 60 frames have passed
-			/* gui.update("This is second: "+secondCounter); */
-			//sendMessage("This is second: " + secondCounter);
 		}
 	}
 

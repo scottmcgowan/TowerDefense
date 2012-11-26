@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 
+import model.Delivery;
+
 class Liason extends Thread {
 	private Socket socketFromServer;
 	private ObjectInputStream readFromClient;
@@ -41,11 +43,12 @@ class Liason extends Thread {
 			return;
 		}
 
-		String messageFromClient = null;
+		Delivery deliveryFromClient = null;
 		boolean stayConnected = true;
 		while (stayConnected) {
 			try {
-				messageFromClient = (String) readFromClient.readObject();
+				deliveryFromClient = (Delivery) readFromClient.readObject();
+				System.out.println("got stuff");
 			} catch (IOException e1) {
 				//Catch the closed connection exception to remove outputStream and Liason related to the client in the server.
 				server.removeLiason(getId());
@@ -54,7 +57,7 @@ class Liason extends Thread {
 				System.out.println("Error in Liason.run when trying to read from client");
 				e1.printStackTrace();
 			}
-			server.updateMessage(messageFromClient);
+			server.updateMessage(deliveryFromClient);
 
 		}
 	}

@@ -41,7 +41,7 @@ public class Map {
 			}
 		}
 	}
-
+	
 	public int getRow() {
 		return rowCount;
 	}

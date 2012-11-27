@@ -26,14 +26,13 @@ public class GameGUI extends JFrame {
 
 		// UI components
 		gameView = new JPanel();
-		gameView.setLayout(null);
-		gameView.setSize(JFRAME_WIDTH, JFRAME_HEIGHT);
+//		gameView.setLayout(new FlowLayout());
 		// Other UI components such as button, score board, if any.
 		// ......
 
 		// this.add(GameView);
 		menuView = new Menu();
-		menuView.setSize(JFRAME_WIDTH, JFRAME_WIDTH);
+		menuView.setSize(JFRAME_WIDTH, JFRAME_HEIGHT);
 
 		add(menuView);
 
@@ -50,7 +49,7 @@ public class GameGUI extends JFrame {
 			this.setLayout(null);
 
 			MenuButtons.setSize(200, 300);
-			MenuButtons.setLocation(550, 125);
+			MenuButtons.setLocation(JFRAME_WIDTH-250, JFRAME_HEIGHT-475);
 
 			JButton singlePlayer = new JButton("Single Player");
 			JButton serverPlayer = new JButton("Multiplayer (Server)");
@@ -82,6 +81,7 @@ public class GameGUI extends JFrame {
 					shop.setLocation(10, 400);
 
 					canvas = new GameCanvas();
+					canvas.setLocation(0, 0);
 					shop.connectToMap(canvas);
 
 					gameView.add(shop);
@@ -90,6 +90,9 @@ public class GameGUI extends JFrame {
 					remove(menuView);
 					remove(MenuButtons);
 					repaint();
+					
+					gameView.setLayout(null);
+					gameView.setSize(JFRAME_WIDTH, JFRAME_HEIGHT);
 					add(gameView);
 					gameView.revalidate();
 					gameView.repaint();
@@ -99,28 +102,22 @@ public class GameGUI extends JFrame {
 	}
 
 	// ------ All the game related codes here ------
-
 	// Initialize all the game objects, run only once.
 	public void gameInit() {
 	}
-
 	// Start and re-start the game.
 	public void gameStart() {
 	}
-
 	// Shutdown the game, clean up code that runs only once.
 	public void gameShutdown() {
 	}
-
 	// One step of the game.
 	public void gameUpdate() {
 	}
-
 	// Refresh the display after each step.
 	// Use (Graphics g) as argument if you are not using Java 2D.
 	public void gameDraw(Graphics2D g2d) {
 	}
-
 	// main
 	public static void main(String[] args) {
 		// Use the event dispatch thread to build the UI for thread-safety.

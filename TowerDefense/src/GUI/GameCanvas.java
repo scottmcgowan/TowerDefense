@@ -2,12 +2,16 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
@@ -30,7 +34,7 @@ class GameCanvas extends JPanel implements KeyListener {
 	// Location of each square
 	private int xTop = 0;
 	private int yTop = 0;
-
+	
 	// GUI representation of each square
 	private JPanel[][] game = new JPanel[rows][cols];
 	private GameCanvas canvas;
@@ -52,11 +56,6 @@ class GameCanvas extends JPanel implements KeyListener {
 
 		// Initialize a new path
 		int[][] path = new int[map.getRow()][map.getCol()];
-		for (int row = 0; row < path.length; row++) {
-			for (int col = 0; col < path[row].length; col++) {
-				path[row][col] = 0;
-			}
-		}
 
 		// Example path; 2 = start, 1 = path, 3 = end
 		path[5][0] = 2;
@@ -106,9 +105,10 @@ class GameCanvas extends JPanel implements KeyListener {
 		// container
 		for (int y = 0; y < map.getRow(); y++) {
 			if (y == 0) {
-			} else
+			} else {
 				yTop += gridHeight;
-			xTop = 0;
+				xTop = 0;
+			}	
 			for (int x = 0; x < map.getCol(); x++) {
 				JPanel temp = game[y][x];
 				temp.setSize(gridWidth, gridHeight);
@@ -125,7 +125,6 @@ class GameCanvas extends JPanel implements KeyListener {
 		// Locations used to identify the component
 		int locationX;
 		int locationY;
-
 		PaintSquare(int x, int y) {
 			locationX = x;
 			locationY = y;
@@ -189,6 +188,57 @@ class GameCanvas extends JPanel implements KeyListener {
 		}
 	}
 
+	// Finds the path coordinates for enemy
+	private Stack<Integer> pathTrail() {
+		Stack<Integer> trail = new Stack<Integer>(); 
+		
+		// Push start points if start tile is on the horizontal walls
+ 		for(int i = 0; i < map.map[0].length; i++) {
+			if(map.map[0][i] == Tile.START) {
+				trail.push(i*30 + 15);
+				trail.push(0);
+			}
+			if(map.map[map.map.length][i] == Tile.START) {
+				trail.push(i*30 + 15);
+				trail.push(0);
+			}
+		}
+
+		// Push start points if start tile is on the vertical walls
+		for(int j = 0; j < map.map.length; j++) {
+			if(map.map[j][0] == Tile.START) {
+				trail.push(0);
+				trail.push(j*30 + 15);
+			}
+			if(map.map[map.map.length][j] == Tile.START) {
+				trail.push(0);
+				trail.push(j*30 + 15);
+			}
+		}
+		
+		// Finds elements by traversing through the 8 squares around the current square.
+		// If the path has not been traversed, the middle coordinates will be pushed into the stack
+		Tile current = Tile.START;
+		int currentX = trail.elementAt(0);
+		int currentY = trail.elementAt(1);
+		while(current != Tile.GOAL) {
+			for (int i = currentX - 16; i <= currentX - 13; i++)
+				for (int j = currentY - 16; j <= currentY - 13; j++) {
+					if (i > -1 && i < map.map.length && j > -1 && j < map.map[0].length) {
+						if (map.map[j][i] != Tile.ENVIRONMENT && (i*30 + 15) != currentX && (j*30 + 15) != currentY) {
+							current = map.map[j][i];
+							currentX = i*30 + 15;
+							currentY = j*30 + 15;
+							trail.push(currentX);
+							trail.push(currentY);
+						}
+					}
+				}
+		}
+				
+		return trail;
+	}
+	
 	private class MouseClickListener implements MouseListener {
 
 		/**
@@ -214,19 +264,12 @@ class GameCanvas extends JPanel implements KeyListener {
 			}
 		}
 
-		@Override
 		public void mouseEntered(MouseEvent arg0) {
 		}
-
-		@Override
 		public void mouseExited(MouseEvent arg0) {
 		}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {
 		}
-
-		@Override
 		public void mouseReleased(MouseEvent arg0) {
 		}
 	}
@@ -256,22 +299,18 @@ class GameCanvas extends JPanel implements KeyListener {
 	// Process a key-released event.
 	public void gameKeyReleased(int keyCode) {
 	}
-
 	// Process a key-typed event.
 	public void gameKeyTyped(char keyChar) {
 	}
-
 	// KeyEvent handlers
 	@Override
 	public void keyPressed(KeyEvent e) {
 		gameKeyPressed(e.getKeyCode());
 	}
-
 	@Override
 	public void keyReleased(KeyEvent e) {
 		gameKeyReleased(e.getKeyCode());
 	}
-
 	@Override
 	public void keyTyped(KeyEvent e) {
 		gameKeyTyped(e.getKeyChar());

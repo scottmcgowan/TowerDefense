@@ -3,46 +3,49 @@ package GUI;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import model.MultiPlayerShop;
+
 public class ShopGUI extends JPanel{
 	GameCanvas canvas;
-
+	private ArrayList<JButton> buttons = new ArrayList<JButton>();
+	private int placement = 260;
+	
+	// GUI for the shop buttons
 	public ShopGUI() {
-		setLayout(new GridLayout(1, 5, 5, 5));
-		setSize(200, 50);
-		JButton one = new JButton("1");
-		JButton two = new JButton("2");
-		JButton three = new JButton("3");
-		JButton four = new JButton("4");
+		setLayout(new GridLayout(3, 9, 5, 5));
+		setSize(600, 100);
+		
+		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
-		one.addActionListener(new shopListener());
-		two.addActionListener(new shopListener());
-		three.addActionListener(new shopListener());
-		four.addActionListener(new shopListener());
-
-		add(one);
-		add(two);
-		add(three);
-		add(four);
+		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
+			JButton b = new JButton(i.name() + "  " + "(" + i.value + ")");
+			buttons.add(b);
+			b.addActionListener(listenerToAllButtons);
+			add(b);
+		}
+		repaint();
 	}
 
 	public void connectToMap(GameCanvas game) {
 		this.canvas = game;
 	}
+	
+	private class AllButtonListener implements ActionListener {
 
-	private class shopListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-
-			JButton button = (JButton) arg0.getSource();
-			int i = Integer.parseInt(button.getText());
-			canvas.setSelected(i);
-
+		public void actionPerformed(ActionEvent theEvent) {
+			// Determine which of the five buttons was clicked
+			JButton clickButton = (JButton) theEvent.getSource();
+			String text = clickButton.getText().substring(0, clickButton.getText().length()-7);
+			// game.sendMessage(text);
+			canvas.setSelected(text);
+			
+			if(canvas.getClicked() != null)
+				canvas.purchase();
 		}
 	}
 }

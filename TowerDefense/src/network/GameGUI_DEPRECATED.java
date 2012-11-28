@@ -13,7 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import network.Shop.Item;
+import model.MultiPlayerShop.Item;
+import model.MultiPlayerShop;
 
 public class GameGUI_DEPRECATED extends JFrame implements Observer{
 
@@ -59,7 +60,7 @@ public class GameGUI_DEPRECATED extends JFrame implements Observer{
 
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 		
-		for (Item i : Shop.Item.values()) {
+		for (Item i : MultiPlayerShop.Item.values()) {
 			JButton b = new JButton(i.name());
 			buttons.add(b);
 			b.setSize(270, 20);

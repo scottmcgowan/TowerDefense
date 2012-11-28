@@ -17,8 +17,8 @@ import javax.swing.ScrollPaneConstants;
 
 import model.Delivery;
 import model.PurchaseOrder;
-import model.Shop;
-import model.Shop.Item;
+import model.MultiPlayerShop;
+import model.MultiPlayerShop.Item;
 
 public class NetworkPanel extends JPanel implements Observer {
 
@@ -53,23 +53,6 @@ public class NetworkPanel extends JPanel implements Observer {
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane);
-
-		int placement = 260;
-
-		AllButtonListener listenerToAllButtons = new AllButtonListener();
-
-		for (Shop.Item i : Shop.Item.values()) {
-			JButton b = new JButton(i.name());
-			buttons.add(b);
-			b.setSize(270, 20);
-			b.addActionListener(listenerToAllButtons);
-			b.setLocation(30, placement);
-			add(b);
-			placement += 26;
-		}
-
-		chatBar.addActionListener(new ChatAction());
-		repaint();
 	}
 
 	private class ChatAction implements ActionListener {
@@ -82,18 +65,7 @@ public class NetworkPanel extends JPanel implements Observer {
 		}
 	}
 
-	private class AllButtonListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent theEvent) {
-			// Determine which of the five buttons was clicked
-			JButton clickButton = (JButton) theEvent.getSource();
-			String text = clickButton.getText();
-			// game.sendMessage(text);
-			interpretDelivery(new Delivery("Player " + player + " purchased "
-					+ text + ".", new PurchaseOrder(player, null), false, true,
-					player));
-		}
-	}
+	
 
 	@Override
 	public void update(Observable o, Object arg) {

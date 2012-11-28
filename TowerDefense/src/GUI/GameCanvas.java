@@ -15,6 +15,8 @@ import java.util.Stack;
 
 import javax.swing.JPanel;
 
+import model.MultiPlayerShop.Item;
+
 import GUI.Map.Tile;
 
 // Main component to display the map
@@ -39,8 +41,8 @@ class GameCanvas extends JPanel implements KeyListener {
 	private JPanel[][] game = new JPanel[rows][cols];
 	private GameCanvas canvas;
 
-	private int selected = 0;
-
+	private String selected = "";
+	private Component clicked;
 	Map map = new Map();
 
 	// Constructor
@@ -125,6 +127,7 @@ class GameCanvas extends JPanel implements KeyListener {
 		// Locations used to identify the component
 		int locationX;
 		int locationY;
+		
 		PaintSquare(int x, int y) {
 			locationX = x;
 			locationY = y;
@@ -154,36 +157,27 @@ class GameCanvas extends JPanel implements KeyListener {
 				gr.drawRect(0, 0, gridWidth, gridHeight);
 				gr.setColor(Color.RED);
 				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
-			} else if (map.map[locationX][locationY] == Tile.TOWER) {
-				if(selected == 1) {
+			} else if (map.map[locationX][locationY] == Tile.TOWER) { 
+				if(selected.equals("ICE_TOWER")) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.BLUE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
-
-				if (selected == 2) {
+				if (selected.equals("FIRE_TOWER")) {
+					gr.setColor(Color.BLACK);
+					gr.drawRect(0, 0, gridWidth, gridHeight);
+					gr.setColor(Color.ORANGE);
+					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				}
+				if (selected.equals("LIGHTNING_TOWER")) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.CYAN);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
 
-				if (selected == 3) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.MAGENTA);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
-				}
-
-				if (selected == 4) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.ORANGE);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
-				}
-
-				selected = 0;
+				selected = "";
 			}
 		}
 	}
@@ -238,9 +232,25 @@ class GameCanvas extends JPanel implements KeyListener {
 				
 		return trail;
 	}
-	
-	private class MouseClickListener implements MouseListener {
 
+	public Component getClicked() {
+		return clicked;
+	}
+	
+	// Makes sure an environment tile is clicked and then does a tower purchase
+	public void purchase() {
+		for (int i = 0; i < game.length; i++) {
+			for (int j = 0; j < game[i].length; j++) {
+				if (clicked.equals(game[i][j])) {
+					if (map.map[i][j] == Tile.ENVIRONMENT) {
+						map.map[i][j] = Tile.TOWER;
+						repaint();
+					}
+				}
+			}
+		}
+	}
+	private class MouseClickListener implements MouseListener {
 		/**
 		 * Handles the event of a mouse clicking a specific listening component.
 		 * Determines which component was clicked, and sends the appropriate
@@ -251,17 +261,7 @@ class GameCanvas extends JPanel implements KeyListener {
 		 */
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			Component clicked = arg0.getComponent();
-			for (int i = 0; i < game.length; i++) {
-				for (int j = 0; j < game[i].length; j++) {
-					if (clicked.equals(game[i][j]) && selected != 0) {
-						if (map.map[i][j] == Tile.ENVIRONMENT) {
-							map.map[i][j] = Tile.TOWER;
-							repaint();
-						}
-					}
-				}
-			}
+			clicked = arg0.getComponent();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
@@ -274,7 +274,8 @@ class GameCanvas extends JPanel implements KeyListener {
 		}
 	}
 
-	protected void setSelected(int n) {
+	// Set the type of tower to be purchased
+	protected void setSelected(String n) {
 		this.selected = n;
 	}
 

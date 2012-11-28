@@ -19,13 +19,13 @@ public class ComputerPlayer extends Player{
 		counter++;
 		switch(counter){
 			case 120:
-				gc.addOrder(new PurchaseOrder(2,Shop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
 				break;
 			case 420:
-				gc.addOrder(new PurchaseOrder(2,Shop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
 				break;
 			case 720:
-				gc.addOrder(new PurchaseOrder(2,Shop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
 				break;
 		}
 	}

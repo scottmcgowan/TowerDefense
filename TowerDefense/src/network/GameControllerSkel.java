@@ -2,7 +2,6 @@ package network;
 import javax.swing.JFrame;
 
 import GUI.GameCanvas;
-import GUI.MultiPlayerShopPanel;
 
 import model.Delivery;
 import model.PurchaseOrder;
@@ -25,9 +24,9 @@ public class GameControllerSkel {
 	private MultiPlayerShopPanel shop;
 
 	public static void main(String[] args) {
-		GameControllerSkel game = new GameControllerSkel(true);
+		GameControllerSkel game = new GameControllerSkel(Server.SERVER_PLAYER);
 		wait(1);
-		GameControllerSkel game2 = new GameControllerSkel(false);
+		GameControllerSkel game2 = new GameControllerSkel(Server.CLIENT_PLAYER);
 	}
 
 	public static void wait (int n){
@@ -39,9 +38,9 @@ public class GameControllerSkel {
         while (t1-t0<1000);
 	}
 	
-	public GameControllerSkel(boolean isServer) {
-		networkPanel = new NetworkPanel(this);
-		if(isServer==true){
+	public GameControllerSkel(int player) {
+		networkPanel = new NetworkPanel(player, this);
+		if(player==Server.SERVER_PLAYER){
 			Server server = new Server(Server.PORT_NUMBER);
 			server.start();
 			network = new Network(networkPanel, Server.SERVER_PLAYER);
@@ -52,7 +51,7 @@ public class GameControllerSkel {
 		
 		JFrame gui = new JFrame();
 		gui.setLayout(null);
-		shop = new MultiPlayerShopPanel();
+		shop = new MultiPlayerShopPanel(player, this);
 		canvas = new GameCanvas();
 		shop.connectToMap(canvas);
 		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
@@ -79,7 +78,6 @@ public class GameControllerSkel {
 	public void sendDelivery(Delivery d) {
 		network.sendDelivery(d);
 	}
-	
 	
 	public void gameStart() {
 		// gui = new GameGUI();

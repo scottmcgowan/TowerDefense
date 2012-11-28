@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-import model.MultiPlayerShop.Item;
+import network.MultiPlayerShop.Item;
 
 public class PurchaseOrder implements Serializable{
 	private int player;

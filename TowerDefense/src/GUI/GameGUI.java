@@ -5,6 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import network.MultiPlayerShopPanel;
+
 public class GameGUI extends JFrame {
 
 	// Parameters for the JPanel
@@ -77,7 +79,7 @@ public class GameGUI extends JFrame {
 
 				JButton button = (JButton) arg0.getSource();
 				if (button.getText().equals("Single Player")) {
-					shop = new MultiPlayerShopPanel();
+					//shop = new MultiPlayerShopPanel(flags, null);
 					shop.setLocation(10, 400);
 
 					canvas = new GameCanvas();

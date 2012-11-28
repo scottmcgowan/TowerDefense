@@ -15,8 +15,6 @@ import java.util.Stack;
 
 import javax.swing.JPanel;
 
-import model.MultiPlayerShop.Item;
-
 import GUI.Map.Tile;
 
 // Main component to display the map
@@ -284,7 +282,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 	}
 
 	// Set the type of tower to be purchased
-	protected void setSelected(String n) {
+	public void setSelected(String n) {
 		this.selected = n;
 	}
 

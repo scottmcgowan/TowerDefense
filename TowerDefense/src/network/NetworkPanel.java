@@ -17,41 +17,41 @@ import javax.swing.ScrollPaneConstants;
 
 import model.Delivery;
 import model.PurchaseOrder;
-import model.MultiPlayerShop;
-import model.MultiPlayerShop.Item;
 
 public class NetworkPanel extends JPanel implements Observer {
 
-	public int player;
+	private int player;
 
 	private JTextField chatBar = new JTextField("And I say hey!");
 	public JTextArea textArea = new JTextArea();
 	private JScrollPane scrollPane = new JScrollPane(textArea);
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	GameControllerSkel game;
-	public static final int PANEL_WIDTH = 200;
-	public static final int PANEL_HEIGHT = 250;
+	public static final int PANEL_WIDTH = 220;
+	public static final int PANEL_HEIGHT = 360;
 
-	public NetworkPanel(GameControllerSkel game) {
+	public NetworkPanel(int p, GameControllerSkel game) {
 		this.game = game;
+		this.player = p;
 		setLayout(null);
 		setSize(PANEL_WIDTH, PANEL_HEIGHT);
 		setVisible(true);
 
-		chatBar.setSize(200, 20);
+		chatBar.setSize(PANEL_WIDTH, 20);
 		chatBar.setLocation(0, 0);
 		chatBar.setEditable(true);
 		add(chatBar);
 
 		textArea.setLocation(0, 30);
-		textArea.setSize(200, 210);
+		textArea.setSize(PANEL_WIDTH, 320);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
-
-		scrollPane.setSize(200, 210);
+		
+		scrollPane.setSize(PANEL_WIDTH, 320);
 		scrollPane.setLocation(0, 30);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		//scrollPane.setAutoscrolls(true);
 		add(scrollPane);
 
 		int placement = 260;
@@ -93,6 +93,7 @@ public class NetworkPanel extends JPanel implements Observer {
 	public void update(Observable o, Object arg) {
 		System.out.println("updateReceived");
 		textArea.append((String) arg + "\n");
+		textArea.selectAll();
 		repaint();
 	}
 

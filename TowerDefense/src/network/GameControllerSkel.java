@@ -59,7 +59,7 @@ public class GameControllerSkel {
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
 		canvas.setLocation(20, 20);
 		networkPanel.setLocation(canvas.PANEL_WIDTH+40, 20);
-		shop.setLocation(20, canvas.PANEL_HEIGHT+40);
+		shop.setLocation(80, canvas.PANEL_HEIGHT+40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(canvas.PANEL_WIDTH+networkPanel.PANEL_WIDTH+80, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+90);

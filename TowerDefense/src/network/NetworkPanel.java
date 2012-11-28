@@ -28,7 +28,7 @@ public class NetworkPanel extends JPanel implements Observer {
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	GameControllerSkel game;
 	public static final int PANEL_WIDTH = 220;
-	public static final int PANEL_HEIGHT = 360;
+	public static final int PANEL_HEIGHT = 372;
 
 	public NetworkPanel(int p, GameControllerSkel game) {
 		this.game = game;
@@ -43,11 +43,11 @@ public class NetworkPanel extends JPanel implements Observer {
 		add(chatBar);
 
 		textArea.setLocation(0, 30);
-		textArea.setSize(PANEL_WIDTH, 320);
+		textArea.setSize(PANEL_WIDTH, 332);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
 		
-		scrollPane.setSize(PANEL_WIDTH, 320);
+		scrollPane.setSize(PANEL_WIDTH, 332);
 		scrollPane.setLocation(0, 30);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

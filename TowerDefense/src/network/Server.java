@@ -1,4 +1,5 @@
 package network;
+
 /**
  * Multi-Client Chat Program
  * Written by Zuoming Shi and Victor Nguyen, for CS335 Fall 2012.
@@ -9,6 +10,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import model.Delivery;
 
 /**
  * This server is a thread that accepts requests to connect from clients. Each
@@ -24,13 +27,17 @@ public class Server extends Thread {
 	// change these constants if needed
 	public static final int PORT_NUMBER = 4009;
 	public static final String HOST_NAME = "localhost";
+	public static final int SERVER_PLAYER = 1;
+	public static final int CLIENT_PLAYER = 2;
 	private ServerSocket myServerSocket; // client request source
 	private Vector<String> connectedClients;
 	private ArrayList<ObjectOutputStream> listOutputStreams = new ArrayList<ObjectOutputStream>();
 	private ArrayList<Liason> listLiasons = new ArrayList<Liason>();
+
 	public static void main(String args[]) {
 		Server server = new Server(PORT_NUMBER);
-		// always call the start() method on a Thread. Don't call the run method.
+		// Always call the start() method on a Thread. Don't call the run
+		// method.
 		server.start();
 	}
 
@@ -51,20 +58,24 @@ public class Server extends Thread {
 			while (true) {
 				// accept blocks until request comes over socket
 				Socket intoServer = myServerSocket.accept();
-				
+
 				// For every new connection, start a new Thread that will
 				// communicate with that client. Each one will have access
 				// to the common collection of all users who are connected.
-				Thread t = new Liason(intoServer, connectedClients, this);//, idCount);
-				//idCount++;
+				Thread t = new Liason(intoServer, connectedClients, this);// ,
+																			// idCount);
+				// idCount++;
 
-				if(intoServer == null) {continue;}
-				else {
-					if(intoServer.getOutputStream() != null)
-					listOutputStreams.add(new ObjectOutputStream(intoServer.getOutputStream()));
-					listLiasons.add((Liason)t);
-				// always call the start() method on a Thread. Don't call the run method.
-				t.start();
+				if (intoServer == null) {
+					continue;
+				} else {
+					if (intoServer.getOutputStream() != null)
+						listOutputStreams.add(new ObjectOutputStream(intoServer
+								.getOutputStream()));
+					listLiasons.add((Liason) t);
+					// always call the start() method on a Thread. Don't call
+					// the run method.
+					t.start();
 				}
 			}
 		} catch (IOException e) {
@@ -72,31 +83,52 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	//Sends message to via all avalible outputStreams to Clients.
-	public void updateMessage(String message){
-		ObjectOutputStream current;
-		for (int i = 0; i < listOutputStreams.size(); i++) {
-			try {
-				listOutputStreams.get(i).writeObject(message);				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+	// Sends message to via all avalible outputStreams to Clients.
+	public void updateMessage(Delivery d) {
+		// ObjectOutputStream current;
+		try {
+			if (d.player == SERVER_PLAYER) {
+				if (d.messageForSelf) {
+					listOutputStreams.get(0).writeObject(d);
+				}
+				if (d.messageForOther) {
+					if(listOutputStreams.size()>=2){
+					listOutputStreams.get(1).writeObject(d);}
+				}
+			} else {
+				if (d.messageForSelf) {
+					if(listOutputStreams.size()>=2){
+					listOutputStreams.get(1).writeObject(d);}
+				}
+				if (d.messageForOther) {
+					listOutputStreams.get(0).writeObject(d);
+				}
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		/*
+		 * for (int i = 0; i < listOutputStreams.size(); i++) { try {
+		 * listOutputStreams.get(i).writeObject(d); } catch (IOException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); } }
+		 */
 	}
-	
-	//Removes the Liason and the OutputStream connected to a Client upon the Client exiting.
-	public void removeLiason(long id){
-		System.out.println(id+":PassedID");
-		int i=0;
-		while(listLiasons.get(i).getId()!=id){
-			System.out.println(id+":LiasonID");
+
+	// Removes the Liason and the OutputStream connected to a Client upon the
+	// Client exiting.
+	public void removeLiason(long id) {
+		System.out.println(id + ":PassedID");
+		int i = 0;
+		while (listLiasons.get(i).getId() != id) {
+			System.out.println(id + ":LiasonID");
 			i++;
-			if(i==listLiasons.size()){return;}
+			if (i == listLiasons.size()) {
+				return;
+			}
 		}
 		listLiasons.remove(i);
 		listOutputStreams.remove(i);
-		
 	}
 }

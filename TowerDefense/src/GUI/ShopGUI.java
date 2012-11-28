@@ -13,7 +13,6 @@ import model.MultiPlayerShop;
 public class ShopGUI extends JPanel{
 	GameCanvas canvas;
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
-	private int placement = 260;
 	
 	// GUI for the shop buttons
 	public ShopGUI() {

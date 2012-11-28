@@ -2,20 +2,17 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
-import model.MultiPlayerShop.Item;
 
 import GUI.Map.Tile;
 
@@ -136,7 +133,7 @@ class GameCanvas extends JPanel implements KeyListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
-
+	
 			if (map.map[locationX][locationY] == Tile.ENVIRONMENT) {
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);

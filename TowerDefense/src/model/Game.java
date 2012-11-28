@@ -8,6 +8,8 @@ import java.util.Queue;
 /**
  * Contains primary game logic
  */
+
+// TODO: Add gameOver conditions
 public class Game {
 
 	private ArrayList<Tower> towerList;
@@ -95,6 +97,10 @@ public class Game {
 			}
 		} // end outer
 		
+		// Temp lists to keep track of enemys/projectiles to remove from the game
+		ArrayList<Projectile> tempProj = new ArrayList<Projectile>();
+		ArrayList<Enemy> tempEnemy = new ArrayList<Enemy>();
+		
 		// Check for projectile collision last
 		for (Projectile projectile : projectileList) {
 			projectile.updatePosition();
@@ -103,14 +109,19 @@ public class Game {
 				if (projectile.getBounds().intersects((Rectangle2D) enemy.getBounds())) {
 					
 					// Deal damage, remove enemy if damage kills it
-					if (enemy.wound(projectile.getDamage()))
-						enemyList.remove(enemy);
+					if (enemy.wound(projectile.getDamage())) {
+						tempEnemy.add(enemy);
+					}
 					
 					// Destroy projectile
-					projectileList.remove(projectile);
+					tempProj.add(projectile);
 				}
 			}
 		}
+		
+		// Cleanup lists
+		projectileList.removeAll(tempProj);
+		enemyList.removeAll(tempEnemy);
 		
 		// Increment frame counter for tower fireRate calculations
 		counter++;

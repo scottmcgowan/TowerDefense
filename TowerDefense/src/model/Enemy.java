@@ -30,6 +30,8 @@ public class Enemy extends Drawable {
 	
 	public Enemy(int xPos, int yPos) {
 		
+		hp = 100;
+		
 		// TODO: Magic numbers
 		int width = 30;
 		int height = 30;
@@ -46,6 +48,10 @@ public class Enemy extends Drawable {
 	
 	public Point getPosition() {
 		return pos;
+	}
+	
+	public int getHP() {
+		return hp;
 	}
 	
 	/**

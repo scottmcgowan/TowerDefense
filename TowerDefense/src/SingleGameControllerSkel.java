@@ -2,7 +2,6 @@
 import javax.swing.JFrame;
 
 import GUI.GameCanvas;
-import GUI.MultiPlayerShopPanel;
 import GUI.SinglePlayerShopPanel;
 
 public class SingleGameControllerSkel {

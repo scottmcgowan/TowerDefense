@@ -6,36 +6,19 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Observable;
 
-import javax.swing.JFrame;
-
 import model.Delivery;
 
-//Runs the updating logic of the game, like a game controller
-//Receives info sent from the server
-public class GameLogic extends Observable {
+public class Network extends Observable{
 
-	// main game class
-	static final int UPDATE_RATE = 60; // number of game update per second
-	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 	public ObjectOutputStream outputToLiasonLoop; // stream to server
 	private ObjectInputStream inputFromServerLoop; // stream from server
-
-	// State of the game
-	boolean gameOver = false;
-	boolean gamePaused = false;
-	public int frameCounter = 0;
-	public int secondCounter = 0;
-
-	// To start and re-start the game.
-	/*
-	public static void main(String[] args) {
-		GameLogic game = new GameLogic();
-	}*/
-
-	public GameLogic() {
-		gameStart();
+	public int player;
+	
+	public Network(NetworkPanel np, int player){
+		addObserver(np);
+		openForConnection();
 	}
-
+	
 	public void sendMessage(String text) {
 		try {
 			outputToLiasonLoop.writeObject(text);
@@ -44,9 +27,11 @@ public class GameLogic extends Observable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sendDelivery(Delivery d) {
 		try {
+			if(d==null){
+			System.out.print("failed!");}
 			outputToLiasonLoop.writeObject(d);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -54,17 +39,7 @@ public class GameLogic extends Observable {
 		}
 	}
 
-	public void gameStart() {
-		// gui = new GameGUI();
-		// Create a new thread
-		Thread gameThread = new Thread() {
-			// Override run() to provide the running behavior of this thread.
-			@Override
-			public void run() {
-				gameLoop();
-			}
-		};
-
+	public void openForConnection() {
 		Thread clientThread = new Thread() {
 			// Override run() to provide the running behavior of this thread.
 			@Override
@@ -95,9 +70,6 @@ public class GameLogic extends Observable {
 			}
 		};
 
-		// Start the thread. start() calls run(), which in turn calls
-		// gameLoop().
-		gameThread.start();
 		clientThread.start();
 	}
 
@@ -117,51 +89,6 @@ public class GameLogic extends Observable {
 			System.out
 					.println("Unable to obtain Input & Output streams from Socket");
 			e.printStackTrace();
-		}
-	}
-
-	public void gameUpdate() {
-		frameCounter++;
-		if (frameCounter % 5 == 0 && frameCounter < 30) {
-			// gui.textArea.append(frameCounter+"\n");
-			// gui.repaint();
-		}
-		if (frameCounter == 60) {
-			secondCounter++;
-			frameCounter = 0;
-		}
-	}
-
-	// Run the game loop here.
-	private void gameLoop() {
-		// Regenerate the game objects for a new game
-		// ......
-
-		// Game loop
-		long beginTime, timeTaken, timeLeft;
-		while (true) {
-			beginTime = System.nanoTime();
-			if (gameOver)
-				break; // break the loop to finish the current play
-			if (!gamePaused) {
-				// Update the state and position of all the game objects,
-				// detect collisions and provide responses.
-				gameUpdate();
-			}
-			// Refresh the display
-
-			// Delay timer to provide the necessary delay to meet the target
-			// rate
-			timeTaken = System.nanoTime() - beginTime;
-			timeLeft = (UPDATE_PERIOD - timeTaken) / 1000000; // in milliseconds
-			if (timeLeft < 10)
-				timeLeft = 10; // set a minimum
-			try {
-				// Provides the necessary delay and also yields control so that
-				// other thread can do work.
-				Thread.sleep(timeLeft);
-			} catch (InterruptedException ex) {
-			}
 		}
 	}
 }

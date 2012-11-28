@@ -1,9 +1,10 @@
 package network;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class ServerPlayer {
-	
+	/*
 	public static void main(String args[]) {
 		Server server = new Server(Server.PORT_NUMBER);
 		server.start();
@@ -15,5 +16,12 @@ public class ServerPlayer {
 		gui.setVisible(true);
 		gui.add(np);
 	}
+
+	public ServerPlayer(){
+	}
+	
+	public JPanel getNetworkPanel(){
+		return new NetworkPanel(Server.SERVER_PLAYER);
+	}*/
 	
 }

@@ -1,5 +1,11 @@
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import GUI.GameCanvas;
 import GUI.SinglePlayerShopPanel;
@@ -18,6 +24,7 @@ public class SingleGameControllerSkel {
 	//public GameCanvas gameCanvas;
 	private GameCanvas canvas;
 	private SinglePlayerShopPanel shop;
+	private JFrame gui = new JFrame();
 
 	public static void main(String[] args) {
 		SingleGameControllerSkel game = new SingleGameControllerSkel();
@@ -34,7 +41,6 @@ public class SingleGameControllerSkel {
 	
 	public SingleGameControllerSkel() {
 		
-		JFrame gui = new JFrame();
 		gui.setLayout(null);
 		shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas();
@@ -45,14 +51,41 @@ public class SingleGameControllerSkel {
 		shop.setLocation(20, canvas.PANEL_HEIGHT+40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(shop.PANEL_WIDTH+50, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+90);
+		gui.setSize(shop.PANEL_WIDTH+50, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+110);
 		gui.setVisible(true);
 		gui.add(shop);
 		gui.add(canvas);
 		
+		JMenuBar menubar = new JMenuBar();
+		gui.setJMenuBar(menubar);
+		
+		JMenu fileMenu = new JMenu("File");
+		menubar.add(fileMenu);
+		
+		JMenuItem newGame = new JMenuItem("New Game");
+		JMenuItem exit = new JMenuItem("Exit");
+		fileMenu.add(newGame);
+		fileMenu.addSeparator();
+		fileMenu.add(exit);
+		newGame.addActionListener(new allMenuAction());
+		exit.addActionListener(new allMenuAction());
+		
+		gui.repaint();
+		
 		gameStart();
 	}
 	
+	private class allMenuAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			JMenuItem menuItem = (JMenuItem) arg0.getSource();
+			if (menuItem.getText() == "New Game") {
+			}
+			else {
+				gui.dispose();
+			}
+		}
+	}
 	public void gameStart() {
 		// gui = new GameGUI();
 		// Create a new thread

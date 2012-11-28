@@ -15,7 +15,7 @@ public class GameGUI extends JFrame {
 	private JPanel gameView;
 	private JPanel menuView;
 	private GameCanvas canvas;
-	private ShopGUI shop;
+	private MultiPlayerShopPanel shop;
 
 	// Constructor to initialize the UI components and game objects
 	public GameGUI() {
@@ -77,7 +77,7 @@ public class GameGUI extends JFrame {
 
 				JButton button = (JButton) arg0.getSource();
 				if (button.getText().equals("Single Player")) {
-					shop = new ShopGUI();
+					shop = new MultiPlayerShopPanel();
 					shop.setLocation(10, 400);
 
 					canvas = new GameCanvas();

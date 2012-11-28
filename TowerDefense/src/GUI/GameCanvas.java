@@ -2,38 +2,41 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Stack;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import model.MultiPlayerShop.Item;
 
 import GUI.Map.Tile;
 
 // Main component to display the map
-class GameCanvas extends JPanel implements KeyListener {
+public class GameCanvas extends JPanel implements KeyListener {
 	// Parameters for the game screen
-	private static final int GAME_WIDTH = 360;
-	private static final int GAME_HEIGHT = 480;
+	public static final int PANEL_WIDTH = 480;
+	public static final int PANEL_HEIGHT = 360;
 
 	// Parameters of the game grid
 	private int rows = 12;
 	private int cols = 16;
 
 	// Size of each square on grid
-	private int gridWidth = GAME_WIDTH / rows;	//30x30
-	private int gridHeight = GAME_HEIGHT / cols; //30x30
+	private int gridWidth = PANEL_WIDTH / cols; // 30x30
+	private int gridHeight = PANEL_HEIGHT / rows; // 30x30
 
 	// Location of each square
 	private int xTop = 0;
 	private int yTop = 0;
-	
+
 	// GUI representation of each square
 	private JPanel[][] game = new JPanel[rows][cols];
 	private GameCanvas canvas;
@@ -47,8 +50,8 @@ class GameCanvas extends JPanel implements KeyListener {
 		setFocusable(true); // so that can receive key-events
 		requestFocus();
 		addKeyListener(this);
-		setSize(GAME_HEIGHT, GAME_WIDTH);
-		setLocation(0,0);
+		setSize(PANEL_WIDTH, PANEL_HEIGHT);
+		// setLocation(0,0);
 		setLayout(null);
 
 		setBackground(Color.WHITE);
@@ -107,7 +110,7 @@ class GameCanvas extends JPanel implements KeyListener {
 			} else {
 				yTop += gridHeight;
 				xTop = 0;
-			}	
+			}
 			for (int x = 0; x < map.getCol(); x++) {
 				JPanel temp = game[y][x];
 				temp.setSize(gridWidth, gridHeight);
@@ -124,7 +127,7 @@ class GameCanvas extends JPanel implements KeyListener {
 		// Locations used to identify the component
 		int locationX;
 		int locationY;
-		
+
 		PaintSquare(int x, int y) {
 			locationX = x;
 			locationY = y;
@@ -133,7 +136,7 @@ class GameCanvas extends JPanel implements KeyListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
-	
+
 			if (map.map[locationX][locationY] == Tile.ENVIRONMENT) {
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);
@@ -154,8 +157,8 @@ class GameCanvas extends JPanel implements KeyListener {
 				gr.drawRect(0, 0, gridWidth, gridHeight);
 				gr.setColor(Color.RED);
 				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
-			} else if (map.map[locationX][locationY] == Tile.TOWER) { 
-				if(selected.equals("ICE_TOWER")) {
+			} else if (map.map[locationX][locationY] == Tile.TOWER) {
+				if (selected.equals("ICE_TOWER")) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.BLUE);
@@ -181,59 +184,64 @@ class GameCanvas extends JPanel implements KeyListener {
 
 	// Finds the path coordinates for enemy
 	private Stack<Integer> pathTrail() {
-		Stack<Integer> trail = new Stack<Integer>(); 
-		
+		Stack<Integer> trail = new Stack<Integer>();
+
 		// Push start points if start tile is on the horizontal walls
- 		for(int i = 0; i < map.map[0].length; i++) {
-			if(map.map[0][i] == Tile.START) {
-				trail.push(i*30 + 15);
+		for (int i = 0; i < map.map[0].length; i++) {
+			if (map.map[0][i] == Tile.START) {
+				trail.push(i * 30 + 15);
 				trail.push(0);
 			}
-			if(map.map[map.map.length][i] == Tile.START) {
-				trail.push(i*30 + 15);
+			if (map.map[map.map.length][i] == Tile.START) {
+				trail.push(i * 30 + 15);
 				trail.push(0);
 			}
 		}
 
 		// Push start points if start tile is on the vertical walls
-		for(int j = 0; j < map.map.length; j++) {
-			if(map.map[j][0] == Tile.START) {
+		for (int j = 0; j < map.map.length; j++) {
+			if (map.map[j][0] == Tile.START) {
 				trail.push(0);
-				trail.push(j*30 + 15);
+				trail.push(j * 30 + 15);
 			}
-			if(map.map[map.map.length][j] == Tile.START) {
+			if (map.map[map.map.length][j] == Tile.START) {
 				trail.push(0);
-				trail.push(j*30 + 15);
+				trail.push(j * 30 + 15);
 			}
 		}
-		
-		// Finds elements by traversing through the 8 squares around the current square.
-		// If the path has not been traversed, the middle coordinates will be pushed into the stack
+
+		// Finds elements by traversing through the 8 squares around the current
+		// square.
+		// If the path has not been traversed, the middle coordinates will be
+		// pushed into the stack
 		Tile current = Tile.START;
 		int currentX = trail.elementAt(0);
 		int currentY = trail.elementAt(1);
-		while(current != Tile.GOAL) {
+		while (current != Tile.GOAL) {
 			for (int i = currentX - 16; i <= currentX - 13; i++)
 				for (int j = currentY - 16; j <= currentY - 13; j++) {
-					if (i > -1 && i < map.map.length && j > -1 && j < map.map[0].length) {
-						if (map.map[j][i] != Tile.ENVIRONMENT && (i*30 + 15) != currentX && (j*30 + 15) != currentY) {
+					if (i > -1 && i < map.map.length && j > -1
+							&& j < map.map[0].length) {
+						if (map.map[j][i] != Tile.ENVIRONMENT
+								&& (i * 30 + 15) != currentX
+								&& (j * 30 + 15) != currentY) {
 							current = map.map[j][i];
-							currentX = i*30 + 15;
-							currentY = j*30 + 15;
+							currentX = i * 30 + 15;
+							currentY = j * 30 + 15;
 							trail.push(currentX);
 							trail.push(currentY);
 						}
 					}
 				}
 		}
-				
+
 		return trail;
 	}
 
 	public Component getClicked() {
 		return clicked;
 	}
-	
+
 	// Makes sure an environment tile is clicked and then does a tower purchase
 	public void purchase() {
 		for (int i = 0; i < game.length; i++) {
@@ -247,6 +255,7 @@ class GameCanvas extends JPanel implements KeyListener {
 			}
 		}
 	}
+
 	private class MouseClickListener implements MouseListener {
 		/**
 		 * Handles the event of a mouse clicking a specific listening component.
@@ -263,10 +272,13 @@ class GameCanvas extends JPanel implements KeyListener {
 
 		public void mouseEntered(MouseEvent arg0) {
 		}
+
 		public void mouseExited(MouseEvent arg0) {
 		}
+
 		public void mousePressed(MouseEvent arg0) {
 		}
+
 		public void mouseReleased(MouseEvent arg0) {
 		}
 	}
@@ -297,18 +309,22 @@ class GameCanvas extends JPanel implements KeyListener {
 	// Process a key-released event.
 	public void gameKeyReleased(int keyCode) {
 	}
+
 	// Process a key-typed event.
 	public void gameKeyTyped(char keyChar) {
 	}
+
 	// KeyEvent handlers
 	@Override
 	public void keyPressed(KeyEvent e) {
 		gameKeyPressed(e.getKeyCode());
 	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		gameKeyReleased(e.getKeyCode());
 	}
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		gameKeyTyped(e.getKeyChar());

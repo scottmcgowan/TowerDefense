@@ -7,14 +7,17 @@ import java.net.Socket;
 import java.util.Observable;
 
 import model.Delivery;
+import model.GameControllerInterface;
 
 public class Network extends Observable{
 
 	public ObjectOutputStream outputToLiasonLoop; // stream to server
 	private ObjectInputStream inputFromServerLoop; // stream from server
 	public int player;
+	private GameControllerInterface game;
 	
-	public Network(NetworkPanel np, int player){
+	public Network(NetworkPanel np, int player, GameControllerInterface gc){
+		game = gc;
 		addObserver(np);
 		openForConnection();
 	}
@@ -56,6 +59,7 @@ public class Network extends Observable{
 							// gui.update(outputMessage);
 							setChanged();
 							notifyObservers(outputMessage);
+							game.addOrder(d.getOrder());
 							System.out.println(outputMessage);
 						}
 					}

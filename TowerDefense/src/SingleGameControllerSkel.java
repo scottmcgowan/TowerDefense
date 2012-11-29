@@ -1,19 +1,24 @@
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import model.Delivery;
+import model.Drawable;
+import model.GameControllerInterface;
+import model.PurchaseOrder;
+
 import GUI.GameCanvas;
 import GUI.SinglePlayerShopPanel;
 
-public class SingleGameControllerSkel {
+public class SingleGameControllerSkel implements GameControllerInterface {
 
 	// main game class
-	static final int UPDATE_RATE = 60; // number of game update per second
+	static final int UPDATE_RATE = 60; // number of game updates per second
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
@@ -21,26 +26,24 @@ public class SingleGameControllerSkel {
 	boolean gamePaused = false;
 	public int frameCounter = 0;
 	public int secondCounter = 0;
-	//public GameCanvas gameCanvas;
+	// public GameCanvas gameCanvas;
 	private GameCanvas canvas;
 	private SinglePlayerShopPanel shop;
 	private JFrame gui = new JFrame();
 
 	public static void main(String[] args) {
 		SingleGameControllerSkel game = new SingleGameControllerSkel();
-		}
-
-	public static void wait (int n){
-        long t0,t1;
-        t0=System.currentTimeMillis();
-        do{
-            t1=System.currentTimeMillis();
-        }
-        while (t1-t0<1000);
 	}
-	
+
+	public static void wait(int n) {
+		long t0, t1;
+		t0 = System.currentTimeMillis();
+		do {
+			t1 = System.currentTimeMillis();
+		} while ((t1 - t0) < 1000);
+	}
+
 	public SingleGameControllerSkel() {
-		
 		gui.setLayout(null);
 		shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas();
@@ -48,20 +51,20 @@ public class SingleGameControllerSkel {
 		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
 		canvas.setLocation(70, 20);
-		shop.setLocation(20, canvas.PANEL_HEIGHT+40);
+		shop.setLocation(20, canvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(shop.PANEL_WIDTH+50, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+110);
+		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 110);
 		gui.setVisible(true);
 		gui.add(shop);
 		gui.add(canvas);
-		
+
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
-		
+
 		JMenu fileMenu = new JMenu("File");
 		menubar.add(fileMenu);
-		
+
 		JMenuItem newGame = new JMenuItem("New Game");
 		JMenuItem exit = new JMenuItem("Exit");
 		fileMenu.add(newGame);
@@ -69,23 +72,23 @@ public class SingleGameControllerSkel {
 		fileMenu.add(exit);
 		newGame.addActionListener(new allMenuAction());
 		exit.addActionListener(new allMenuAction());
-		
+
 		gui.repaint();
-		
+
 		gameStart();
 	}
-	
+
 	private class allMenuAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			JMenuItem menuItem = (JMenuItem) arg0.getSource();
 			if (menuItem.getText() == "New Game") {
+				SingleGameControllerSkel newGame = new SingleGameControllerSkel(); // Is this even acceptable...?
 			}
-			else {
-				gui.dispose();
-			}
+			gui.dispose();
 		}
 	}
+
 	public void gameStart() {
 		// gui = new GameGUI();
 		// Create a new thread
@@ -102,11 +105,12 @@ public class SingleGameControllerSkel {
 	}
 
 	public void gameUpdate() {
-		//get some gameLogic in here!
+		// get some gameLogic in here!
 	}
 
+	@Override
 	// Run the game loop here.
-	private void gameLoop() {
+	public void gameLoop() {
 		// Regenerate the game objects for a new game
 		// ......
 
@@ -136,5 +140,28 @@ public class SingleGameControllerSkel {
 			} catch (InterruptedException ex) {
 			}
 		}
+	}
+
+	@Override
+	public void sendDelivery(Delivery d) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addOrder(PurchaseOrder po) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void draw(ArrayList<Drawable> arr) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void processOrders() {
+		// TODO Auto-generated method stub
+		
 	}
 }

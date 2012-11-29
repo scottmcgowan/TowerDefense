@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import model.Delivery;
+import model.GameControllerInterface;
 import model.PurchaseOrder;
 
 public class NetworkPanel extends JPanel implements Observer {
@@ -26,11 +27,11 @@ public class NetworkPanel extends JPanel implements Observer {
 	public JTextArea textArea = new JTextArea();
 	private JScrollPane scrollPane = new JScrollPane(textArea);
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
-	GameControllerSkel game;
+	private GameControllerInterface game;
 	public static final int PANEL_WIDTH = 220;
 	public static final int PANEL_HEIGHT = 372;
 
-	public NetworkPanel(int p, GameControllerSkel game) {
+	public NetworkPanel(int p, GameControllerInterface game) {
 		this.game = game;
 		this.player = p;
 		setLayout(null);

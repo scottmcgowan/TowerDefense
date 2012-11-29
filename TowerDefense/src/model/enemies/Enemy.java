@@ -23,7 +23,7 @@ public abstract class Enemy extends Drawable {
 	private int speed;
 	
 	// Attack damage
-	private int attack;
+	private int damage;
 	
 	// Attack radius
 	private int radius;
@@ -50,6 +50,7 @@ public abstract class Enemy extends Drawable {
 		
 		hp = 100;
 		maxHP = hp;
+		damage = 10;
 		
 		isAlive = true;
 		
@@ -74,7 +75,10 @@ public abstract class Enemy extends Drawable {
 	 *            Points in this array are midpoints for each step in the path.
 	 */
 	public Enemy(Point[] initPath) {
+		
 		hp = 100;
+		maxHP = hp;
+		damage = 10;
 		
 		speed = 1;
 		
@@ -115,6 +119,10 @@ public abstract class Enemy extends Drawable {
 		return isAlive;
 	}
 	
+	public int getDamage() {
+		return damage;
+	}
+	
 	/**
 	 * Deal damage to this enemy
 	 * 
@@ -128,6 +136,7 @@ public abstract class Enemy extends Drawable {
 		return false;
 	}
 	
+	// TODO: This might have bugs
 	public void updatePosition() {
 		if (currentPath < path.length - 1 && isAlive) {
 			

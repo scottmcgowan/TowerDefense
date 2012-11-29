@@ -12,8 +12,6 @@ import model.towers.Tower;
 /**
  * Contains primary game logic
  */
-
-// TODO: Add gameOver conditions
 public class Game {
 
 	private ArrayList<Tower> towerList;
@@ -30,6 +28,9 @@ public class Game {
 	
 	// frame counter for update()
 	private int counter;
+	
+	// Player Health
+	private int playerHealth = 100;
 	
 	
 	public Game() {
@@ -48,17 +49,16 @@ public class Game {
 		return towerList;
 	}
 	
+	
 	public ArrayList<Enemy> getEnemies() {
 		return enemyList;
 	}
+	
 	
 	public ArrayList<Projectile> getProjectiles() {
 		return projectileList;
 	}
 	
-	public boolean gameOver() {
-		return gameOver;
-	}
 	
 	/**
 	 * @return A list of all drawable game objects in the order to be drawn
@@ -71,6 +71,41 @@ public class Game {
 		return drawable;
 	}
 	
+	
+	/**
+	 * @return true is the game is over
+	 */
+	public boolean gameOver() {
+		return gameOver;
+	}
+	
+	
+	/**
+	 * @return int value of the player's current health. Health <= 0 is gameOver
+	 */
+	public int getPlayerHealth() {
+		return playerHealth;
+	}
+	
+	
+	/**
+	 * Allows the Game Controller to set the playerHealth.
+	 * 
+	 * @param health
+	 *            int value for the player's health
+	 * @return false if health parameter is zero or negative
+	 */
+	public boolean setPlayerHealth(int health) {
+		if (health <= 0)
+			return false;
+		playerHealth = health;
+		return true;
+	}
+	
+	
+	/**
+	 * Updates all game logic, to be called every frame
+	 */
 	public void update() {
 		
 		if (gameOver)
@@ -88,7 +123,12 @@ public class Game {
 			// this enemy has reached the goal
 			if (!enemy.isAlive()) {
 				tempEnemy.add(enemy);
-				// TODO: Enemy scored, decrement player health
+				// Enemy scored, decrement player health
+				playerHealth -= enemy.getDamage();
+				if (playerHealth <= 0) {
+					gameOver = true;
+					return;
+				}
 			}
 		}
 		
@@ -147,6 +187,7 @@ public class Game {
 		counter++;
 	}
 	
+	
 	/**
 	 * Add an enemy to the list of active enemies
 	 * @param enemy The Enemy object to add to the game
@@ -154,6 +195,7 @@ public class Game {
 	public void addEnemy(Enemy enemy) {
 		enemyList.add(enemy);
 	}
+	
 	
 	/**
 	 * Add a tower to the list of active towers
@@ -163,6 +205,11 @@ public class Game {
 		towerList.add(tower);
 	}
 	
+	
+	/**
+	 * Add a Projectile to the list of active projectiles
+	 * @param proj The Projectile object to add to the game
+	 */
 	public void addProjectile(Projectile proj) {
 		projectileList.add(proj);
 	}

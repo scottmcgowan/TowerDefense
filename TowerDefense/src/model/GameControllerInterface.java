@@ -19,5 +19,7 @@ public interface GameControllerInterface{
 	void drawMapSelection();
 	void drawHealthBars();
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile);
+	void updateShopWithCurrentMoney();
+	public void notifyShopOfSelection(String s);
 
 }

@@ -1,3 +1,4 @@
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import model.Drawable;
 import model.GameControllerInterface;
 import model.Player;
 import model.PurchaseOrder;
-
 import GUI.GameCanvas;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
@@ -50,20 +50,15 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	}
 
 	public SingleGameControllerSkel() {
-		gui.setLayout(null);
+		gui.setLayout(new FlowLayout());
 		shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
-		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
-		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
-		canvas.setLocation(70, 20);
-		shop.setLocation(20, canvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 110);
-		gui.setVisible(true);
-		gui.add(shop);
+		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
 		gui.add(canvas);
+		gui.add(shop);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
@@ -79,6 +74,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		newGame.addActionListener(new allMenuAction());
 		exit.addActionListener(new allMenuAction());
 
+		gui.setVisible(true);
 		gui.repaint();
 
 		gameStart();
@@ -171,13 +167,17 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
 
 	@Override
 	public void processOrders() {
 		// TODO Auto-generated method stub
 		// Essentially a transaction list, function-wise.
+	}
+
+	@Override
+	public void drawMapSelection() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -188,6 +188,18 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 
 	@Override
 	public void notifyShopOfSelection(int tileX, int tileY, Tile tile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateShopWithCurrentMoney() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyShopOfSelection(String s) {
 		// TODO Auto-generated method stub
 		
 	}

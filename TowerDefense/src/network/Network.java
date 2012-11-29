@@ -59,7 +59,7 @@ public class Network extends Observable{
 							// gui.update(outputMessage);
 							setChanged();
 							notifyObservers(outputMessage);
-							game.addOrder(d.getOrder());
+							//game.addOrder(d.getOrder());
 							System.out.println(outputMessage);
 						}
 					}

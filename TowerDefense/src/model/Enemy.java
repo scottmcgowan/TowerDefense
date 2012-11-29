@@ -27,7 +27,17 @@ public class Enemy extends Drawable {
 	// The shape of this enemy for collision detection
 	private Shape cBox;
 	
+	private Point[] path;
 	
+	/**
+	 * Create an enemy with an explicit starting position, stritcly for testing
+	 * purposes
+	 * 
+	 * @param xPos
+	 *            Leftmost point of this enemy
+	 * @param yPos
+	 *            Topmost point of this enemy
+	 */
 	public Enemy(int xPos, int yPos) {
 		
 		hp = 100;
@@ -40,6 +50,31 @@ public class Enemy extends Drawable {
 		cBox = new Rectangle2D.Double(xPos, yPos, xPos + width, yPos + height);
 		
 		pos = new Point(xPos, yPos);
+	}
+
+	/**
+	 * Enemy constructor
+	 * 
+	 * @param initPath
+	 *            Point[] map path for this enemy to follow, where initPath[0]
+	 *            is the starting location, and initPath[length-1] is the goal.
+	 *            Points in this array are midpoints for each step in the path.
+	 */
+	public Enemy(Point[] initPath) {
+		hp = 100;
+		
+		// TODO: Magic numbers
+		int width = 30;
+		int height = 30;
+		
+		path = initPath;
+		
+		// path contains midpoint coordinates, get the top-left point
+		int top = path[0].y - (height / 2);
+		int left = path[0].x - (width / 2);
+		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
+		
+		pos = path[0];
 	}
 	
 	public Shape getBounds() {
@@ -68,7 +103,7 @@ public class Enemy extends Drawable {
 	}
 	
 	public void updatePosition() {
-		// TODO: Path finding
+		
 	}
 	
 	public void attack() {

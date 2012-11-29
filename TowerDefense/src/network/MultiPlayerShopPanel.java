@@ -10,9 +10,10 @@ import javax.swing.JPanel;
 
 import GUI.GameCanvas;
 
-import network.GameControllerSkel;
+import network.MultiPlayerGameControllerSkel;
 
 import model.Delivery;
+import model.GameControllerInterface;
 import model.PurchaseOrder;
 
 public class MultiPlayerShopPanel extends JPanel{
@@ -20,11 +21,11 @@ public class MultiPlayerShopPanel extends JPanel{
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 100;
-	private GameControllerSkel game;
+	private GameControllerInterface game;
 	private int player;
 
 	// GUI for the shop buttons
-	public MultiPlayerShopPanel(int p, GameControllerSkel game) {
+	public MultiPlayerShopPanel(int p, GameControllerInterface game) {
 		this.game = game;
 		this.player = p;
 		setLayout(new GridLayout(3, 9, 5, 5));

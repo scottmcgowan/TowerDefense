@@ -1,10 +1,15 @@
 package network;
-import javax.swing.JFrame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import GUI.GameCanvas;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import model.Delivery;
 import model.PurchaseOrder;
+import GUI.GameCanvas;
 
 public class GameControllerSkel {
 
@@ -22,6 +27,8 @@ public class GameControllerSkel {
 	//public GameCanvas gameCanvas;
 	private GameCanvas canvas;
 	private MultiPlayerShopPanel shop;
+
+	private JFrame gui = new JFrame();
 
 	public static void main(String[] args) {
 		GameControllerSkel game = new GameControllerSkel(Server.SERVER_PLAYER);
@@ -48,8 +55,6 @@ public class GameControllerSkel {
 			network = new Network(networkPanel, Server.CLIENT_PLAYER);
 		}
 		
-		
-		JFrame gui = new JFrame();
 		gui.setLayout(null);
 		shop = new MultiPlayerShopPanel(player, this);
 		canvas = new GameCanvas();
@@ -68,7 +73,34 @@ public class GameControllerSkel {
 		gui.add(shop);
 		gui.add(canvas);
 		
+		JMenuBar menubar = new JMenuBar();
+		gui.setJMenuBar(menubar);
+		
+		JMenu fileMenu = new JMenu("File");
+		menubar.add(fileMenu);
+		
+		JMenuItem newGame = new JMenuItem("New Game");
+		JMenuItem exit = new JMenuItem("Exit");
+		fileMenu.add(newGame);
+		fileMenu.addSeparator();
+		fileMenu.add(exit);
+		newGame.addActionListener(new allMenuAction());
+		exit.addActionListener(new allMenuAction());
+		
+		gui.repaint();
 		gameStart();
+	}
+	
+	private class allMenuAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			JMenuItem menuItem = (JMenuItem) arg0.getSource();
+			if (menuItem.getText() == "New Game") {
+			}
+			else {
+				gui.dispose();
+			}
+		}
 	}
 
 	public void addOrder(PurchaseOrder po){

@@ -31,7 +31,6 @@ public class Tower extends Drawable {
 	public Tower(int xPos, int yPos) {
 		pos = new Point(xPos, yPos);
 		
-		
 		rate = 60;
 		
 		// TODO: Eliminate magic numbers.
@@ -42,9 +41,13 @@ public class Tower extends Drawable {
 		
 		cBox = new Rectangle2D.Double(xPos, yPos, width, height);
 		
-		// Init position is top-left corner, so first add half the size of the tower to find the center point
+		// Init position is top-left corner, 
+		// so first add half the size of the tower to find the center point
 		// Then subtract the radius to get upper-left bounds for range
-		range = new Ellipse2D.Double(xPos + (width / 2) - rangeRadius, yPos + (height / 2) - rangeRadius, rangeRadius * 2, rangeRadius * 2);
+		range = new Ellipse2D.Double(xPos + (width / 2) - rangeRadius, 
+											yPos + (height / 2) - rangeRadius, 
+											rangeRadius * 2, 
+											rangeRadius * 2);
 		
 		pos = new Point(xPos, yPos);
 	}

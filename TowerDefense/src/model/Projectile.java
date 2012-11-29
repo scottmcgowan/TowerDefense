@@ -13,7 +13,7 @@ public class Projectile extends Drawable {
 	// End point
 	private Point destination;
 	
-	// Movement per frame
+	// Pixels to move per frame
 	private double speed;
 	
 	// Degrees movement
@@ -33,6 +33,7 @@ public class Projectile extends Drawable {
 	
 	public Projectile(int xPos, int yPos, int xDes, int yDes) {
 		
+		speed = 10;
 		damage = 10;
 		disposable = false;
 		pos = new Point(xPos, yPos);
@@ -46,7 +47,21 @@ public class Projectile extends Drawable {
 	}
 	
 	public void updatePosition() {
-		// TODO: calculate projectile movement
+		if (pos.x != destination.x && pos.y != destination.y) {
+			if (destination.x > pos.x) {
+				if (destination.y > pos.y)
+					pos.y += speed;
+				else
+					pos.y -= speed;
+				pos.x += speed;
+			} else {
+				if (destination.y > pos.y)
+					pos.y += speed;
+				else
+					pos.y -= speed;
+				pos.x -= speed;
+			}
+		}
 	}
 	
 	public Shape getBounds() {

@@ -1,12 +1,14 @@
-package model;
+package model.towers;
 
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
+import model.Drawable;
+
 //TODO Make abstract after testing
-public class Tower extends Drawable {
+public abstract class Tower extends Drawable {
 	
 	// Tower's location
 	private Point pos;
@@ -45,9 +47,9 @@ public class Tower extends Drawable {
 		// so first add half the size of the tower to find the center point
 		// Then subtract the radius to get upper-left bounds for range
 		range = new Ellipse2D.Double(xPos + (width / 2) - rangeRadius, 
-											yPos + (height / 2) - rangeRadius, 
-											rangeRadius * 2, 
-											rangeRadius * 2);
+									yPos + (height / 2) - rangeRadius, 
+									rangeRadius * 2, 
+									rangeRadius * 2);
 		
 		pos = new Point(xPos, yPos);
 	}

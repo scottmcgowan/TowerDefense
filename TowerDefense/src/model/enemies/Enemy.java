@@ -1,11 +1,12 @@
-package model;
+package model.enemies;
 
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-// TODO Make abstract after testing
-public class Enemy extends Drawable {
+import model.Drawable;
+
+public abstract class Enemy extends Drawable {
 	
 	// Data fields every enemy must maintain
 	

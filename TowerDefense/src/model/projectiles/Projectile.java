@@ -1,12 +1,13 @@
-package model;
+package model.projectiles;
 
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-//TODO Make abstract after testing
-public class Projectile extends Drawable {
+import model.Drawable;
+
+public abstract class Projectile extends Drawable {
 	
 	// Current location
 	private Point pos;

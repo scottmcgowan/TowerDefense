@@ -3,6 +3,11 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import model.enemies.Enemy;
+import model.projectiles.*;
+import model.projectiles.Projectile;
+import model.towers.Tower;
+
 
 /**
  * Contains primary game logic
@@ -101,7 +106,7 @@ public class Game {
 						
 						Point pos = tower.getPostion();
 						Point des = enemy.getPosition();
-						addProjectile(new Projectile(pos.x, pos.y, des.x, des.y));
+						addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));
 						
 						// this tower has fired, move on to the next one
 						break;

@@ -5,6 +5,12 @@ import static org.junit.Assert.*;
 import java.awt.Point;
 
 import model.*;
+import model.enemies.Enemy;
+import model.enemies.Grunt;
+import model.projectiles.Pellet;
+import model.projectiles.Projectile;
+import model.towers.PelletTower;
+import model.towers.Tower;
 
 import org.junit.Test;
 
@@ -15,13 +21,13 @@ public class GameTest {
 		Game game = new Game();
 		
 		// add 3 projectiles, 2 enemies, 2 towers
-		game.addProjectile(new Projectile(0, 0, 75, 75));
-		game.addProjectile(new Projectile(0, 0, 100, 100));
-		game.addEnemy(new Enemy(0, 0));
-		game.addTower(new Tower(0, 0));
-		game.addEnemy(new Enemy(50, 50));
-		game.addTower(new Tower(50, 50));
-		game.addProjectile(new Projectile(0, 0, 50, 50));
+		game.addProjectile(new Pellet(0, 0, 75, 75));
+		game.addProjectile(new Pellet(0, 0, 100, 100));
+		game.addEnemy(new Grunt(0, 0));
+		game.addTower(new PelletTower(0, 0));
+		game.addEnemy(new Grunt(50, 50));
+		game.addTower(new PelletTower(50, 50));
+		game.addProjectile(new Pellet(0, 0, 50, 50));
 		
 		// check order of the list
 		assertTrue(game.getDrawable().get(0) instanceof Tower);
@@ -40,7 +46,7 @@ public class GameTest {
 		
 		// Note: tower init position is top-left corner,
 		// center tower at (0, 0)
-		Tower tower = new Tower(-15, -15);
+		Tower tower = new PelletTower(-15, -15);
 		System.out.println(tower.getRange().getBounds2D().getWidth());
 		System.out.println(tower.getRange().getBounds2D().getHeight());
 		
@@ -67,9 +73,9 @@ public class GameTest {
 	public void testUpdateEnemyHP() {
 		Game game = new Game();
 		
-		Tower tower = new Tower(0, 0);
+		Tower tower = new PelletTower(0, 0);
 		game.addTower(tower);
-		Enemy enemy = new Enemy(5, 5);
+		Enemy enemy = new Grunt(5, 5);
 		game.addEnemy(enemy);
 		
 		assertEquals(100, game.getEnemies().get(0).getMaxHP());
@@ -106,7 +112,7 @@ public class GameTest {
 	
 	@Test
 	public void testUpdateProjectile() {
-		Projectile proj = new Projectile(0, 0, 30, 50);
+		Projectile proj = new Pellet(0, 0, 30, 50);
 		assertEquals(new Point(0, 0), proj.getPosition());
 		System.out.println(proj.getPosition());
 		proj.updatePosition();
@@ -132,7 +138,7 @@ public class GameTest {
 	public void testEnemyUpdatePosition() {
 		Point[] path = {new Point(0,0), new Point(5,0), new Point(5,5), 
 						new Point(5,10), new Point(5,5), new Point(0, 5)};
-		Enemy enemy = new Enemy(path);
+		Enemy enemy = new Grunt(path);
 		assertEquals(new Point(0, 0), enemy.getPosition());
 		enemy.updatePosition();
 		assertEquals(new Point(1, 0), enemy.getPosition());

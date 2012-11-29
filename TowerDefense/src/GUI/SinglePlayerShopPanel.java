@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import model.SinglePlayerShop;
+import network.MultiPlayerShop;
 
 public class SinglePlayerShopPanel extends JPanel {
 	GameCanvas canvas;
@@ -23,11 +23,13 @@ public class SinglePlayerShopPanel extends JPanel {
 
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
-		for (SinglePlayerShop.Item i : SinglePlayerShop.Item.values()) {
-			JButton b = new JButton(i.name() + "  " + "(" + i.value + ")");
-			buttons.add(b);
-			b.addActionListener(listenerToAllButtons);
-			add(b);
+		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
+			if (i.type != 3) {
+				JButton b = new JButton(i.name() + "  " + "(" + i.value + ")");
+				buttons.add(b);
+				b.addActionListener(listenerToAllButtons);
+				add(b);
+			}
 		}
 		repaint();
 	}

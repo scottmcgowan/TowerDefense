@@ -2,26 +2,22 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import model.GameControllerInterface;
-
 import GUI.Map.Tile;
 
 // Main component to display the map
@@ -59,7 +55,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 		addKeyListener(this);
 		setSize(PANEL_WIDTH, PANEL_HEIGHT);
 		// setLocation(0,0);
-		setLayout(null);
+		setLayout(new GridLayout(12,16));
 		setBackground(Color.WHITE);
 
 		// Initialize a new path
@@ -112,17 +108,10 @@ public class GameCanvas extends JPanel implements KeyListener {
 		// Sets each component's dimensions and adds the component to the
 		// container
 		for (int y = 0; y < map.getRow(); y++) {
-			if (y == 0) {
-			} else {
-				yTop += gridHeight;
-				xTop = 0;
-			}
 			for (int x = 0; x < map.getCol(); x++) {
 				JPanel temp = gameMap[y][x];
-				temp.setSize(gridWidth, gridHeight);
-				temp.setLocation(xTop, yTop);
+				temp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				temp.addMouseListener(new MouseClickListener());
-				xTop += gridWidth;
 				add(temp);
 				temp.repaint();
 			}

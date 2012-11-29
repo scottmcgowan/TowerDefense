@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 
+import GUI.Map;
+
+import network.MultiPlayerShop;
+
 public interface GameControllerInterface{
 
 	//public ArrayList<PurchaseOrder> listOrders;
@@ -9,8 +13,12 @@ public interface GameControllerInterface{
 	public void sendDelivery(Delivery d);
 	public void addOrder(PurchaseOrder po);
 	void gameLoop();
-	abstract void gameUpdate();
-	abstract void draw(ArrayList<Drawable> arr);
-	abstract void processOrders();
+	void gameUpdate();
+	void draw(ArrayList<Drawable> arr);
+	void processOrders();
+	void notifyShopOfSelection(String s);
+	void drawMapSelection();
+	void drawHealthBars();
+	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile);
 
 }

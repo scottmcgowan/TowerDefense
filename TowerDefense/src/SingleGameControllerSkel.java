@@ -1,15 +1,21 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import model.Delivery;
+import model.Drawable;
+import model.GameControllerInterface;
+import model.PurchaseOrder;
+
 import GUI.GameCanvas;
 import GUI.SinglePlayerShopPanel;
 
-public class SingleGameControllerSkel {
+public class SingleGameControllerSkel implements GameControllerInterface {
 
 	// main game class
 	static final int UPDATE_RATE = 60; // number of game updates per second
@@ -102,8 +108,9 @@ public class SingleGameControllerSkel {
 		// get some gameLogic in here!
 	}
 
+	@Override
 	// Run the game loop here.
-	private void gameLoop() {
+	public void gameLoop() {
 		// Regenerate the game objects for a new game
 		// ......
 
@@ -133,5 +140,28 @@ public class SingleGameControllerSkel {
 			} catch (InterruptedException ex) {
 			}
 		}
+	}
+
+	@Override
+	public void sendDelivery(Delivery d) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void addOrder(PurchaseOrder po) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void draw(ArrayList<Drawable> arr) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void processOrders() {
+		// TODO Auto-generated method stub
+		
 	}
 }

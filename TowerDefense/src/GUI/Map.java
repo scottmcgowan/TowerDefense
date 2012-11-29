@@ -3,7 +3,7 @@ package GUI;
 public class Map {
 
 	public enum Tile {
-		ENVIRONMENT, START, GOAL, PATH, TOWER
+		ENVIRONMENT, START, GOAL, PATH, ICE_TOWER, FIRE_TOWER, LIGHTNING_TOWER
 	}
 
 	private int rowCount = 12;

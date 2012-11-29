@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -138,73 +139,63 @@ public class GameCanvas extends JPanel implements KeyListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
+			Tile current = map.map[locationX][locationY];
 			
-			if (map.map[locationX][locationY] == Tile.ENVIRONMENT) {
+			switch (current) {
+			case ENVIRONMENT:
 				try {
-					gr.drawImage(ImageIO.read(new File("images/grass.png")), 0, 0, this);
+					gr.drawImage(ImageIO.read(new File("images/grass.png")), 0,
+							0, this);
 				} catch (IOException e) {
 					System.out.println("Could not find grass.png");
 				}
-				
-				/**
-				gr.setColor(Color.BLACK);
-				gr.drawRect(0, 0, gridWidth, gridHeight);
-				**/
-			} else if (map.map[locationX][locationY] == Tile.PATH) {
-				try {
-					gr.drawImage(ImageIO.read(new File("images/path.png")), 0, 0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find path.png");
+				break;
+			case PATH:
+				if (map.map[locationX][locationY] == Tile.PATH) {
+					try {
+						gr.drawImage(ImageIO.read(new File("images/path.png")),
+								0, 0, this);
+					} catch (IOException e) {
+						System.out.println("Could not find path.png");
+					}
 				}
-				
-				/**
-				gr.setColor(Color.BLACK);
-				gr.drawRect(0, 0, gridWidth, gridHeight);
-				**/
-			} else if (map.map[locationX][locationY] == Tile.START) {
-				try {
-					gr.drawImage(ImageIO.read(new File("images/start.png")), 0, 0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find start.png");
+			case START:
+				if (map.map[locationX][locationY] == Tile.START) {
+					try {
+						gr.drawImage(
+								ImageIO.read(new File("images/start.png")), 0,
+								0, this);
+					} catch (IOException e) {
+						System.out.println("Could not find start.png");
+					}
 				}
-				
-				/**
-				gr.setColor(Color.BLACK);
-				gr.drawRect(0, 0, gridWidth, gridHeight);
-				**/
-			} else if (map.map[locationX][locationY] == Tile.GOAL) {
-				try {
-					gr.drawImage(ImageIO.read(new File("images/goal.png")), 0, 0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find goal.png");
-				}
-				
-				/**
-				gr.setColor(Color.BLACK);
-				gr.drawRect(0, 0, gridWidth, gridHeight);
-				**/
-			} else if (map.map[locationX][locationY] == Tile.TOWER) {
-				if (selected.equals("ICE_TOWER")) {
+			case ICE_TOWER:
+				if (map.map[locationX][locationY] == Tile.ICE_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.BLUE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
-				if (selected.equals("FIRE_TOWER")) {
+			case FIRE_TOWER:
+				if (map.map[locationX][locationY] == Tile.FIRE_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.ORANGE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
-				if (selected.equals("LIGHTNING_TOWER")) {
+			case LIGHTNING_TOWER:
+				if (map.map[locationX][locationY] == Tile.LIGHTNING_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.CYAN);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
-
-				selected = "";
 			}
+
+				/**
+				gr.setColor(Color.BLACK);
+				gr.drawRect(0, 0, gridWidth, gridHeight);
+				**/
 		}
 	}
 
@@ -274,7 +265,12 @@ public class GameCanvas extends JPanel implements KeyListener {
 			for (int j = 0; j < game[i].length; j++) {
 				if (clicked.equals(game[i][j])) {
 					if (map.map[i][j] == Tile.ENVIRONMENT) {
-						map.map[i][j] = Tile.TOWER;
+						if(selected.equals("ICE_TOWER"))
+							map.map[i][j] = Tile.ICE_TOWER;
+						if(selected.equals("FIRE_TOWER"))
+							map.map[i][j] = Tile.FIRE_TOWER;
+						if(selected.equals("LIGHTNING_TOWER"))
+							map.map[i][j] = Tile.LIGHTNING_TOWER;
 						repaint();
 					}
 				}
@@ -297,6 +293,9 @@ public class GameCanvas extends JPanel implements KeyListener {
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
+			Component hover = arg0.getComponent();
+			
+			
 		}
 
 		public void mouseExited(MouseEvent arg0) {

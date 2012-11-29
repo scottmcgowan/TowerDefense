@@ -7,10 +7,10 @@ after it is created, assuming the game runs at 60fps.*/
 
 public class ComputerPlayer extends Player{
 
-	private GameControllerSkel gc;
+	private GameControllerInterface gc;
 	private int counter = 0;
 	
-	public ComputerPlayer(GameControllerSkel gc){
+	public ComputerPlayer(GameControllerInterface gc){
 		super();
 		this.gc = gc;
 	}

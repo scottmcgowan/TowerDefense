@@ -37,7 +37,7 @@ public class AnimationTest extends JFrame {
 	
 	private class Movement extends JPanel {
 		private BufferedImage character;
-		private static final int CHAR_WIDTH = 30, CHAR_HEIGHT = 47;
+		private static final int CHAR_WIDTH = 90, CHAR_HEIGHT = 90;
 		private Cursor cursor;
 		private Timer timer; 		
 		
@@ -99,7 +99,7 @@ public class AnimationTest extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (y == 100) 
+				if (y == 300) 
 					timer.stop();
 				else {
 					y++;
@@ -114,13 +114,13 @@ public class AnimationTest extends JFrame {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
 			if (y % 30 >= 10 && y % 30 <= 14)
-				g2.drawImage(character.getSubimage(0, 0, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
+				g2.drawImage(character.getSubimage(0, 270, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
 			else if ((y % 30 >= 5 && y % 30 <= 9) || (y % 30 >= 15 && y % 30 <= 19))
-				g2.drawImage(character.getSubimage(CHAR_WIDTH, 0, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
+				g2.drawImage(character.getSubimage(CHAR_WIDTH, 270, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
 			else if ((y % 30 >= 0 && y % 30 <= 4) || (y % 30 >= 20 && y % 30 <= 24))
-				g2.drawImage(character.getSubimage(2 * CHAR_WIDTH, 0, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
+				g2.drawImage(character.getSubimage(2 * CHAR_WIDTH, 270, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
 			else if (y % 30 >= 25 && y % 30 <= 29)
-				g2.drawImage(character.getSubimage(3 * CHAR_WIDTH, 0, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
+				g2.drawImage(character.getSubimage(3 * CHAR_WIDTH, 270, CHAR_WIDTH, CHAR_HEIGHT), 10, y, this);
 		}
 	}
 	

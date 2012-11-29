@@ -20,6 +20,8 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import model.GameControllerInterface;
+
 import GUI.Map.Tile;
 
 // Main component to display the map
@@ -41,22 +43,23 @@ public class GameCanvas extends JPanel implements KeyListener {
 	private int yTop = 0;
 
 	// GUI representation of each square
-	private JPanel[][] game = new JPanel[rows][cols];
+	private PaintSquare[][] gameMap = new PaintSquare[rows][cols];
 	private GameCanvas canvas;
 
 	private String selected = "";
 	private Component clicked;
+	private GameControllerInterface game;
 	Map map = new Map();
 
 	// Constructor
-	public GameCanvas() {
+	public GameCanvas(GameControllerInterface gc) {
+		game = gc;
 		setFocusable(true); // so that can receive key-events
 		requestFocus();
 		addKeyListener(this);
 		setSize(PANEL_WIDTH, PANEL_HEIGHT);
 		// setLocation(0,0);
 		setLayout(null);
-
 		setBackground(Color.WHITE);
 
 		// Initialize a new path
@@ -101,8 +104,8 @@ public class GameCanvas extends JPanel implements KeyListener {
 		// component array that represents the map
 		for (int i = 0; i < map.getRow(); i++) {
 			for (int j = 0; j < map.getCol(); j++) {
-				JPanel e = new PaintSquare(i, j);
-				game[i][j] = e;
+				PaintSquare e = new PaintSquare(i, j);
+				gameMap[i][j] = e;
 			}
 		}
 
@@ -115,7 +118,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 				xTop = 0;
 			}
 			for (int x = 0; x < map.getCol(); x++) {
-				JPanel temp = game[y][x];
+				JPanel temp = gameMap[y][x];
 				temp.setSize(gridWidth, gridHeight);
 				temp.setLocation(xTop, yTop);
 				temp.addMouseListener(new MouseClickListener());
@@ -128,9 +131,17 @@ public class GameCanvas extends JPanel implements KeyListener {
 
 	private class PaintSquare extends JPanel {
 		// Locations used to identify the component
-		int locationX;
-		int locationY;
+		private int locationX;
+		private int locationY;
 
+		public int getTileX(){
+			return locationX;
+		}
+
+		public int getTileY(){
+			return locationY;
+		}
+		
 		PaintSquare(int x, int y) {
 			locationX = x;
 			locationY = y;
@@ -139,49 +150,57 @@ public class GameCanvas extends JPanel implements KeyListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
-			Tile current = map.map[locationX][locationY];
+			Tile current = map.tileMap[locationX][locationY];
 
 			switch (current) {
 			case ENVIRONMENT:
 				try {
-					gr.drawImage(ImageIO.read(new File("images/grass.png")), 0, 0, this);
+					gr.drawImage(ImageIO.read(new File("images/grass.png")), 0,
+							0, this);
 				} catch (IOException e) {
 					System.out.println("Could not find grass.png");
-				} break;
+				}
+				break;
 			case PATH:
 				try {
-					gr.drawImage(ImageIO.read(new File("images/path.png")), 0, 0, this);
+					gr.drawImage(ImageIO.read(new File("images/path.png")), 0,
+							0, this);
 				} catch (IOException e) {
 					System.out.println("Could not find path.png");
-				} break;
+				}
+				break;
 			case START:
 				try {
-					gr.drawImage(ImageIO.read(new File("images/start.png")), 0, 0, this);
+					gr.drawImage(ImageIO.read(new File("images/start.png")), 0,
+							0, this);
 				} catch (IOException e) {
 					System.out.println("Could not find start.png");
-				} break;
+				}
+				break;
 			case GOAL:
 				try {
-					gr.drawImage(ImageIO.read(new File("images/goal.png")), 0, 0, this);
+					gr.drawImage(ImageIO.read(new File("images/goal.png")), 0,
+							0, this);
 				} catch (IOException e) {
 					System.out.println("Could not find goal.png");
-				} break;
+				}
+				break;
 			case ICE_TOWER:
-				if (map.map[locationX][locationY] == Tile.ICE_TOWER) {
+				if (map.tileMap[locationX][locationY] == Tile.ICE_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.BLUE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
 			case FIRE_TOWER:
-				if (map.map[locationX][locationY] == Tile.FIRE_TOWER) {
+				if (map.tileMap[locationX][locationY] == Tile.FIRE_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.ORANGE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
 			case LIGHTNING_TOWER:
-				if (map.map[locationX][locationY] == Tile.LIGHTNING_TOWER) {
+				if (map.tileMap[locationX][locationY] == Tile.LIGHTNING_TOWER) {
 					gr.setColor(Color.BLACK);
 					gr.drawRect(0, 0, gridWidth, gridHeight);
 					gr.setColor(Color.CYAN);
@@ -201,24 +220,24 @@ public class GameCanvas extends JPanel implements KeyListener {
 		Stack<Integer> trail = new Stack<Integer>();
 
 		// Push start points if start tile is on the horizontal walls
-		for (int i = 0; i < map.map[0].length; i++) {
-			if (map.map[0][i] == Tile.START) {
+		for (int i = 0; i < map.tileMap[0].length; i++) {
+			if (map.tileMap[0][i] == Tile.START) {
 				trail.push(i * 30 + 15);
 				trail.push(0);
 			}
-			if (map.map[map.map.length][i] == Tile.START) {
+			if (map.tileMap[map.tileMap.length][i] == Tile.START) {
 				trail.push(i * 30 + 15);
 				trail.push(0);
 			}
 		}
 
 		// Push start points if start tile is on the vertical walls
-		for (int j = 0; j < map.map.length; j++) {
-			if (map.map[j][0] == Tile.START) {
+		for (int j = 0; j < map.tileMap.length; j++) {
+			if (map.tileMap[j][0] == Tile.START) {
 				trail.push(0);
 				trail.push(j * 30 + 15);
 			}
-			if (map.map[map.map.length][j] == Tile.START) {
+			if (map.tileMap[map.tileMap.length][j] == Tile.START) {
 				trail.push(0);
 				trail.push(j * 30 + 15);
 			}
@@ -234,12 +253,12 @@ public class GameCanvas extends JPanel implements KeyListener {
 		while (current != Tile.GOAL) {
 			for (int i = currentX - 16; i <= currentX - 13; i++)
 				for (int j = currentY - 16; j <= currentY - 13; j++) {
-					if (i > -1 && i < map.map.length && j > -1
-							&& j < map.map[0].length) {
-						if (map.map[j][i] != Tile.ENVIRONMENT
+					if (i > -1 && i < map.tileMap.length && j > -1
+							&& j < map.tileMap[0].length) {
+						if (map.tileMap[j][i] != Tile.ENVIRONMENT
 								&& (i * 30 + 15) != currentX
 								&& (j * 30 + 15) != currentY) {
-							current = map.map[j][i];
+							current = map.tileMap[j][i];
 							currentX = i * 30 + 15;
 							currentY = j * 30 + 15;
 							trail.push(currentX);
@@ -252,22 +271,23 @@ public class GameCanvas extends JPanel implements KeyListener {
 		return trail;
 	}
 
+	
 	public Component getClicked() {
 		return clicked;
 	}
 
 	// Makes sure an environment tile is clicked and then does a tower purchase
 	public void purchase() {
-		for (int i = 0; i < game.length; i++) {
-			for (int j = 0; j < game[i].length; j++) {
-				if (clicked.equals(game[i][j])) {
-					if (map.map[i][j] == Tile.ENVIRONMENT) {
+		for (int i = 0; i < gameMap.length; i++) {
+			for (int j = 0; j < gameMap[i].length; j++) {
+				if (clicked.equals(gameMap[i][j])) {
+					if (map.tileMap[i][j] == Tile.ENVIRONMENT) {
 						if (selected.equals("ICE_TOWER"))
-							map.map[i][j] = Tile.ICE_TOWER;
+							map.tileMap[i][j] = Tile.ICE_TOWER;
 						if (selected.equals("FIRE_TOWER"))
-							map.map[i][j] = Tile.FIRE_TOWER;
+							map.tileMap[i][j] = Tile.FIRE_TOWER;
 						if (selected.equals("LIGHTNING_TOWER"))
-							map.map[i][j] = Tile.LIGHTNING_TOWER;
+							map.tileMap[i][j] = Tile.LIGHTNING_TOWER;
 						repaint();
 					}
 				}
@@ -287,6 +307,8 @@ public class GameCanvas extends JPanel implements KeyListener {
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			clicked = arg0.getComponent();
+			PaintSquare click = (PaintSquare)(arg0.getComponent());
+			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileX()][click.getTileY()]);
 		}
 
 		public void mouseEntered(MouseEvent arg0) {

@@ -8,7 +8,7 @@ public class Map {
 
 	private int rowCount = 12;
 	private int colCount = 16;
-	Tile[][] map = new Tile[rowCount][colCount];
+	Tile[][] tileMap = new Tile[rowCount][colCount];
 	int[][] path =  new int[rowCount][colCount];
 
 	public Map() {
@@ -30,14 +30,14 @@ public class Map {
 			for(int col = 0; col < path[row].length; col++) {
 				if(path[row][col] != 0) {
 					if (path[row][col] == 1)
-						map[row][col] = Tile.PATH;
+						tileMap[row][col] = Tile.PATH;
 					if (path[row][col] == 2)
-						map[row][col] = Tile.START;
+						tileMap[row][col] = Tile.START;
 					if (path[row][col] == 3)
-						map[row][col] = Tile.GOAL;
+						tileMap[row][col] = Tile.GOAL;
 				}
 				else
-					map[row][col] = Tile.ENVIRONMENT;
+					tileMap[row][col] = Tile.ENVIRONMENT;
 			}
 		}
 	}

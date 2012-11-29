@@ -13,6 +13,7 @@ import model.Drawable;
 import model.GameControllerInterface;
 import model.PurchaseOrder;
 import GUI.GameCanvas;
+import GUI.Map;
 
 public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 
@@ -60,7 +61,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 		
 		gui.setLayout(null);
 		shop = new MultiPlayerShopPanel(player, this);
-		canvas = new GameCanvas();
+		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
 		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH, networkPanel.PANEL_HEIGHT);
@@ -176,5 +177,23 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	public void processOrders() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void drawMapSelection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawHealthBars() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile) {
+		// TODO Auto-generated method stub
+		shop.updateButtons(tileX, tileY, tile);
 	}
 }

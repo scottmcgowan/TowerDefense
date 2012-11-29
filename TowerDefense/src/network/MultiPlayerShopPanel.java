@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import GUI.GameCanvas;
+import GUI.Map.Tile;
 
 import network.MultiPlayerGameControllerSkel;
 
@@ -67,5 +68,10 @@ public class MultiPlayerShopPanel extends JPanel{
 	
 	public void interpretDelivery(Delivery d) {
 			game.sendDelivery(d);
+	}
+
+	public void updateButtons(int tileX, int tileY, Tile tile) {
+		// TODO Auto-generated method stub
+		
 	}
 }

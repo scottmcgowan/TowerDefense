@@ -12,6 +12,7 @@ import model.Delivery;
 import model.Drawable;
 import model.GameControllerInterface;
 import model.PurchaseOrder;
+import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.Map;
 
@@ -194,6 +195,13 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	@Override
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile) {
 		// TODO Auto-generated method stub
-		shop.updateButtons(tileX, tileY, tile);
+		int tileType;
+		if(tile.equals(Map.Tile.ENVIRONMENT)){tileType = Tower.EMPTY;}
+		else if(tile.equals(Map.Tile.FIRE_TOWER)){tileType = Tower.FIRE_TYPE;}
+		else if(tile.equals(Map.Tile.ICE_TOWER)){tileType = Tower.ICE_TYPE;}
+		else if(tile.equals(Map.Tile.LIGHTNING_TOWER)){tileType = Tower.LIGHTNING_TYPE;}
+		else{tileType = Tower.UNBUILDABLE;}
+		shop.updateButtons(tileX, tileY, tileType);
 	}
+	
 }

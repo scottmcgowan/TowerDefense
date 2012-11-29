@@ -16,6 +16,7 @@ import network.MultiPlayerGameControllerSkel;
 import model.Delivery;
 import model.GameControllerInterface;
 import model.PurchaseOrder;
+import model.towers.Tower;
 
 public class MultiPlayerShopPanel extends JPanel{
 	GameCanvas canvas;
@@ -70,8 +71,31 @@ public class MultiPlayerShopPanel extends JPanel{
 			game.sendDelivery(d);
 	}
 
-	public void updateButtons(int tileX, int tileY, Tile tile) {
+	public void updateButtons(int tileX, int tileY, int tileType) {
 		// TODO Auto-generated method stub
-		
+		for(JButton b:buttons){
+			b.setEnabled(true);
+		}
+		if(tileType==Tower.UNBUILDABLE){
+			buttons.get(0).setEnabled(false);
+			buttons.get(1).setEnabled(false);
+			buttons.get(2).setEnabled(false);
+			buttons.get(3).setEnabled(false);
+			buttons.get(4).setEnabled(false);
+			buttons.get(5).setEnabled(false);
+		}else if(tileType==Tower.EMPTY){
+			buttons.get(3).setEnabled(false);
+			buttons.get(4).setEnabled(false);
+			buttons.get(5).setEnabled(false);
+		}else{
+			buttons.get(0).setEnabled(false);
+			buttons.get(1).setEnabled(false);
+			buttons.get(2).setEnabled(false);
+			buttons.get(3).setEnabled(false);
+			buttons.get(4).setEnabled(false);
+			buttons.get(5).setEnabled(false);
+			buttons.get(tileType+2).setEnabled(true);
+		}
+		repaint();
 	}
 }

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class SinglePlayerShop {
 
 	//public String[] items = {"OOOO","XXXX","XOXO","OXOX"};
-	
+
 	public static final int TYPE_BUY_TOWER = 1;
 	public static final int TYPE_UPGRADE_TOWER = 2;
-	
+
 	/*
 	public static enum OrderType{
 		BUY_TOWER(1), 
@@ -21,7 +21,7 @@ public class SinglePlayerShop {
                 this.type = type;
         }
 	}*/
-	
+
 	public static enum Item {
 		ICE_TOWER(100, 1), 
 		FIRE_TOWER(100, 1 ), 
@@ -36,5 +36,5 @@ public class SinglePlayerShop {
                 this.type = type;
         }
 	}
-	
+
 }

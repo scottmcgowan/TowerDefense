@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import model.Delivery;
 import model.Drawable;
 import model.GameControllerInterface;
+import model.Player;
 import model.PurchaseOrder;
 
 import GUI.GameCanvas;
@@ -18,10 +19,13 @@ import GUI.SinglePlayerShopPanel;
 public class SingleGameControllerSkel implements GameControllerInterface {
 
 	// main game class
-	static final int UPDATE_RATE = 60; // number of game updates per second
-	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	private static final int UPDATE_RATE = 60; // number of game updates per second
+	private static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	private static final int HUMAN_PLAYER_VAL = 1;
+	private static final int COM_PLAYER_VAL = 2;
 
 	// State of the game
+	private Player humanUser = new Player();
 	boolean gameOver = false;
 	boolean gamePaused = false;
 	public int frameCounter = 0;
@@ -29,6 +33,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	// public GameCanvas gameCanvas;
 	private GameCanvas canvas;
 	private SinglePlayerShopPanel shop;
+	public ArrayList<PurchaseOrder> listOrders;
 	private JFrame gui = new JFrame();
 
 	public static void main(String[] args) {
@@ -149,8 +154,16 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 
 	@Override
 	public void addOrder(PurchaseOrder po) {
-		// TODO Auto-generated method stub
+		listOrders.add(po);
+		int player = po.getPlayer();
+		int cost = po.getItem().value;
 		
+		/**
+		if (player == HUMAN_PLAYER_VAL) {
+			int userMoney = humanUser.getMoney();
+			humanUser.setMoney(userMoney - cost); 
+		}
+		*/
 	}
 
 	@Override
@@ -162,6 +175,6 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	@Override
 	public void processOrders() {
 		// TODO Auto-generated method stub
-		
+		// Essentially a transaction list, function-wise.
 	}
 }

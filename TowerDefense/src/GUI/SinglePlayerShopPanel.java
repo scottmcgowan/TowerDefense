@@ -46,8 +46,9 @@ public class SinglePlayerShopPanel extends JPanel {
 			// game.sendMessage(text);
 			canvas.setSelected(text);
 
-			if (canvas.getClicked() != null)
+			if (canvas.getClicked() != null) 
 				canvas.purchase();
+			
 		}
 	}
 }

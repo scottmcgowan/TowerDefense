@@ -21,4 +21,12 @@ public class PurchaseOrder implements Serializable{
 		tile_x = x;
 		tile_y = y;
 	}
+	
+	public int getPlayer() {
+		return player;
+	}
+	
+	public Item getItem() {
+		return item;
+	}
 }

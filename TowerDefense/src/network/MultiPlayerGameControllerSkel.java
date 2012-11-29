@@ -1,4 +1,5 @@
 package network;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -60,23 +61,17 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 			network = new Network(networkPanel, Server.CLIENT_PLAYER, this);
 		}
 		
-		gui.setLayout(null);
+		gui.setLayout(new FlowLayout());
 		shop = new MultiPlayerShopPanel(player, this);
 		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
-		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
-		networkPanel.setSize(networkPanel.PANEL_WIDTH, networkPanel.PANEL_HEIGHT);
-		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
-		canvas.setLocation(20, 20);
-		networkPanel.setLocation(canvas.PANEL_WIDTH+40, 20);
-		shop.setLocation(80, canvas.PANEL_HEIGHT+40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(canvas.PANEL_WIDTH+networkPanel.PANEL_WIDTH+80, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+90);
+		gui.setSize(canvas.PANEL_WIDTH+networkPanel.PANEL_WIDTH+80, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+80);
 		gui.setVisible(true);
+		gui.add(canvas);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(canvas);
 		
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);

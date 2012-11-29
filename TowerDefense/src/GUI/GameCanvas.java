@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -53,7 +54,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 		setFocusable(true); // so that can receive key-events
 		requestFocus();
 		addKeyListener(this);
-		setSize(PANEL_WIDTH, PANEL_HEIGHT);
+		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		// setLocation(0,0);
 		setLayout(new GridLayout(12,16));
 		setBackground(Color.WHITE);
@@ -181,6 +182,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 					gr.setColor(Color.BLUE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
+				break;
 			case FIRE_TOWER:
 				if (map.tileMap[locationX][locationY] == Tile.FIRE_TOWER) {
 					gr.setColor(Color.BLACK);
@@ -188,6 +190,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 					gr.setColor(Color.ORANGE);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
+				break;
 			case LIGHTNING_TOWER:
 				if (map.tileMap[locationX][locationY] == Tile.LIGHTNING_TOWER) {
 					gr.setColor(Color.BLACK);
@@ -195,6 +198,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 					gr.setColor(Color.CYAN);
 					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
 				}
+				break;
 			}
 
 			/**

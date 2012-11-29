@@ -80,13 +80,15 @@ public class GameGUI extends JFrame {
 				JButton button = (JButton) arg0.getSource();
 				if (button.getText().equals("Single Player")) {
 					//shop = new MultiPlayerShopPanel(flags, null);
-					shop.setLocation(10, 400);
+					
+					
+					//shop.setLocation(10, 400);
 
 					canvas = new GameCanvas();
 					canvas.setLocation(0, 0);
-					shop.connectToMap(canvas);
+					//shop.connectToMap(canvas);
 
-					gameView.add(shop);
+					//gameView.add(shop);
 					gameView.add(canvas);
 
 					remove(menuView);

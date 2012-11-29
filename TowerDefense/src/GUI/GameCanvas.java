@@ -6,13 +6,17 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import GUI.Map.Tile;
@@ -134,27 +138,51 @@ public class GameCanvas extends JPanel implements KeyListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
-
+			
 			if (map.map[locationX][locationY] == Tile.ENVIRONMENT) {
+				try {
+					gr.drawImage(ImageIO.read(new File("images/grass.png")), 0, 0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find grass.png");
+				}
+				
+				/**
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);
-				gr.setColor(Color.GRAY);
-				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				**/
 			} else if (map.map[locationX][locationY] == Tile.PATH) {
+				try {
+					gr.drawImage(ImageIO.read(new File("images/path.png")), 0, 0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find path.png");
+				}
+				
+				/**
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);
-				gr.setColor(Color.YELLOW);
-				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				**/
 			} else if (map.map[locationX][locationY] == Tile.START) {
+				try {
+					gr.drawImage(ImageIO.read(new File("images/start.png")), 0, 0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find start.png");
+				}
+				
+				/**
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);
-				gr.setColor(Color.GREEN);
-				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				**/
 			} else if (map.map[locationX][locationY] == Tile.GOAL) {
+				try {
+					gr.drawImage(ImageIO.read(new File("images/goal.png")), 0, 0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find goal.png");
+				}
+				
+				/**
 				gr.setColor(Color.BLACK);
 				gr.drawRect(0, 0, gridWidth, gridHeight);
-				gr.setColor(Color.RED);
-				gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				**/
 			} else if (map.map[locationX][locationY] == Tile.TOWER) {
 				if (selected.equals("ICE_TOWER")) {
 					gr.setColor(Color.BLACK);

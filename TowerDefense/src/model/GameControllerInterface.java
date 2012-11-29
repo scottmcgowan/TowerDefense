@@ -16,7 +16,6 @@ public interface GameControllerInterface{
 	void gameUpdate();
 	void draw(ArrayList<Drawable> arr);
 	void processOrders();
-	void notifyShopOfSelection(String s);
 	void drawMapSelection();
 	void drawHealthBars();
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile);

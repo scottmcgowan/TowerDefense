@@ -196,4 +196,10 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 		// TODO Auto-generated method stub
 		shop.updateButtons(tileX, tileY, tile);
 	}
+
+	@Override
+	public void notifyShopOfSelection(String s) {
+		// TODO Auto-generated method stub
+		
+	}
 }

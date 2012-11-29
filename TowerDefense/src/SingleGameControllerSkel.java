@@ -14,6 +14,7 @@ import model.Player;
 import model.PurchaseOrder;
 
 import GUI.GameCanvas;
+import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
 
 public class SingleGameControllerSkel implements GameControllerInterface {
@@ -51,7 +52,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	public SingleGameControllerSkel() {
 		gui.setLayout(null);
 		shop = new SinglePlayerShopPanel();
-		canvas = new GameCanvas();
+		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
 		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
@@ -158,12 +159,11 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		int player = po.getPlayer();
 		int cost = po.getItem().value;
 		
-		/**
 		if (player == HUMAN_PLAYER_VAL) {
 			int userMoney = humanUser.getMoney();
 			humanUser.setMoney(userMoney - cost); 
 		}
-		*/
+		
 	}
 
 	@Override
@@ -171,10 +171,24 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 	@Override
 	public void processOrders() {
 		// TODO Auto-generated method stub
 		// Essentially a transaction list, function-wise.
+	}
+
+	@Override
+	public void drawHealthBars() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyShopOfSelection(int tileX, int tileY, Tile tile) {
+		// TODO Auto-generated method stub
+		
 	}
 }

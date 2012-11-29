@@ -72,6 +72,8 @@ public class GameTest {
 		Enemy enemy = new Enemy(5, 5);
 		game.addEnemy(enemy);
 		
+		assertEquals(100, game.getEnemies().get(0).getMaxHP());
+		
 		assertEquals(100, game.getEnemies().get(0).getHP());
 		game.update();
 		assertEquals(90, game.getEnemies().get(0).getHP());
@@ -97,24 +99,78 @@ public class GameTest {
 		
 		// Kill the enemy
 		assertEquals(10, game.getEnemies().get(0).getHP());
+		assertEquals(100, game.getEnemies().get(0).getMaxHP());
 		game.update();
 		assertEquals(0, game.getEnemies().size());
 	}
 	
 	@Test
 	public void testUpdateProjectile() {
-		Projectile proj = new Projectile(0, 0, 50, 50);
+		Projectile proj = new Projectile(0, 0, 30, 50);
 		assertEquals(new Point(0, 0), proj.getPosition());
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
-		assertEquals(new Point(10, 10), proj.getPosition());
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
-		assertEquals(new Point(20, 20), proj.getPosition());
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
-		assertEquals(new Point(50, 50), proj.getPosition());
+		System.out.println(proj.getPosition());
 		proj.updatePosition();
-		assertEquals(new Point(50, 50), proj.getPosition());
+		assertTrue(proj.isAlive());
+		System.out.println(proj.getPosition());
+		assertEquals(new Point(30, 50), proj.getPosition());
+		proj.updatePosition();
+		assertEquals(new Point(30, 50), proj.getPosition());
+		assertFalse(proj.isAlive());
+	}
+	
+	@Test
+	public void testEnemyUpdatePosition() {
+		Point[] path = {new Point(0,0), new Point(5,0), new Point(5,5), 
+						new Point(5,10), new Point(5,5), new Point(0, 5)};
+		Enemy enemy = new Enemy(path);
+		assertEquals(new Point(0, 0), enemy.getPosition());
+		enemy.updatePosition();
+		assertEquals(new Point(1, 0), enemy.getPosition());
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		assertEquals(new Point(5, 0), enemy.getPosition());
+		enemy.updatePosition();
+		assertEquals(new Point(5, 1), enemy.getPosition());
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		assertEquals(new Point(5, 5), enemy.getPosition());
+		enemy.updatePosition();
+		assertEquals(new Point(5, 6), enemy.getPosition());
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		assertEquals(new Point(5, 10), enemy.getPosition());
+		enemy.updatePosition();
+		assertEquals(new Point(5, 9), enemy.getPosition());
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		assertEquals(new Point(5, 5), enemy.getPosition());
+		enemy.updatePosition();
+		assertEquals(new Point(4, 5), enemy.getPosition());
+		enemy.updatePosition();
+		enemy.updatePosition();
+		enemy.updatePosition();
+		assertTrue(enemy.isAlive());
+		enemy.updatePosition();
+		assertEquals(new Point(0, 5), enemy.getPosition());
+		assertFalse(enemy.isAlive());
 	}
 
 }

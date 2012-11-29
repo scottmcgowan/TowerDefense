@@ -9,8 +9,14 @@ public class Enemy extends Drawable {
 	
 	// Data fields every enemy must maintain
 	
-	// This enemy's health
+	// Enemy's initial health
+	private int maxHP;
+	
+	// This enemy's current health
 	private int hp;
+	
+	// Is the enemy active in game
+	private boolean isAlive;
 	
 	// Movement speed
 	private int speed;
@@ -28,6 +34,7 @@ public class Enemy extends Drawable {
 	private Shape cBox;
 	
 	private Point[] path;
+	private int currentPath;
 	
 	/**
 	 * Create an enemy with an explicit starting position, stritcly for testing
@@ -41,6 +48,11 @@ public class Enemy extends Drawable {
 	public Enemy(int xPos, int yPos) {
 		
 		hp = 100;
+		maxHP = hp;
+		
+		isAlive = true;
+		
+		path = new Point[0];
 		
 		// TODO: Magic numbers
 		int width = 30;
@@ -63,6 +75,10 @@ public class Enemy extends Drawable {
 	public Enemy(Point[] initPath) {
 		hp = 100;
 		
+		speed = 1;
+		
+		isAlive = true;
+		
 		// TODO: Magic numbers
 		int width = 30;
 		int height = 30;
@@ -75,6 +91,7 @@ public class Enemy extends Drawable {
 		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
 		
 		pos = path[0];
+		currentPath = 0;
 	}
 	
 	public Shape getBounds() {
@@ -87,6 +104,14 @@ public class Enemy extends Drawable {
 	
 	public int getHP() {
 		return hp;
+	}
+	
+	public int getMaxHP() {
+		return maxHP;
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
 	}
 	
 	/**
@@ -103,7 +128,42 @@ public class Enemy extends Drawable {
 	}
 	
 	public void updatePosition() {
-		
+		if (currentPath < path.length - 1 && isAlive) {
+			
+			// Set the temp destination
+			Point next = path[currentPath + 1];
+			
+			// The enemy is moving horizontally
+			if (pos.y == next.y) {
+				if (pos.x < next.x) {
+					pos.x += speed;
+					if (pos.x >= next.x)
+						currentPath++;
+				}
+				else {
+					pos.x -= speed;
+					if (pos.x <= next.x)
+						currentPath++;
+				}
+			}
+			
+			// The enemy is moving vertically
+			else if (pos.x == next.x) {
+				if (pos.y < next.y) {
+					pos.y += speed;
+					if (pos.y >= next.y)
+						currentPath++;
+				}
+				else {
+					pos.y -= speed;
+					if (pos.y <= next.y)
+						currentPath++;
+				}
+			}
+			
+			if (currentPath >= path.length - 1)
+				isAlive = false;
+		}
 	}
 	
 	public void attack() {

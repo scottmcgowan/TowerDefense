@@ -3,6 +3,7 @@ package model;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
 //TODO Make abstract after testing
 public class Projectile extends Drawable {
@@ -16,9 +17,6 @@ public class Projectile extends Drawable {
 	// Pixels to move per frame
 	private double speed;
 	
-	// Degrees movement
-	private double direction;
-	
 	// Does this projectile burn out
 	private boolean disposable;
 	
@@ -31,11 +29,14 @@ public class Projectile extends Drawable {
 	// Collision box
 	private Shape cBox;
 	
+	private boolean isAlive;
+	
 	public Projectile(int xPos, int yPos, int xDes, int yDes) {
 		
 		speed = 10;
 		damage = 10;
 		disposable = false;
+		isAlive = true;
 		pos = new Point(xPos, yPos);
 		destination = new Point(xDes, yDes);
 		
@@ -48,20 +49,26 @@ public class Projectile extends Drawable {
 	
 	public void updatePosition() {
 		if (pos.x != destination.x && pos.y != destination.y) {
-			if (destination.x > pos.x) {
-				if (destination.y > pos.y)
-					pos.y += speed;
-				else
-					pos.y -= speed;
-				pos.x += speed;
-			} else {
-				if (destination.y > pos.y)
-					pos.y += speed;
-				else
-					pos.y -= speed;
-				pos.x -= speed;
-			}
+
+			int x = destination.x - pos.x;
+			int y = destination.y - pos.y;
+			Point2D vect = new Point(x, y);
+
+			double distance = pos.distance(destination);
+
+			double xDis = vect.getX() / distance;
+			double yDis = vect.getY() / distance;
+
+			vect.setLocation(xDis * speed, yDis * speed);
+
+			pos.setLocation(pos.x + vect.getX(), pos.y + vect.getY());
+		} else if (pos.x == destination.x && pos.y == destination.y) {
+			isAlive = false;
 		}
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
 	}
 	
 	public Shape getBounds() {

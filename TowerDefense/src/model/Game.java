@@ -2,7 +2,6 @@ package model;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Queue;
 
 
 /**
@@ -72,10 +71,24 @@ public class Game {
 		if (gameOver)
 			return;
 		
+		// Temp lists to keep track of enemys/projectiles to remove from the game
+		ArrayList<Projectile> tempProj = new ArrayList<Projectile>();
+		ArrayList<Enemy> tempEnemy = new ArrayList<Enemy>();
+		
 		// Move all enemies first
 		for (Enemy enemy : enemyList) {
 			enemy.updatePosition();
+			
+			// An enemy has died, but no shots were fired,
+			// this enemy has reached the goal
+			if (!enemy.isAlive()) {
+				tempEnemy.add(enemy);
+				// TODO: Enemy scored, decrement player health
+			}
 		}
+		
+		// Cleanup enemy list
+		enemyList.removeAll(tempEnemy);
 		
 		// Fire any available projectiles second
 		for (Tower tower : towerList) {
@@ -97,10 +110,6 @@ public class Game {
 			}
 		} // end outer
 		
-		// Temp lists to keep track of enemys/projectiles to remove from the game
-		ArrayList<Projectile> tempProj = new ArrayList<Projectile>();
-		ArrayList<Enemy> tempEnemy = new ArrayList<Enemy>();
-		
 		// Check for projectile collision last
 		for (Projectile projectile : projectileList) {
 			projectile.updatePosition();
@@ -114,8 +123,14 @@ public class Game {
 					}
 					
 					// Destroy projectile
+					if (!tempProj.contains(projectile))
+						tempProj.add(projectile);
+				} 
+			}
+			
+			if (!projectile.isAlive()) {
+				if (!tempProj.contains(projectile))
 					tempProj.add(projectile);
-				}
 			}
 		}
 		

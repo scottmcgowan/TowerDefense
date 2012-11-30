@@ -16,6 +16,7 @@ import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import model.GameControllerInterface;
@@ -111,7 +112,6 @@ public class GameCanvas extends JPanel implements KeyListener {
 		for (int y = 0; y < map.getRow(); y++) {
 			for (int x = 0; x < map.getCol(); x++) {
 				JPanel temp = gameMap[y][x];
-				temp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				temp.addMouseListener(new MouseClickListener());
 				add(temp);
 				temp.repaint();
@@ -141,7 +141,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
 			Tile current = map.tileMap[locationX][locationY];
-
+			
 			switch (current) {
 			case ENVIRONMENT:
 				try {
@@ -200,11 +200,6 @@ public class GameCanvas extends JPanel implements KeyListener {
 				}
 				break;
 			}
-
-			/**
-			 * gr.setColor(Color.BLACK); gr.drawRect(0, 0, gridWidth,
-			 * gridHeight);
-			 **/
 		}
 	}
 
@@ -302,14 +297,17 @@ public class GameCanvas extends JPanel implements KeyListener {
 			clicked = arg0.getComponent();
 			PaintSquare click = (PaintSquare)(arg0.getComponent());
 			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileX()][click.getTileY()]);
+			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
 			Component hover = arg0.getComponent();
-
+				((JComponent) hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 		}
 
 		public void mouseExited(MouseEvent arg0) {
+			Component hover = arg0.getComponent();
+			((JComponent) hover).setBorder(BorderFactory.createEmptyBorder());
 		}
 
 		public void mousePressed(MouseEvent arg0) {

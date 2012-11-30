@@ -1,9 +1,23 @@
 package GUI;
 
+import model.towers.Tower;
+
 public class Map {
 
 	public enum Tile {
-		ENVIRONMENT, START, GOAL, PATH, ICE_TOWER, FIRE_TOWER, LIGHTNING_TOWER
+		ENVIRONMENT(Tower.EMPTY), 
+		START(Tower.UNBUILDABLE), 
+		GOAL(Tower.UNBUILDABLE), 
+		PATH(Tower.UNBUILDABLE),
+		ICE_TOWER(Tower.ICE_TYPE), 
+		FIRE_TOWER(Tower.FIRE_TYPE), 
+		LIGHTNING_TOWER(Tower.LIGHTNING_TYPE);
+		
+		public int tileType;
+		
+		private Tile(int tileType){
+			this.tileType = tileType;
+		}
 	}
 
 	private int rowCount = 12;

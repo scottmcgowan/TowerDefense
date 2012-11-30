@@ -1,14 +1,13 @@
 package network;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -17,7 +16,6 @@ import javax.swing.ScrollPaneConstants;
 
 import model.Delivery;
 import model.GameControllerInterface;
-import model.PurchaseOrder;
 
 public class NetworkPanel extends JPanel implements Observer {
 
@@ -35,21 +33,21 @@ public class NetworkPanel extends JPanel implements Observer {
 		this.game = game;
 		this.player = p;
 		setLayout(null);
-		setSize(PANEL_WIDTH, PANEL_HEIGHT);
+		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		setVisible(true);
 
 		chatBar.setSize(PANEL_WIDTH, 20);
-		chatBar.setLocation(0, 0);
+		chatBar.setLocation(0, 6);
 		chatBar.setEditable(true);
 		add(chatBar);
 
-		textArea.setLocation(0, 30);
+		textArea.setLocation(0, 36);
 		textArea.setSize(PANEL_WIDTH, 332);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
 		
 		scrollPane.setSize(PANEL_WIDTH, 332);
-		scrollPane.setLocation(0, 30);
+		scrollPane.setLocation(0, 36);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//scrollPane.setAutoscrolls(true);

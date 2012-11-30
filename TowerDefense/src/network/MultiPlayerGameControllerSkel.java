@@ -2,16 +2,21 @@ package network;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.Timer;
 
 import model.Delivery;
 import model.Drawable;
+import model.Game;
 import model.GameControllerInterface;
+import model.Player;
 import model.PurchaseOrder;
+import model.enemies.Enemy;
 import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.Map;
@@ -29,11 +34,15 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	public int secondCounter = 0;
 	public NetworkPanel networkPanel;
 	public Network network;
-	//public GameCanvas gameCanvas;
 	private GameCanvas canvas;
 	private MultiPlayerShopPanel shop;
-
+	private Player thisPlayer = new Player();
+	private Player otherPlayer = new Player();
 	private JFrame gui = new JFrame();
+	private ArrayList<PurchaseOrder> orders = new ArrayList<PurchaseOrder>();
+	private Game game;
+	private ArrayList<Enemy> spawnQueue;
+	private Timer timer;
 
 	public static void main(String[] args) {
 		MultiPlayerGameControllerSkel game = new MultiPlayerGameControllerSkel(Server.SERVER_PLAYER);
@@ -78,6 +87,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 		gui.add(shop);
 		gui.add(canvas);
 		
+		/*
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
 		
@@ -90,7 +100,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 		fileMenu.addSeparator();
 		fileMenu.add(exit);
 		newGame.addActionListener(new allMenuAction());
-		exit.addActionListener(new allMenuAction());
+		exit.addActionListener(new allMenuAction());*/
 		
 		gui.repaint();
 		gameStart();
@@ -109,6 +119,8 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	}
 
 	public void addOrder(PurchaseOrder po){
+		orders.add(po);
+		thisPlayer.setMoney(thisPlayer.getMoney()-po.getItem().value);
 		return;
 	}
 
@@ -181,12 +193,6 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	}
 
 	@Override
-	public void drawMapSelection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void drawHealthBars() {
 		// TODO Auto-generated method stub
 		
@@ -194,14 +200,13 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 
 	@Override
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile) {
-		// TODO Auto-generated method stub
-		int tileType;
-		if(tile.equals(Map.Tile.ENVIRONMENT)){tileType = Tower.EMPTY;}
-		else if(tile.equals(Map.Tile.FIRE_TOWER)){tileType = Tower.FIRE_TYPE;}
-		else if(tile.equals(Map.Tile.ICE_TOWER)){tileType = Tower.ICE_TYPE;}
-		else if(tile.equals(Map.Tile.LIGHTNING_TOWER)){tileType = Tower.LIGHTNING_TYPE;}
-		else{tileType = Tower.UNBUILDABLE;}
-		shop.updateButtons(tileX, tileY, tileType);
+		shop.updateButtons(tileX, tileY, tile.tileType);
+		shop.updateWithMoney(thisPlayer.getMoney());
+	}
+	
+	@Override
+	public void updateShopWithCurrentMoney(){
+		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 	
 }

@@ -20,7 +20,7 @@ import model.towers.Tower;
 
 public class MultiPlayerShopPanel extends JPanel{
 	GameCanvas canvas;
-	private ArrayList<JButton> buttons = new ArrayList<JButton>();
+	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 100;
 	private GameControllerInterface game;
@@ -36,9 +36,10 @@ public class MultiPlayerShopPanel extends JPanel{
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
 		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
-			JButton b = new JButton(i.name() + "  " + "(" + i.value + ")");
+			ShopButton b = new ShopButton(i.name() + "  " + "(" + i.value + ")", i);
 			buttons.add(b);
 			b.addActionListener(listenerToAllButtons);
+			b.setEnabled(false);
 			add(b);
 		}
 		repaint();
@@ -52,7 +53,7 @@ public class MultiPlayerShopPanel extends JPanel{
 
 		public void actionPerformed(ActionEvent theEvent) {
 			// Determine which of the five buttons was clicked
-			JButton clickButton = (JButton) theEvent.getSource();
+			ShopButton clickButton = (ShopButton) theEvent.getSource();
 			String text = clickButton.getText().substring(0,
 					clickButton.getText().length() - 7);
 			// game.sendMessage(text);
@@ -64,6 +65,7 @@ public class MultiPlayerShopPanel extends JPanel{
 			interpretDelivery(new Delivery("Player " + player + " purchased "
 					+ text + ".", new PurchaseOrder(player, null), false, true,
 					player));
+			
 		}
 	}
 	
@@ -73,29 +75,42 @@ public class MultiPlayerShopPanel extends JPanel{
 
 	public void updateButtons(int tileX, int tileY, int tileType) {
 		// TODO Auto-generated method stub
-		for(JButton b:buttons){
+		for(ShopButton b:buttons){
 			b.setEnabled(true);
 		}
 		if(tileType==Tower.UNBUILDABLE){
-			buttons.get(0).setEnabled(false);
-			buttons.get(1).setEnabled(false);
-			buttons.get(2).setEnabled(false);
-			buttons.get(3).setEnabled(false);
-			buttons.get(4).setEnabled(false);
-			buttons.get(5).setEnabled(false);
+			for(ShopButton b:buttons){
+				if(b.item.type==MultiPlayerShop.TYPE_BUY_TOWER)
+					b.setEnabled(false);
+				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER)
+					b.setEnabled(false);
+			}
 		}else if(tileType==Tower.EMPTY){
-			buttons.get(3).setEnabled(false);
-			buttons.get(4).setEnabled(false);
-			buttons.get(5).setEnabled(false);
+			for(ShopButton b:buttons){
+				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER)
+					b.setEnabled(false);
+			}
 		}else{
-			buttons.get(0).setEnabled(false);
-			buttons.get(1).setEnabled(false);
-			buttons.get(2).setEnabled(false);
-			buttons.get(3).setEnabled(false);
-			buttons.get(4).setEnabled(false);
-			buttons.get(5).setEnabled(false);
-			buttons.get(tileType+2).setEnabled(true);
+			for(ShopButton b:buttons){
+				if(b.item.type==MultiPlayerShop.TYPE_BUY_TOWER)
+					b.setEnabled(false);
+				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER){
+					if(b.item.towerType==tileType){
+					b.setEnabled(true);}else{
+						b.setEnabled(false);
+					}
+				}
+			}
 		}
 		repaint();
 	}
+
+	public void updateWithMoney(int money) {
+		// TODO Auto-generated method stub
+		for(ShopButton b:buttons){
+			if(b.item.value>=money)
+				b.setEnabled(false);
+		}
+	}
+
 }

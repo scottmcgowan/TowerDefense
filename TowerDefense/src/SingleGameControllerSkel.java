@@ -56,7 +56,6 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 110);
-		gui.setVisible(true);
 		gui.add(shop);
 		gui.add(canvas);
 
@@ -74,9 +73,11 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		newGame.addActionListener(new allMenuAction());
 		exit.addActionListener(new allMenuAction());
 
+		gui.setVisible(true);
 		gui.repaint();
 
 		gameStart();
+		
 	}
 
 	private class allMenuAction implements ActionListener {

@@ -139,7 +139,8 @@ public class Game {
 		for (Tower tower : towerList) {
 			
 			// First check that the tower can fire, to avoid unnecessary collision detection
-			if (counter % tower.getFireRate() == 0) {
+//			if (counter % tower.getFireRate() == 0) {
+			if (tower.canFire()) {
 				
 				for (Enemy enemy: enemyList) {
 					if (tower.getRange().intersects((Rectangle2D) enemy.getBounds())) {
@@ -147,12 +148,14 @@ public class Game {
 						Point pos = tower.getPostion();
 						Point des = enemy.getPosition();
 						addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));
+						tower.fire();
 						
 						// this tower has fired, move on to the next one
 						break;
 					}
 				} // end inner
-			}
+			} else
+				tower.reload();
 		} // end outer
 		
 		// Check for projectile collision last

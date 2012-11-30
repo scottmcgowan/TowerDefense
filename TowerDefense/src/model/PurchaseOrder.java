@@ -11,12 +11,12 @@ public class PurchaseOrder implements Serializable{
 	private int tile_y;
 	
 	public PurchaseOrder(int p, Item i){
-		player = p;
+		setPlayer(p);
 		setItem(i);
 	}
 
 	public PurchaseOrder(int p, Item i, int x, int y){
-		player = p;
+		setPlayer(p);
 		setItem(i);
 		tile_x = x;
 		tile_y = y;
@@ -28,5 +28,13 @@ public class PurchaseOrder implements Serializable{
 
 	public void setItem(Item item) {
 		this.item = item;
+	}
+
+	public int getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(int player) {
+		this.player = player;
 	}
 }

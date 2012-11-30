@@ -11,6 +11,7 @@ public class Delivery implements Serializable{
 	public boolean messageForSelf;
 	public boolean messageForOther;
 	public int player;
+	public boolean gameOver = false;
 	
 	public Delivery(String s, PurchaseOrder purchase, boolean self, boolean other, int p){
 		message = s;

@@ -43,7 +43,8 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	private Game game;
 	private ArrayList<Enemy> spawnQueue;
 	private Timer timer;
-
+	private int player;
+	
 	public static void main(String[] args) {
 		MultiPlayerGameControllerSkel game = new MultiPlayerGameControllerSkel(Server.SERVER_PLAYER);
 		wait(1);
@@ -60,6 +61,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	}
 	
 	public MultiPlayerGameControllerSkel(int player) {
+		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
 		if(player==Server.SERVER_PLAYER){
 			Server server = new Server(Server.PORT_NUMBER);
@@ -120,7 +122,9 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 
 	public void addOrder(PurchaseOrder po){
 		orders.add(po);
-		thisPlayer.setMoney(thisPlayer.getMoney()-po.getItem().value);
+		if(po.getPlayer()==player){
+			thisPlayer.setMoney(thisPlayer.getMoney()-po.getItem().value);
+		}
 		return;
 	}
 

@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
+import resources.Res;
+
 import model.Drawable;
 
 public abstract class Enemy extends Drawable {
@@ -38,7 +40,7 @@ public abstract class Enemy extends Drawable {
 	private int currentPath;
 	
 	/**
-	 * Create an enemy with an explicit starting position, stritcly for testing
+	 * Create an enemy with an explicit starting position, strictly for testing
 	 * purposes
 	 * 
 	 * @param xPos
@@ -56,9 +58,8 @@ public abstract class Enemy extends Drawable {
 		
 		path = new Point[0];
 		
-		// TODO: Magic numbers
-		int width = 30;
-		int height = 30;
+		int width = Res.GRID_WIDTH;
+		int height = Res.GRID_HEIGHT;
 		
 		// TODO: For now enemies take up 1 grid space, may change
 		cBox = new Rectangle2D.Double(xPos, yPos, xPos + width, yPos + height);
@@ -84,9 +85,8 @@ public abstract class Enemy extends Drawable {
 		
 		isAlive = true;
 		
-		// TODO: Magic numbers
-		int width = 30;
-		int height = 30;
+		int width = Res.GRID_WIDTH;
+		int height = Res.GRID_HEIGHT;
 		
 		path = initPath;
 		

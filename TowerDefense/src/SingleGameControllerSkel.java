@@ -175,4 +175,10 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updateShopWithCurrentMoney() {
+		// TODO Auto-generated method stub
+		
+	}
 }

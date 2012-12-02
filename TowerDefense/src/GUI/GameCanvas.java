@@ -176,27 +176,27 @@ public class GameCanvas extends JPanel implements KeyListener {
 				}
 				break;
 			case ICE_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.ICE_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.BLUE);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/IceTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find IceTower.png");
 				}
 				break;
 			case FIRE_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.FIRE_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.ORANGE);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/FireTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find FireTower.png");
 				}
 				break;
 			case LIGHTNING_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.LIGHTNING_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.CYAN);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/LightningTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find LightningTower.png");
 				}
 				break;
 			}

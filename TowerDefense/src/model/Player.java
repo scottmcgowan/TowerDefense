@@ -4,7 +4,7 @@ import java.awt.Shape;
 
 public class Player {
 	private int health = 20;
-	private int money = 300;
+	private int money = 600;
 	private int towers = 0;
 	private Shape shape;
 

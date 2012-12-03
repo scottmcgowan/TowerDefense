@@ -48,15 +48,16 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private GameCanvas gameCanvas;
 	private MultiPlayerShopPanel shop;
 	private Player thisPlayer = new Player();
-	private Player otherPlayer = new Player();
 	private JFrame gui = new JFrame();
 	private LinkedList<PurchaseOrder> orders = new LinkedList<PurchaseOrder>();
 	private Game game;
 	private LinkedList<Enemy> spawnQueue = new LinkedList<Enemy>();
-	private int timer;
+	private int spawn_timer;
+	private int logistic_timer;
 	private int player;
 	private int currentTileX;
 	private int currentTileY;
+	private int tower_count;
 	
 	public static void main(String[] args) {
 		MultiPlayerGameController game = new MultiPlayerGameController(
@@ -74,6 +75,31 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		} while (t1 - t0 < 1000);
 	}
 
+	public void lost(){System.out.println("Losing conditions met");}
+	
+	public boolean hasLost(){
+		return game.gameOver();}
+	
+	public void won(){System.out.println("Winning conditions met");}
+	
+	private boolean checkOnesidedTieConditions(){
+		return thisPlayer.getMoney()<100 && game.getEnemies().isEmpty();}
+	
+	public void tie(){System.out.println("Tie conditions met");}
+
+	public void updateLogisticSender(){
+		spawn_timer++;
+		if(spawn_timer>=300){
+		System.out.println("Sending Logistics");
+		String log = "Player" + player;
+		//Tower count
+		//Health
+		//Money
+			
+		spawn_timer = 0;
+		}
+	}
+	
 	public MultiPlayerGameController(int player) {
 		game = new Game();
 		this.player = player;
@@ -101,12 +127,9 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
-		gui.setVisible(true);
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(gameCanvas);
-		
-		
 		JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
 		
 		JMenu fileMenu = new JMenu("File"); menubar.add(fileMenu);
@@ -116,9 +139,9 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		fileMenu.add(exit); 
 		newGame.addActionListener(new allMenuAction());
 	 	exit.addActionListener(new allMenuAction());
-		
+
+		gui.setVisible(true);
 		gui.repaint();
-		gameStart();
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -137,6 +160,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);
 			if (po.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
 				orders.add(po);
+				shop.updateButtons(po.getTile_x(), po.getTile_y(), po.getItem().towerType);
 				System.out.println("Player "+ player + " tower order added");
 			}
 		} else {
@@ -145,15 +169,53 @@ public class MultiPlayerGameController implements GameControllerInterface {
 				System.out.println("Player "+ player + " purchase enemy order added");
 			}
 		}
-		//shop.updateWithMoney(thisPlayer.getMoney());
+		shop.updateWithMoney(thisPlayer.getMoney());
 		System.out.println("Called add order");
 	}
 
+	@Override
+	public void processOrders() {
+		// TODO Auto-generated method stub
+		for (PurchaseOrder po : orders) {
+			if (po.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER) {
+				Tower tower = null;
+				System.out.println(po.getTile_x());
+				System.out.println(po.getTile_y());
+				switch (po.getItem().towerType) {
+				case Res.TOWER_FIRE_TYPE:
+					tower = new FireTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_ICE_TYPE:
+					tower = new IceTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_LIGHTNING_TYPE:
+					tower = new LightningTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				}
+				setUpTower(po.getTile_x(), po.getTile_y(), po.getItem().towerType);
+				game.addTower(tower);
+				tower_count++;
+				System.out.println("Player "+ player + " tower added.");
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
+
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+				for(int i=0;i<5;i++){
+				spawnQueue.add(new Grunt(gameCanvas.getPath()));}
+				System.out.println("Player "+ player + " enemy order processed.");
+			}
+		}
+		orders.clear();
+	}
+	
 	public void sendDelivery(Delivery d) {
 		network.sendDelivery(d);
 	}
 
 	public void gameStart() {
+		shop.updateWithMoney(thisPlayer.getMoney());
 		// gui = new GameGUI();
 		// Create a new thread
 		Thread gameThread = new Thread() {
@@ -177,10 +239,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public void processSpawnQueue() {
-		timer += 1;
-		if(timer >=60 && !spawnQueue.isEmpty()){
+		spawn_timer += 1;
+		if(spawn_timer >=60 && !spawnQueue.isEmpty()){
 			game.addEnemy(spawnQueue.poll());
-			timer = 0;
+			spawn_timer = 0;
 			System.out.println("Player "+ player + " enemy added");
 		}
 	}
@@ -225,42 +287,6 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	@Override
-	public void processOrders() {
-		// TODO Auto-generated method stub
-		for (PurchaseOrder po : orders) {
-			if (po.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER) {
-				Tower tower = null;
-				System.out.println(po.getTile_x());
-				System.out.println(po.getTile_y());
-				switch (po.getItem().towerType) {
-				case Res.TOWER_FIRE_TYPE:
-					tower = new FireTower(po.getTile_x() * Res.GRID_WIDTH,
-							po.getTile_y() * Res.GRID_HEIGHT);
-					break;
-				case Res.TOWER_ICE_TYPE:
-					tower = new IceTower(po.getTile_x() * Res.GRID_WIDTH,
-							po.getTile_y() * Res.GRID_HEIGHT);
-					break;
-				case Res.TOWER_LIGHTNING_TYPE:
-					tower = new LightningTower(po.getTile_x() * Res.GRID_WIDTH,
-							po.getTile_y() * Res.GRID_HEIGHT);
-					break;
-				}
-				setUpTower(po.getTile_x(), po.getTile_y(), po.getItem().towerType);
-				game.addTower(tower);
-				System.out.println("Player "+ player + " tower added.");
-			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
-
-			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
-				for(int i=0;i<5;i++){
-				spawnQueue.add(new Grunt(gameCanvas.getPath()));}
-				System.out.println("Player "+ player + " enemy order processed.");
-			}
-		}
-		orders.clear();
-	}
-
-	@Override
 	public void drawHealthBars() {
 		// TODO Auto-generated method stub
 
@@ -280,6 +306,11 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	@Override
 	public void updateShopWithCurrentMoney() {
 		shop.updateWithMoney(thisPlayer.getMoney());
+	}
+
+	public void checkForTie() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

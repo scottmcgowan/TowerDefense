@@ -55,7 +55,7 @@ public class Server extends Thread {
 	@Override
 	public void run() {
 		try {
-			while (true) {
+			while (listLiasons.size()<2) {
 				// accept blocks until request comes over socket
 				Socket intoServer = myServerSocket.accept();
 
@@ -76,6 +76,10 @@ public class Server extends Thread {
 					// always call the start() method on a Thread. Don't call
 					// the run method.
 					t.start();
+					if(listLiasons.size()==2){
+						listOutputStreams.get(0).writeObject(new Delivery("New Game Started", true, false, false, false, false));
+						listOutputStreams.get(1).writeObject(new Delivery("New Game Started", true, false, false, false, false));
+					}
 				}
 			}
 		} catch (IOException e) {

@@ -2,8 +2,8 @@ package model;
 
 import java.io.Serializable;
 
-//An entity that contains a message, the intended audience for the message, and a possible 
-//purchaseOrder that comes with.
+//An entity that contains a message, the intended audience for the message, a possible 
+//purchaseOrder that comes with, and possible messages about the outcome of the game.
 
 public class Delivery implements Serializable{
 	private String message;
@@ -11,7 +11,10 @@ public class Delivery implements Serializable{
 	public boolean messageForSelf;
 	public boolean messageForOther;
 	public int player;
-	public boolean gameOver = false;
+	public final boolean newGameReady;
+	public final boolean lose;
+	public final boolean tieMet;
+	public final boolean tied;
 	
 	public Delivery(String s, PurchaseOrder purchase, boolean self, boolean other, int p){
 		message = s;
@@ -19,6 +22,21 @@ public class Delivery implements Serializable{
 		player = p;
 		messageForSelf = self;
 		messageForOther = other;
+		newGameReady = false;
+		lose = false;
+		tieMet = false;
+		tied = false;
+	}
+	
+	public Delivery(String s, boolean gameReady, boolean lost, boolean tieCondition, boolean tiedEnd, boolean self){
+		message = s;
+		newGameReady = gameReady;
+		lose = lost;
+		tieMet = tieCondition;
+		tied = tiedEnd;
+		messageForSelf = self;
+		messageForOther = true;
+		player = 0;
 	}
 	
 	public String getMessage(){return message;}

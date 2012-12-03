@@ -38,7 +38,7 @@ public abstract class Tower extends Drawable {
 		super(new Point(xPos, yPos));
 		
 		canFire = true;
-		fireRate = 60;
+		fireRate = 60; // 60 = one shot per second
 		reloadCount = 1;
 		
 		int width = Res.GRID_WIDTH;
@@ -58,6 +58,7 @@ public abstract class Tower extends Drawable {
 		
 		pos = new Point(xPos, yPos);
 	}
+	
 	
 	// To determine if an enemy is range of the tower
 	public Shape getRange() {
@@ -87,10 +88,7 @@ public abstract class Tower extends Drawable {
 		if (reloadCount % fireRate == 0)
 			canFire = true;
 	}
-	
-	// TODO: Let Game do this
-//	public void attack() {
-//		
-//	}
+
+	public abstract int getID();
 	
 }

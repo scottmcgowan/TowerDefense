@@ -21,6 +21,9 @@ public abstract class Projectile extends Drawable {
 	// Does this projectile burn out
 	private boolean disposable;
 	
+	// Does this projectile cause splash damage
+	private boolean splash;
+	
 	// If disposable, how long until burnout
 	private int duration;
 
@@ -34,14 +37,15 @@ public abstract class Projectile extends Drawable {
 	
 	private boolean isAlive;
 	
-	public Projectile(int xPos, int yPos, int xDes, int yDes) {
+	public Projectile(int xPos, int yPos, int xDes, int yDes, int speed, int damage, boolean splash) {
 		
 		super(new Point(xPos, yPos));
 		
-		speed = 10;
-		damage = 50;
-		disposable = false;
 		isAlive = true;
+		disposable = false;
+		this.speed = speed;
+		this.damage = damage;
+		this.splash = splash;
 		destination = new Point(xDes, yDes);
 		
 		width = 10;
@@ -64,7 +68,7 @@ public abstract class Projectile extends Drawable {
 			double yDis = vect.getY() / distance;
 
 			vect.setLocation(xDis * speed, yDis * speed);
-
+			
 			pos.setLocation(pos.x + vect.getX(), pos.y + vect.getY());
 			cBox = new Ellipse2D.Double(pos.x, pos.y, width, height);
 			
@@ -75,6 +79,10 @@ public abstract class Projectile extends Drawable {
 	
 	public boolean isAlive() {
 		return isAlive;
+	}
+	
+	public boolean isSplash() {
+		return splash;
 	}
 	
 	public Shape getBounds() {

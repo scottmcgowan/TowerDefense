@@ -170,7 +170,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			}
 		}
 	}
-
+	
 	public void addOrder(PurchaseOrder po) {
 		if (po.getPlayer() == player) {
 			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);

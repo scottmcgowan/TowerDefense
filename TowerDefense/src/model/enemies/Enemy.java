@@ -3,8 +3,12 @@ package model.enemies;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
 
 import resources.Res;
 
@@ -102,6 +106,7 @@ public abstract class Enemy extends Drawable {
 		currentPath = 0;
 		
 		cBox = new Rectangle2D.Double(pos.x, pos.y, width, height);
+		
 	}
 	
 	public Shape getBounds() {
@@ -211,7 +216,7 @@ public abstract class Enemy extends Drawable {
 			cBox = new Rectangle2D.Double(pos.x, pos.y, width, height);
 			
 			canMove = false;
-			moveCount = 1;
+			rest();
 		}
 	}
 	

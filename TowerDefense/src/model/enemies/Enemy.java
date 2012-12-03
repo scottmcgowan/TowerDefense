@@ -103,6 +103,7 @@ public abstract class Enemy extends Drawable {
 		int left = path.get(0).x - (width / 2);
 		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
 		
+		currentPath = 0;
 	}
 	
 	public Shape getBounds() {

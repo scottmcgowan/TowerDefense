@@ -125,6 +125,7 @@ public class Game {
 			
 			// An enemy has died, but no shots were fired,
 			// this enemy has reached the goal
+			
 			if (!enemy.isAlive()) {
 				tempEnemy.add(enemy);
 				// Enemy scored, decrement player health

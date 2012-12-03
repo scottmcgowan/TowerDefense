@@ -1,3 +1,4 @@
+
 package model.enemies;
 
 import java.awt.Point;

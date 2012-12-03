@@ -30,7 +30,7 @@ import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.Map;
 
-public class MultiPlayerGameControllerSkel implements GameControllerInterface {
+public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
 	static final int UPDATE_RATE = 60; // number of game update per second
@@ -53,12 +53,14 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 	private ArrayList<Enemy> spawnQueue = new ArrayList<Enemy>();
 	private int timer;
 	private int player;
-
+	private int currentTileX;
+	private int currentTileY;
+	
 	public static void main(String[] args) {
-		MultiPlayerGameControllerSkel game = new MultiPlayerGameControllerSkel(
+		MultiPlayerGameController game = new MultiPlayerGameController(
 				Server.SERVER_PLAYER);
 		wait(1);
-		MultiPlayerGameControllerSkel game2 = new MultiPlayerGameControllerSkel(
+		MultiPlayerGameController game2 = new MultiPlayerGameController(
 				Server.CLIENT_PLAYER);
 	}
 
@@ -70,7 +72,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 		} while (t1 - t0 < 1000);
 	}
 
-	public MultiPlayerGameControllerSkel(int player) {
+	public MultiPlayerGameController(int player) {
 		game = new Game();
 		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
@@ -85,8 +87,8 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 		gui.setLayout(null);
 		shop = new MultiPlayerShopPanel(player, this);
 		gameCanvas = new GameCanvas(this);
-		shop.connectToMap(gameCanvas);
 		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
+		shop.connectToMap(gameCanvas);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH,
 				networkPanel.PANEL_HEIGHT);
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
@@ -101,17 +103,18 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(gameCanvas);
-
-		/*
-		 * JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
-		 * 
-		 * JMenu fileMenu = new JMenu("File"); menubar.add(fileMenu);
-		 * 
-		 * JMenuItem newGame = new JMenuItem("New Game"); JMenuItem exit = new
-		 * JMenuItem("Exit"); fileMenu.add(newGame); fileMenu.addSeparator();
-		 * fileMenu.add(exit); newGame.addActionListener(new allMenuAction());
-		 * exit.addActionListener(new allMenuAction());
-		 */
+		
+		
+		JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
+		
+		JMenu fileMenu = new JMenu("File"); menubar.add(fileMenu);
+		
+		JMenuItem newGame = new JMenuItem("New Game"); JMenuItem exit = new
+		JMenuItem("Exit"); fileMenu.add(newGame); fileMenu.addSeparator();
+		fileMenu.add(exit); 
+		newGame.addActionListener(new allMenuAction());
+	 	exit.addActionListener(new allMenuAction());
+		
 
 		gui.repaint();
 		gameStart();
@@ -141,6 +144,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 				System.out.println("Player "+ player + " purchase enemy order added");
 			}
 		}
+		//shop.updateWithMoney(thisPlayer.getMoney());
 		System.out.println("Called add order");
 	}
 
@@ -242,15 +246,14 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 							po.getTile_y() * Res.GRID_HEIGHT);
 					break;
 				}
+				setUpTower(po.getTile_x(), po.getTile_y(), po.getItem().towerType);
 				game.addTower(tower);
 				System.out.println("Player "+ player + " tower added.");
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
 
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
-				Point[] path = {new Point(0,0), new Point(50,0), new Point(50,50), 
-						new Point(50,10), new Point(50,50), new Point(0, 50)};
-				for(int i=0;i<1;i++){
-				spawnQueue.add(new Grunt(path));}
+				for(int i=0;i<5;i++){
+				spawnQueue.add(new Grunt(gameCanvas.getPath()));}
 				System.out.println("Player "+ player + " enemy order processed.");
 			}
 		}
@@ -263,27 +266,20 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 
 	}
 
+	public void setUpTower(int tileX, int tileY, int tower_type){
+		gameCanvas.addTower(tileX, tileY, tower_type);
+	}
+	
 	@Override
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile) {
 		shop.updateButtons(tileX, tileY, tile.tileType);
+		// update shop with the new money value
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 
 	@Override
 	public void updateShopWithCurrentMoney() {
 		shop.updateWithMoney(thisPlayer.getMoney());
-	}
-
-	@Override
-	public void drawMapSelection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyShopOfSelection(String s) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

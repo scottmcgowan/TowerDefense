@@ -60,6 +60,15 @@ public class GameCanvas extends JLayeredPane{
 		add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
 		backgroundPanel.repaint();
 		path = backgroundPanel.pathTrail();
+		
+		// TODO: FIX THESE MAGIC NUMBERS
+		// These offsets are needed in order for the enemies to follow the path
+		// properly, meaning there is a problem in BackgroundPanel.pathTrail()
+		for (Point p: path) {
+			p.y -= 35;
+			p.x -= 35;
+		}
+		
 	}
 
 	public void drawDrawables(ArrayList<Drawable> arr){

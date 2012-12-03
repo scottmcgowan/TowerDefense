@@ -101,11 +101,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
-		gui.setVisible(true);
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(gameCanvas);
-		
+		gui.setVisible(true);
 		
 		JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
 		

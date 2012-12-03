@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import model.enemies.Enemy;
 import model.projectiles.*;
-import model.projectiles.Projectile;
 import model.towers.Tower;
 
 

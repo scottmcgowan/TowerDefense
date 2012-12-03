@@ -5,7 +5,9 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -48,9 +50,9 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private Player thisPlayer = new Player();
 	private Player otherPlayer = new Player();
 	private JFrame gui = new JFrame();
-	private ArrayList<PurchaseOrder> orders = new ArrayList<PurchaseOrder>();
+	private LinkedList<PurchaseOrder> orders = new LinkedList<PurchaseOrder>();
 	private Game game;
-	private ArrayList<Enemy> spawnQueue = new ArrayList<Enemy>();
+	private LinkedList<Enemy> spawnQueue = new LinkedList<Enemy>();
 	private int timer;
 	private int player;
 	private int currentTileX;
@@ -115,7 +117,6 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		newGame.addActionListener(new allMenuAction());
 	 	exit.addActionListener(new allMenuAction());
 		
-
 		gui.repaint();
 		gameStart();
 	}
@@ -178,8 +179,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public void processSpawnQueue() {
 		timer += 1;
 		if(timer >=60 && !spawnQueue.isEmpty()){
-			game.addEnemy(spawnQueue.get(0));
-			spawnQueue.remove(0);
+			game.addEnemy(spawnQueue.poll());
 			timer = 0;
 			System.out.println("Player "+ player + " enemy added");
 		}

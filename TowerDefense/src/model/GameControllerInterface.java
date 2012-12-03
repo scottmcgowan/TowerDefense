@@ -9,7 +9,6 @@ import network.MultiPlayerShop;
 public interface GameControllerInterface{
 
 	//public ArrayList<PurchaseOrder> listOrders;
-	
 	public void sendDelivery(Delivery d);
 	public void addOrder(PurchaseOrder po);
 	void gameLoop();

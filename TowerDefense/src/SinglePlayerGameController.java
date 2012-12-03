@@ -1,4 +1,5 @@
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,55 +9,58 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import resources.Res;
+
 import model.Delivery;
 import model.Drawable;
+import model.Game;
 import model.GameControllerInterface;
 import model.Player;
 import model.PurchaseOrder;
+import model.SinglePlayerShop;
+import model.towers.FireTower;
+import model.towers.IceTower;
+import model.towers.LightningTower;
+import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
 
-public class SingleGameControllerSkel implements GameControllerInterface {
+public class SinglePlayerGameController implements GameControllerInterface {
 
 	// main game class
 	private static final int UPDATE_RATE = 60; // number of game updates per second
 	private static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	
+	// Is this even necessary...?
 	private static final int HUMAN_PLAYER_VAL = 1;
 	private static final int COM_PLAYER_VAL = 2;
 
 	// State of the game
-	private Player humanUser = new Player();
-	boolean gameOver = false;
-	boolean gamePaused = false;
-	public int frameCounter = 0;
-	public int secondCounter = 0;
-	// public GameCanvas gameCanvas;
+	private Player user = new Player();
+	private Game game;
+	private boolean gameOver = false;
+	private boolean gamePaused = false;
 	private GameCanvas canvas;
-	private SinglePlayerShopPanel shop;
-	public ArrayList<PurchaseOrder> listOrders;
 	private JFrame gui = new JFrame();
+	private SinglePlayerShopPanel shop;
+	private ArrayList<PurchaseOrder> listOfOrders;
+	private int timer;
+	private int frameCounter = 0;
+	private int secondCounter = 0;
 
 	public static void main(String[] args) {
-		SingleGameControllerSkel game = new SingleGameControllerSkel();
+		SinglePlayerGameController game = new SinglePlayerGameController();
 	}
 
-	public static void wait(int n) {
-		long t0, t1;
-		t0 = System.currentTimeMillis();
-		do {
-			t1 = System.currentTimeMillis();
-		} while ((t1 - t0) < 1000);
-	}
-
-	public SingleGameControllerSkel() {
+	public SinglePlayerGameController() {
+		game = new Game();
 		gui.setLayout(new FlowLayout());
 		shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
 		gui.add(canvas);
 		gui.add(shop);
@@ -77,7 +81,6 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 
 		gui.setVisible(true);
 		gui.repaint();
-
 		gameStart();
 		
 	}
@@ -87,7 +90,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		public void actionPerformed(ActionEvent arg0) {
 			JMenuItem menuItem = (JMenuItem) arg0.getSource();
 			if (menuItem.getText() == "New Game") {
-				SingleGameControllerSkel newGame = new SingleGameControllerSkel(); // Is this even acceptable...?
+				SinglePlayerGameController newGame = new SinglePlayerGameController(); // Is this even acceptable...?
 			}
 			gui.dispose();
 		}
@@ -147,33 +150,49 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	}
 
 	@Override
-	public void sendDelivery(Delivery d) {
-		//Not avalible in singlePlayer
-	}
-
-	@Override
 	public void addOrder(PurchaseOrder po) {
-		listOrders.add(po);
-		int player = po.getPlayer();
+		int userMoney = user.getMoney();
 		int cost = po.getItem().value;
-		
-		if (player == HUMAN_PLAYER_VAL) {
-			int userMoney = humanUser.getMoney();
-			humanUser.setMoney(userMoney - cost); 
-		}
-		
+		user.setMoney(userMoney - cost);
+		System.out.println("Called the addOrder method");
 	}
 
 	@Override
 	public void draw(ArrayList<Drawable> arr) {
 		// TODO Auto-generated method stub
-		
+		canvas.drawDrawables(arr);
 	}
 
 	@Override
 	public void processOrders() {
-		// TODO Auto-generated method stub
-		// Essentially a transaction list, function-wise.
+		
+		for (PurchaseOrder po : listOfOrders) {
+			if (po.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER) {
+				Tower tower = null;
+				System.out.println(po.getTile_x());
+				System.out.println(po.getTile_y());
+				switch (po.getItem().towerType) {
+				case Res.TOWER_FIRE_TYPE:
+					tower = new FireTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_ICE_TYPE:
+					tower = new IceTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_LIGHTNING_TYPE:
+					tower = new LightningTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				}
+				game.addTower(tower);
+				System.out.println("Player "+ " tower added.");
+			} else if (po.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER) {
+
+			} 
+		}
+		listOfOrders.clear();
+		
 	}
 
 	@Override
@@ -190,7 +209,6 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 
 	@Override
 	public void updateShopWithCurrentMoney() {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -203,6 +221,12 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	@Override
 	public void drawMapSelection() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendDelivery(Delivery d) {
+		// Not necessary...
 		
 	}
 

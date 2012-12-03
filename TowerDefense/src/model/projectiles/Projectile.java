@@ -39,7 +39,7 @@ public abstract class Projectile extends Drawable {
 		super(new Point(xPos, yPos));
 		
 		speed = 10;
-		damage = 10;
+		damage = 50;
 		disposable = false;
 		isAlive = true;
 		destination = new Point(xDes, yDes);

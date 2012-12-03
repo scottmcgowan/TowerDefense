@@ -91,7 +91,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		spawn_timer++;
 		if(spawn_timer>=300){
 		System.out.println("Sending Logistics");
-		String log = "Player " + player + " has" + tower_count + " towers, " + ;
+		String log = "Player " + player + " has" + tower_count + " towers, " + "";
 		//Tower count
 		//Health
 		//Money

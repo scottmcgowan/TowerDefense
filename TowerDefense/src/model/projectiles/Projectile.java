@@ -29,6 +29,8 @@ public abstract class Projectile extends Drawable {
 	
 	// Collision box
 	private Shape cBox;
+	private int width;
+	private int height;
 	
 	private boolean isAlive;
 	
@@ -42,8 +44,8 @@ public abstract class Projectile extends Drawable {
 		isAlive = true;
 		destination = new Point(xDes, yDes);
 		
-		int width = 10;
-		int height = 10;
+		width = 10;
+		height = 10;
 		
 		// TODO: will need to adjust for GUI
 		cBox = new Ellipse2D.Double(xPos, yPos, width, height);
@@ -64,6 +66,8 @@ public abstract class Projectile extends Drawable {
 			vect.setLocation(xDis * speed, yDis * speed);
 
 			pos.setLocation(pos.x + vect.getX(), pos.y + vect.getY());
+			cBox = new Ellipse2D.Double(pos.x, pos.y, width, height);
+			
 		} else if (pos.x == destination.x && pos.y == destination.y) {
 			isAlive = false;
 		}

@@ -56,6 +56,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		shop.connectToMap(canvas);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
 		gui.add(canvas);
 		gui.add(shop);
@@ -78,6 +79,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		gui.repaint();
 
 		gameStart();
+		
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -175,12 +177,6 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 	}
 
 	@Override
-	public void drawMapSelection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void drawHealthBars() {
 		// TODO Auto-generated method stub
 		
@@ -197,10 +193,17 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void notifyShopOfSelection(String s) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void drawMapSelection() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

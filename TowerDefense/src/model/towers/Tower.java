@@ -5,6 +5,8 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
+import resources.Res;
+
 import model.Drawable;
 
 //TODO Make abstract after testing
@@ -21,10 +23,12 @@ public abstract class Tower extends Drawable {
 	private Point pos;
 	
 	// Fire rate
-	private int rate;
+	private int fireRate;
+	private int reloadCount;
+	private boolean canFire;
 	
 	// Attack radius
-	private int rangeRadius;
+	private double rangeRadius;
 	
 	// Range collision shape
 	private Shape range;
@@ -40,13 +44,14 @@ public abstract class Tower extends Drawable {
 	public Tower(int xPos, int yPos) {
 		pos = new Point(xPos, yPos);
 		
-		rate = 60;
+		canFire = true;
+		fireRate = 60;
+		reloadCount = 1;
 		
-		// TODO: Eliminate magic numbers.
-		int width = 30;
-		int height = 30;
+		int width = Res.GRID_WIDTH;
+		int height = Res.GRID_HEIGHT;
 		
-		rangeRadius = 45;
+		rangeRadius = width * 2.5;
 		
 		cBox = new Rectangle2D.Double(xPos, yPos, width, height);
 		
@@ -74,9 +79,24 @@ public abstract class Tower extends Drawable {
 	public Shape getBounds() {
 		return cBox;
 	}
-	
+		
 	public int getFireRate() {
-		return rate;
+		return fireRate;
+	}
+	
+	public boolean canFire() {
+		return canFire;
+	}
+	
+	public void fire() {
+		canFire = false;
+		reloadCount = 1;
+	}
+	
+	public void reload() {
+		reloadCount += 1;
+		if (reloadCount % fireRate == 0)
+			canFire = true;
 	}
 	
 	// TODO: Let Game do this

@@ -34,10 +34,6 @@ public class PurchaseOrder implements Serializable{
 		this.item = item;
 	}
 
-	public int getPlayer() {
-		return player;
-	}
-
 	public void setPlayer(int player) {
 		this.player = player;
 	}

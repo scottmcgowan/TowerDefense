@@ -20,6 +20,7 @@ public class Network extends Observable {
 		game = gc;
 		addObserver(np);
 		openForConnection(gc);
+		this.player = player;
 	}
 
 	public void sendMessage(String text) {
@@ -64,7 +65,11 @@ public class Network extends Observable {
 								gc.won();
 							}
 						} else if (d.tieMet) {
-							gc.checkForTie();
+							if(gc.checkOnesidedTieConditions()){
+								sendDelivery(new Delivery("", player, false, false, false, true, true));
+							}
+						} else if (d.tied){
+							gc.tie();
 						}
 						
 						// Does not update if message is empty, otherwise alerts
@@ -84,7 +89,8 @@ public class Network extends Observable {
 							}
 
 							// System.out.println(outputMessage);
-							game.addOrder(d.getOrder());
+							if(d.getOrder()!=null){
+							game.addOrder(d.getOrder());}
 						}
 					}
 				} catch (IOException e) {

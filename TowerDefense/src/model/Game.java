@@ -13,14 +13,14 @@ import model.towers.Tower;
  */
 public class Game {
 
-	private ArrayList<Tower> towerList;
+	private ArrayList<Tower> towerList = new ArrayList<Tower>();
 	
-	private ArrayList<Enemy> enemyList;
+	private ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
 	
-	private ArrayList<Projectile> projectileList;
+	private ArrayList<Projectile> projectileList = new ArrayList<Projectile>();
 	
 	// A list of all objects to be drawn
-	private ArrayList<Drawable> drawable;
+	private ArrayList<Drawable> drawable = new ArrayList<Drawable>();
 	
 	// false if game is in play
 	private boolean gameOver;
@@ -80,6 +80,10 @@ public class Game {
 	 */
 	public boolean gameOver() {
 		return gameOver;
+	}
+	
+	public void setGameOver(boolean over){
+		gameOver = over;
 	}
 	
 	

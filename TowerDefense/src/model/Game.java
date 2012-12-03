@@ -44,7 +44,7 @@ public class Game {
 		
 		counter = 0;
 		
-		playerMoney = 100;
+		playerMoney = 0;
 	}
 	
 	
@@ -91,23 +91,11 @@ public class Game {
 	}
 	
 	/**
-	 * @return How much money the player has
+	 * @return How much money the player gains in a single frame
 	 */
 	public int getFunds() {
 		return playerMoney;
 	}
-
-	/**
-	 * Set the player's money in the Game model, so that shop can decrement the
-	 * funds in the model
-	 * 
-	 * @param money
-	 *            Value to set model funds to
-	 */
-	public void setFunds(int money) {
-		playerMoney = money;
-	}
-	
 	
 	/**
 	 * Allows the Game Controller to set the playerHealth.
@@ -131,6 +119,8 @@ public class Game {
 		
 		if (gameOver)
 			return;
+		
+		playerMoney = 0;
 		
 		// Temp lists to keep track of enemys/projectiles to remove from the game
 		ArrayList<Projectile> tempProj = new ArrayList<Projectile>();

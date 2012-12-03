@@ -197,9 +197,7 @@ public class GameTest {
 	@Test
 	public void testFunds() {
 		Game game = new Game();
-		assertEquals(100, game.getFunds());
-		game.setFunds(50);
-		assertEquals(50, game.getFunds());
+		assertEquals(0, game.getFunds());
 		
 		Enemy enemy = new Grunt(0, 0);
 		game.addEnemy(enemy);
@@ -210,11 +208,11 @@ public class GameTest {
 			System.out.println(enemy.getHP());
 		}
 		assertEquals(10, enemy.getHP());
-		assertEquals(50, game.getFunds());
+		assertEquals(0, game.getFunds());
 		game.addProjectile(new Pellet(0, 0, 0, 0));
 		game.update();
 		assertFalse(enemy.isAlive());
-		assertEquals(75, game.getFunds());
+		assertEquals(25, game.getFunds());
 	}
 
 }

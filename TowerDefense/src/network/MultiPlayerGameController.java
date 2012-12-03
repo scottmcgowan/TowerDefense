@@ -91,7 +91,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		spawn_timer++;
 		if(spawn_timer>=300){
 		System.out.println("Sending Logistics");
-		String log = "Player" + player;
+		String log = "Player " + player + " has" + tower_count + " towers, " + ;
 		//Tower count
 		//Health
 		//Money
@@ -130,6 +130,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(gameCanvas);
+
 		JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
 		
 		JMenu fileMenu = new JMenu("File"); menubar.add(fileMenu);

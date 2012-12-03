@@ -36,6 +36,8 @@ public abstract class Enemy extends Drawable {
 	
 	// The shape of this enemy for collision detection
 	private Shape cBox;
+	private int width;
+	private int height;
 	
 	private ArrayList<Point> path;
 	private int currentPath;
@@ -64,8 +66,8 @@ public abstract class Enemy extends Drawable {
 		
 		path = new ArrayList<Point>();
 		
-		int width = Res.GRID_WIDTH;
-		int height = Res.GRID_HEIGHT;
+		width = Res.GRID_WIDTH;
+		height = Res.GRID_HEIGHT;
 		
 		// TODO: For now enemies take up 1 grid space, may change
 		cBox = new Rectangle2D.Double(xPos, yPos, xPos + width, yPos + height);
@@ -99,9 +101,9 @@ public abstract class Enemy extends Drawable {
 		currentPath = 0;
 		
 		// path contains midpoint coordinates, get the top-left point
-		int top = path.get(0).y - (height / 2);
-		int left = path.get(0).x - (width / 2);
-		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
+//		int top = pos.y - (height / 2);
+//		int left = pos.x - (width / 2);
+		cBox = new Rectangle2D.Double(pos.x, pos.y, pos.x + width, pos.y + height);
 		
 	}
 	
@@ -208,6 +210,8 @@ public abstract class Enemy extends Drawable {
 			
 			if (currentPath >= path.size() - 1)
 				isAlive = false;
+
+			cBox = new Rectangle2D.Double(pos.x, pos.y, pos.x + width, pos.y + height);
 			
 			canMove = false;
 			moveCount = 1;

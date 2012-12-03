@@ -51,11 +51,11 @@ public abstract class Projectile extends Drawable {
 	
 	public void updatePosition() {
 		if (pos.x != destination.x && pos.y != destination.y) {
-
+			
 			int x = destination.x - pos.x;
 			int y = destination.y - pos.y;
 			Point2D vect = new Point(x, y);
-
+			
 			double distance = pos.distance(destination);
 
 			double xDis = vect.getX() / distance;

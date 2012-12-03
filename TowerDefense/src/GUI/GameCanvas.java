@@ -16,6 +16,7 @@ import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import model.GameControllerInterface;
@@ -111,7 +112,6 @@ public class GameCanvas extends JPanel implements KeyListener {
 		for (int y = 0; y < map.getRow(); y++) {
 			for (int x = 0; x < map.getCol(); x++) {
 				JPanel temp = gameMap[y][x];
-				temp.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				temp.addMouseListener(new MouseClickListener());
 				add(temp);
 				temp.repaint();
@@ -141,7 +141,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 			super.paintComponent(g);
 			Graphics2D gr = (Graphics2D) g;
 			Tile current = map.tileMap[locationX][locationY];
-
+			
 			switch (current) {
 			case ENVIRONMENT:
 				try {
@@ -176,35 +176,30 @@ public class GameCanvas extends JPanel implements KeyListener {
 				}
 				break;
 			case ICE_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.ICE_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.BLUE);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/IceTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find IceTower.png");
 				}
 				break;
 			case FIRE_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.FIRE_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.ORANGE);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/FireTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find FireTower.png");
 				}
 				break;
 			case LIGHTNING_TOWER:
-				if (map.tileMap[locationX][locationY] == Tile.LIGHTNING_TOWER) {
-					gr.setColor(Color.BLACK);
-					gr.drawRect(0, 0, gridWidth, gridHeight);
-					gr.setColor(Color.CYAN);
-					gr.fillRect(1, 1, gridWidth - 1, gridHeight - 1);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/LightningTower.png")), 0,
+							0, this);
+				} catch (IOException e) {
+					System.out.println("Could not find LightningTower.png");
 				}
 				break;
 			}
-
-			/**
-			 * gr.setColor(Color.BLACK); gr.drawRect(0, 0, gridWidth,
-			 * gridHeight);
-			 **/
 		}
 	}
 
@@ -302,14 +297,17 @@ public class GameCanvas extends JPanel implements KeyListener {
 			clicked = arg0.getComponent();
 			PaintSquare click = (PaintSquare)(arg0.getComponent());
 			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileX()][click.getTileY()]);
+			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
 			Component hover = arg0.getComponent();
-
+				((JComponent) hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 		}
 
 		public void mouseExited(MouseEvent arg0) {
+			Component hover = arg0.getComponent();
+			((JComponent) hover).setBorder(BorderFactory.createEmptyBorder());
 		}
 
 		public void mousePressed(MouseEvent arg0) {

@@ -22,3 +22,4 @@ public interface GameControllerInterface{
 	public void gameStart();
 
 }
+

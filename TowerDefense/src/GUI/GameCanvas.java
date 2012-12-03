@@ -43,14 +43,14 @@ public class GameCanvas extends JLayeredPane{
 	private ActorPanel actorPane;
 	Map map = new Map();
 	private final ArrayList<Point> path;
-	
+
 	// Constructor
 	public GameCanvas(GameControllerInterface gc) {
 		setFocusable(true); // so that can receive key-events
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		requestFocus();
 		setBackground(Color.WHITE);
-		
+
 		game = gc;
 		actorPane = new ActorPanel();
 		actorPane.setSize(PANEL_WIDTH, PANEL_HEIGHT);
@@ -61,12 +61,12 @@ public class GameCanvas extends JLayeredPane{
 		backgroundPanel.repaint();
 		path = backgroundPanel.pathTrail();
 	}
-	
+
 	public void drawDrawables(ArrayList<Drawable> arr){
 		actorPane.drawDrawables(arr);
 		actorPane.repaint();
 	}
-	
+
 	public BackgroundPanel getBackgroundPanel(){
 		return backgroundPanel;
 	}

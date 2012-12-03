@@ -46,11 +46,11 @@ public class SinglePlayerShopPanel extends JPanel {
 			String text = clickButton.getText().substring(0,
 					clickButton.getText().length() - 7);
 			// game.sendMessage(text);
-			canvas.setSelected(text);
-
+			// canvas.setSelected(text);
+			/**
 			if (canvas.getClicked() != null) 
 				canvas.purchase();
-			
+			*/
 		}
 	}
 }

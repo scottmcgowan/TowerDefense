@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import resources.Res;
+
 import GUI.GameCanvas;
 import GUI.Map.Tile;
 
@@ -18,13 +20,15 @@ import model.GameControllerInterface;
 import model.PurchaseOrder;
 import model.towers.Tower;
 
-public class MultiPlayerShopPanel extends JPanel{
+public class MultiPlayerShopPanel extends JPanel {
 	GameCanvas canvas;
 	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 100;
 	private GameControllerInterface game;
 	private int player;
+	private int currentTileX;
+	private int currentTileY;
 
 	// GUI for the shop buttons
 	public MultiPlayerShopPanel(int p, GameControllerInterface game) {
@@ -36,10 +40,13 @@ public class MultiPlayerShopPanel extends JPanel{
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
 		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
-			ShopButton b = new ShopButton(i.name() + "  " + "(" + i.value + ")", i);
+			ShopButton b = new ShopButton(
+					i.name() + "  " + "(" + i.value + ")", i);
 			buttons.add(b);
 			b.addActionListener(listenerToAllButtons);
-			b.setEnabled(false);
+			if (b.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+				b.setEnabled(false);
+			}
 			add(b);
 		}
 		repaint();
@@ -62,41 +69,53 @@ public class MultiPlayerShopPanel extends JPanel{
 			if (canvas.getClicked() != null)
 				canvas.purchase();
 
+			PurchaseOrder boughtItem = new PurchaseOrder(player,
+					clickButton.getItem());
+			if (clickButton.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER) {
+				boughtItem.setTile_x(currentTileX);
+				boughtItem.setTile_y(currentTileY);
+			} else if (clickButton.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
+				boughtItem.setTile_x(currentTileX);
+				boughtItem.setTile_y(currentTileY);
+			}
 			interpretDelivery(new Delivery("Player " + player + " purchased "
-					+ text + ".", new PurchaseOrder(player, null), false, true,
-					player));
-			
+					+ text + ".", boughtItem, false, true, player));
+			// false, true
+
 		}
 	}
-	
+
 	public void interpretDelivery(Delivery d) {
-			game.sendDelivery(d);
+		game.sendDelivery(d);
 	}
 
 	public void updateButtons(int tileX, int tileY, int tileType) {
 		// TODO Auto-generated method stub
-		for(ShopButton b:buttons){
+		currentTileX = tileX;
+		currentTileY = tileY;
+		for (ShopButton b : buttons) {
 			b.setEnabled(true);
 		}
-		if(tileType==Tower.UNBUILDABLE){
-			for(ShopButton b:buttons){
-				if(b.item.type==MultiPlayerShop.TYPE_BUY_TOWER)
+		if (tileType == Res.SPACE_UNBUILDABLE) {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER)
 					b.setEnabled(false);
-				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER)
-					b.setEnabled(false);
-			}
-		}else if(tileType==Tower.EMPTY){
-			for(ShopButton b:buttons){
-				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER)
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER)
 					b.setEnabled(false);
 			}
-		}else{
-			for(ShopButton b:buttons){
-				if(b.item.type==MultiPlayerShop.TYPE_BUY_TOWER)
+		} else if (tileType == Res.SPACE_EMPTY) {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER)
 					b.setEnabled(false);
-				if(b.item.type==MultiPlayerShop.TYPE_UPGRADE_TOWER){
-					if(b.item.towerType==tileType){
-					b.setEnabled(true);}else{
+			}
+		} else {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER)
+					b.setEnabled(false);
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
+					if (b.getItem().towerType == tileType) {
+						b.setEnabled(true);
+					} else {
 						b.setEnabled(false);
 					}
 				}
@@ -107,8 +126,8 @@ public class MultiPlayerShopPanel extends JPanel{
 
 	public void updateWithMoney(int money) {
 		// TODO Auto-generated method stub
-		for(ShopButton b:buttons){
-			if(b.item.value>=money)
+		for (ShopButton b : buttons) {
+			if (b.getItem().value >= money)
 				b.setEnabled(false);
 		}
 	}

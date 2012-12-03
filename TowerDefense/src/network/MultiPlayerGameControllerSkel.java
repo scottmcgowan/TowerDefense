@@ -1,4 +1,7 @@
 package network;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,7 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.Timer;
+
+import resources.Res;
 
 import model.Delivery;
 import model.Drawable;
@@ -17,11 +21,16 @@ import model.GameControllerInterface;
 import model.Player;
 import model.PurchaseOrder;
 import model.enemies.Enemy;
+import model.enemies.Grunt;
+import model.projectiles.Projectile;
+import model.towers.FireTower;
+import model.towers.IceTower;
+import model.towers.LightningTower;
 import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.Map;
 
-public class MultiPlayerGameControllerSkel implements GameControllerInterface{
+public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 
 	// main game class
 	static final int UPDATE_RATE = 60; // number of game update per second
@@ -34,104 +43,111 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	public int secondCounter = 0;
 	public NetworkPanel networkPanel;
 	public Network network;
-	private GameCanvas canvas;
+	private GameCanvas gameCanvas;
 	private MultiPlayerShopPanel shop;
 	private Player thisPlayer = new Player();
 	private Player otherPlayer = new Player();
 	private JFrame gui = new JFrame();
 	private ArrayList<PurchaseOrder> orders = new ArrayList<PurchaseOrder>();
 	private Game game;
-	private ArrayList<Enemy> spawnQueue;
-	private Timer timer;
+	private ArrayList<Enemy> spawnQueue = new ArrayList<Enemy>();
+	private int timer;
 	private int player;
-	
+
 	public static void main(String[] args) {
-		MultiPlayerGameControllerSkel game = new MultiPlayerGameControllerSkel(Server.SERVER_PLAYER);
+		MultiPlayerGameControllerSkel game = new MultiPlayerGameControllerSkel(
+				Server.SERVER_PLAYER);
 		wait(1);
-		MultiPlayerGameControllerSkel game2 = new MultiPlayerGameControllerSkel(Server.CLIENT_PLAYER);
+		MultiPlayerGameControllerSkel game2 = new MultiPlayerGameControllerSkel(
+				Server.CLIENT_PLAYER);
 	}
 
-	public static void wait (int n){
-        long t0,t1;
-        t0=System.currentTimeMillis();
-        do{
-            t1=System.currentTimeMillis();
-        }
-        while (t1-t0<1000);
+	public static void wait(int n) {
+		long t0, t1;
+		t0 = System.currentTimeMillis();
+		do {
+			t1 = System.currentTimeMillis();
+		} while (t1 - t0 < 1000);
 	}
-	
+
 	public MultiPlayerGameControllerSkel(int player) {
+		game = new Game();
 		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
-		if(player==Server.SERVER_PLAYER){
+		if (player == Server.SERVER_PLAYER) {
 			Server server = new Server(Server.PORT_NUMBER);
 			server.start();
 			network = new Network(networkPanel, Server.SERVER_PLAYER, this);
-		}else{
+		} else {
 			network = new Network(networkPanel, Server.CLIENT_PLAYER, this);
 		}
-		
+
 		gui.setLayout(null);
 		shop = new MultiPlayerShopPanel(player, this);
-		canvas = new GameCanvas(this);
-		shop.connectToMap(canvas);
-		canvas.setSize(canvas.PANEL_WIDTH, canvas.PANEL_HEIGHT);
-		networkPanel.setSize(networkPanel.PANEL_WIDTH, networkPanel.PANEL_HEIGHT);
+		gameCanvas = new GameCanvas(this);
+		shop.connectToMap(gameCanvas);
+		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
+		networkPanel.setSize(networkPanel.PANEL_WIDTH,
+				networkPanel.PANEL_HEIGHT);
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
-		canvas.setLocation(20, 20);
-		networkPanel.setLocation(canvas.PANEL_WIDTH+40, 20);
-		shop.setLocation(80, canvas.PANEL_HEIGHT+40);
+		gameCanvas.setLocation(20, 20);
+		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
+		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(canvas.PANEL_WIDTH+networkPanel.PANEL_WIDTH+80, canvas.PANEL_HEIGHT+shop.PANEL_HEIGHT+90);
+		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
+				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
 		gui.setVisible(true);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(canvas);
-		
+		gui.add(gameCanvas);
+
 		/*
-		JMenuBar menubar = new JMenuBar();
-		gui.setJMenuBar(menubar);
-		
-		JMenu fileMenu = new JMenu("File");
-		menubar.add(fileMenu);
-		
-		JMenuItem newGame = new JMenuItem("New Game");
-		JMenuItem exit = new JMenuItem("Exit");
-		fileMenu.add(newGame);
-		fileMenu.addSeparator();
-		fileMenu.add(exit);
-		newGame.addActionListener(new allMenuAction());
-		exit.addActionListener(new allMenuAction());*/
-		
+		 * JMenuBar menubar = new JMenuBar(); gui.setJMenuBar(menubar);
+		 * 
+		 * JMenu fileMenu = new JMenu("File"); menubar.add(fileMenu);
+		 * 
+		 * JMenuItem newGame = new JMenuItem("New Game"); JMenuItem exit = new
+		 * JMenuItem("Exit"); fileMenu.add(newGame); fileMenu.addSeparator();
+		 * fileMenu.add(exit); newGame.addActionListener(new allMenuAction());
+		 * exit.addActionListener(new allMenuAction());
+		 */
+
 		gui.repaint();
 		gameStart();
 	}
-	
+
 	private class allMenuAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			JMenuItem menuItem = (JMenuItem) arg0.getSource();
 			if (menuItem.getText() == "New Game") {
-			}
-			else {
+			} else {
 				gui.dispose();
 			}
 		}
 	}
 
-	public void addOrder(PurchaseOrder po){
-		orders.add(po);
-		if(po.getPlayer()==player){
-			thisPlayer.setMoney(thisPlayer.getMoney()-po.getItem().value);
+	public void addOrder(PurchaseOrder po) {
+		if (po.getPlayer() == player) {
+			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);
+			if (po.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+				orders.add(po);
+				System.out.println("Player "+ player + " tower order added");
+			}
+		} else {
+			if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+				orders.add(po);
+				System.out.println("Player "+ player + " purchase enemy order added");
+			}
 		}
-		return;
+		System.out.println("Called add order");
 	}
 
 	public void sendDelivery(Delivery d) {
 		network.sendDelivery(d);
 	}
-	
+
 	public void gameStart() {
 		// gui = new GameGUI();
 		// Create a new thread
@@ -148,7 +164,21 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	}
 
 	public void gameUpdate() {
-		//get some gameLogic in here!
+		// get some gameLogic in here!
+		game.update();
+		draw(game.getDrawable());
+		processOrders();
+		processSpawnQueue();
+	}
+
+	public void processSpawnQueue() {
+		timer += 1;
+		if(timer >=60 && !spawnQueue.isEmpty()){
+			game.addEnemy(spawnQueue.get(0));
+			spawnQueue.remove(0);
+			timer = 0;
+			System.out.println("Player "+ player + " enemy added");
+		}
 	}
 
 	// Run the game loop here.
@@ -187,19 +217,50 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	@Override
 	public void draw(ArrayList<Drawable> arr) {
 		// TODO Auto-generated method stub
-		
+		gameCanvas.drawDrawables(arr);
 	}
 
 	@Override
 	public void processOrders() {
 		// TODO Auto-generated method stub
-		
+		for (PurchaseOrder po : orders) {
+			if (po.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER) {
+				Tower tower = null;
+				System.out.println(po.getTile_x());
+				System.out.println(po.getTile_y());
+				switch (po.getItem().towerType) {
+				case Res.TOWER_FIRE_TYPE:
+					tower = new FireTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_ICE_TYPE:
+					tower = new IceTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				case Res.TOWER_LIGHTNING_TYPE:
+					tower = new LightningTower(po.getTile_x() * Res.GRID_WIDTH,
+							po.getTile_y() * Res.GRID_HEIGHT);
+					break;
+				}
+				game.addTower(tower);
+				System.out.println("Player "+ player + " tower added.");
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
+
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+				Point[] path = {new Point(0,0), new Point(50,0), new Point(50,50), 
+						new Point(50,10), new Point(50,50), new Point(0, 50)};
+				for(int i=0;i<1;i++){
+				spawnQueue.add(new Grunt(path));}
+				System.out.println("Player "+ player + " enemy order processed.");
+			}
+		}
+		orders.clear();
 	}
 
 	@Override
 	public void drawHealthBars() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -209,13 +270,7 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 	}
 
 	@Override
-	public void notifyShopOfSelection(String s) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void updateShopWithCurrentMoney(){
+	public void updateShopWithCurrentMoney() {
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 
@@ -224,5 +279,11 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface{
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+	@Override
+	public void notifyShopOfSelection(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

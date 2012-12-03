@@ -145,7 +145,7 @@ public class Game {
 				for (Enemy enemy: enemyList) {
 					if (tower.getRange().intersects((Rectangle2D) enemy.getBounds())) {
 						
-						Point pos = tower.getPostion();
+						Point pos = tower.getPosition();
 						Point des = enemy.getPosition();
 						addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));
 						tower.fire();

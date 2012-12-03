@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -12,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
@@ -19,14 +21,24 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import model.Drawable;
 import model.GameControllerInterface;
+import model.enemies.Enemy;
+import model.projectiles.Projectile;
+import model.towers.Tower;
 import GUI.Map.Tile;
+
+
+class myGlassPane extends JComponent{
+	
+}
 
 // Main component to display the map
 public class GameCanvas extends JPanel implements KeyListener {
 	// Parameters for the game screen
 	public static final int PANEL_WIDTH = 480;
 	public static final int PANEL_HEIGHT = 360;
+	public ArrayList<Drawable> drawList = new ArrayList<Drawable>();
 
 	// Parameters of the game grid
 	private int rows = 12;
@@ -50,7 +62,9 @@ public class GameCanvas extends JPanel implements KeyListener {
 	Map map = new Map();
 
 	// Constructor
+	
 	public GameCanvas(GameControllerInterface gc) {
+		setOpaque(false);
 		game = gc;
 		setFocusable(true); // so that can receive key-events
 		requestFocus();
@@ -59,7 +73,7 @@ public class GameCanvas extends JPanel implements KeyListener {
 		// setLocation(0,0);
 		setLayout(new GridLayout(12,16));
 		setBackground(Color.WHITE);
-
+		//();
 		// Initialize a new path
 		int[][] path = new int[map.getRow()][map.getCol()];
 
@@ -118,28 +132,58 @@ public class GameCanvas extends JPanel implements KeyListener {
 			}
 		}
 	}
-
+	
+	public void drawDrawables(ArrayList<Drawable> arr){
+		drawList = arr;
+		repaint();
+	}
+	
+	public void paint(Graphics g){
+		paintBorder(g);
+		//paintChildren(g);
+		paintComponent(g);
+	}
+	
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D gr = (Graphics2D) g;
+		gr.setColor(Color.BLACK);
+		
+		for (Drawable d : drawList) {
+			if (d instanceof Tower) {
+				gr.drawString("TOOOO", (int)((Tower) d).getPosition().getX(), (int)((Tower) d).getPosition().getY());
+			} else if (d instanceof Enemy) {
+				gr.drawString("EOOO", (int)((Enemy) d).getPosition().getX(), (int)((Enemy) d).getPosition().getY());
+			} else if (d instanceof Projectile) {
+				gr.drawString("POOO", (int)((Projectile) d).getPosition().getX(), (int)((Projectile) d).getPosition().getY());
+			}
+		}
+	}
+	
 	private class PaintSquare extends JPanel {
 		// Locations used to identify the component
 		private int locationX;
 		private int locationY;
 
+		//Fix these!!!!
 		public int getTileX(){
-			return locationX;
+			return locationY;
 		}
 
 		public int getTileY(){
-			return locationY;
+			return locationX;
 		}
 		
 		PaintSquare(int x, int y) {
 			locationX = x;
 			locationY = y;
 		}
-
+		
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			
 			Graphics2D gr = (Graphics2D) g;
+			
 			Tile current = map.tileMap[locationX][locationY];
 			
 			switch (current) {
@@ -296,6 +340,8 @@ public class GameCanvas extends JPanel implements KeyListener {
 		public void mouseClicked(MouseEvent arg0) {
 			clicked = arg0.getComponent();
 			PaintSquare click = (PaintSquare)(arg0.getComponent());
+			System.out.println(click.getTileX());
+			System.out.println(click.getTileY());
 			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileX()][click.getTileY()]);
 			repaint();
 		}

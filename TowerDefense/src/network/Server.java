@@ -88,7 +88,11 @@ public class Server extends Thread {
 	public void updateMessage(Delivery d) {
 		// ObjectOutputStream current;
 		try {
+			listOutputStreams.get(0).writeObject(d);
+			listOutputStreams.get(1).writeObject(d);
+			/*
 			if (d.player == SERVER_PLAYER) {
+				
 				if (d.messageForSelf) {
 					listOutputStreams.get(0).writeObject(d);
 				}
@@ -104,7 +108,7 @@ public class Server extends Thread {
 				if (d.messageForOther) {
 					listOutputStreams.get(0).writeObject(d);
 				}
-			}
+			}*/
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

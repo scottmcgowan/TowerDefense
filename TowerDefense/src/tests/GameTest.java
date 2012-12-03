@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import model.*;
 import model.enemies.Enemy;
@@ -43,10 +44,11 @@ public class GameTest {
 	
 	@Test
 	public void testTowerRange() {
+		int x = 0;
+		int y = 0;
 		
-		// Note: tower init position is top-left corner,
-		// center tower at (0, 0)
-		Tower tower = new PelletTower(-15, -15);
+		// Note: tower init position is top-left corner
+		Tower tower = new PelletTower(x, y);
 		System.out.println(tower.getRange().getBounds2D().getWidth());
 		System.out.println(tower.getRange().getBounds2D().getHeight());
 		
@@ -58,7 +60,7 @@ public class GameTest {
 		
 		System.out.println(tower.getRange().getBounds2D().getMaxX());
 		System.out.println(tower.getRange().getBounds2D().getMaxY());
-		
+		/*
 		assertFalse(tower.getRange().getBounds().contains(new Point(-46, -46))); // top-left bounds
 		assertTrue(tower.getRange().getBounds().contains(new Point(-45, -45))); // top-left
 		assertFalse(tower.getRange().getBounds().contains(new Point(45, -45))); // top-right bounds
@@ -67,6 +69,7 @@ public class GameTest {
 		assertTrue(tower.getRange().getBounds().contains(new Point(-45, 44))); // bottom-left
 		assertFalse(tower.getRange().getBounds().contains(new Point(45, 45))); // bottom-right bounds
 		assertTrue(tower.getRange().getBounds().contains(new Point(44, 44))); // bottom-right
+		*/
 	}
 	
 	@Test
@@ -136,46 +139,58 @@ public class GameTest {
 	
 	@Test
 	public void testEnemyUpdatePosition() {
-		Point[] path = {new Point(0,0), new Point(5,0), new Point(5,5), 
-						new Point(5,10), new Point(5,5), new Point(0, 5)};
+		Game game = new Game();
+		ArrayList<Point> path = new ArrayList<Point>();
+		
+		path.add(new Point(0, 0));
+		path.add(new Point(5, 0));
+		path.add(new Point(5, 5));
+		path.add(new Point(5, 10));
+		path.add(new Point(5, 5));
+		path.add(new Point(0, 5));
+		
 		Enemy enemy = new Grunt(path);
-		assertEquals(new Point(0, 0), enemy.getPosition());
-		enemy.updatePosition();
+		game.addEnemy(enemy);
+		
+		int moveFivePX = enemy.getSpeed() * 5;
+		
+		assertEquals(path.get(0), enemy.getPosition());
+		game.update();
 		assertEquals(new Point(1, 0), enemy.getPosition());
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		assertEquals(new Point(5, 0), enemy.getPosition());
-		enemy.updatePosition();
+		for (int i = 0; i < moveFivePX - 1; i++) {
+			game.update();
+		}
+		
+		assertEquals(path.get(1), enemy.getPosition());
+		game.update();
 		assertEquals(new Point(5, 1), enemy.getPosition());
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		assertEquals(new Point(5, 5), enemy.getPosition());
-		enemy.updatePosition();
+		for (int i = 0; i < moveFivePX - 1; i++) {
+			game.update();
+		}
+		
+		assertEquals(path.get(2), enemy.getPosition());
+		game.update();
 		assertEquals(new Point(5, 6), enemy.getPosition());
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		assertEquals(new Point(5, 10), enemy.getPosition());
-		enemy.updatePosition();
+		for (int i = 0; i < moveFivePX - 1; i++) {
+			game.update();
+		}
+		
+		assertEquals(path.get(3), enemy.getPosition());
+		game.update();
 		assertEquals(new Point(5, 9), enemy.getPosition());
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
-		assertEquals(new Point(5, 5), enemy.getPosition());
-		enemy.updatePosition();
+		for (int i = 0; i < moveFivePX - 1; i++) {
+			game.update();
+		}
+		
+		assertEquals(path.get(4), enemy.getPosition());
+		game.update();
 		assertEquals(new Point(4, 5), enemy.getPosition());
-		enemy.updatePosition();
-		enemy.updatePosition();
-		enemy.updatePosition();
 		assertTrue(enemy.isAlive());
-		enemy.updatePosition();
-		assertEquals(new Point(0, 5), enemy.getPosition());
+		for (int i = 0; i < moveFivePX - 1; i++) {
+			game.update();
+		}
+		
+		assertEquals(path.get(5), enemy.getPosition());
 		assertFalse(enemy.isAlive());
 	}
 

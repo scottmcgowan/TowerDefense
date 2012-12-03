@@ -12,8 +12,8 @@ import model.Drawable;
 //TODO Make abstract after testing
 public abstract class Tower extends Drawable {
 	
-	// Tower's location
-	private Point pos;
+	// Tower's location in super class
+	// Point pos;
 	
 	// Fire rate
 	private int fireRate;
@@ -35,7 +35,7 @@ public abstract class Tower extends Drawable {
 	 * @param yPos Topmost point of the tower
 	 */
 	public Tower(int xPos, int yPos) {
-		pos = new Point(xPos, yPos);
+		super(new Point(xPos, yPos));
 		
 		canFire = true;
 		fireRate = 60;
@@ -57,10 +57,6 @@ public abstract class Tower extends Drawable {
 									rangeRadius * 2);
 		
 		pos = new Point(xPos, yPos);
-	}
-	
-	public Point getPosition() {
-		return pos;
 	}
 	
 	// To determine if an enemy is range of the tower

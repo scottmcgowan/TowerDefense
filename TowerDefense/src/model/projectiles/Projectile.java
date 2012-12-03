@@ -9,8 +9,8 @@ import model.Drawable;
 
 public abstract class Projectile extends Drawable {
 	
-	// Current location
-	private Point pos;
+	// Current location in super class
+	//	Point pos;
 	
 	// End point
 	private Point destination;
@@ -34,11 +34,12 @@ public abstract class Projectile extends Drawable {
 	
 	public Projectile(int xPos, int yPos, int xDes, int yDes) {
 		
+		super(new Point(xPos, yPos));
+		
 		speed = 10;
 		damage = 10;
 		disposable = false;
 		isAlive = true;
-		pos = new Point(xPos, yPos);
 		destination = new Point(xDes, yDes);
 		
 		int width = 10;
@@ -78,10 +79,6 @@ public abstract class Projectile extends Drawable {
 	
 	public int getDamage() {
 		return damage;
-	}
-	
-	public Point getPosition() {
-		return pos;
 	}
 
 }

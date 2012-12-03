@@ -1,15 +1,24 @@
 package model.enemies;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 /**
  * A fast Enemy
  */
 public class Speedy extends Enemy {
+	
+	private static int speedySpeed = 5;
+	private static int speedyHP = 50;
+	private static int speedyDamage = 5;
 
-	public Speedy(Point[] initPath) {
-		super(initPath);
-		// TODO stuff
+	public Speedy(ArrayList<Point> initPath) {
+		super(initPath, speedySpeed, speedyHP, speedyDamage);
+	}
+	
+	@Override
+	public void attack() {
+		// TODO Auto-generated method stub
 	}
 
 }

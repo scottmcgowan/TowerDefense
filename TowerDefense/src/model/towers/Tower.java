@@ -11,13 +11,6 @@ import model.Drawable;
 
 //TODO Make abstract after testing
 public abstract class Tower extends Drawable {
-
-	public static final int EMPTY = 0;
-	public static final int NO_TYPE = 0;
-	public static final int FIRE_TYPE = 1;
-	public static final int ICE_TYPE = 2;
-	public static final int LIGHTNING_TYPE = 3;
-	public static final int UNBUILDABLE = -1;
 	
 	// Tower's location
 	private Point pos;
@@ -66,7 +59,7 @@ public abstract class Tower extends Drawable {
 		pos = new Point(xPos, yPos);
 	}
 	
-	public Point getPostion() {
+	public Point getPosition() {
 		return pos;
 	}
 	

@@ -57,10 +57,20 @@ public class Network extends Observable{
 						// gui to update with the message.
 						if (!outputMessage.trim().equals("")) {
 							// gui.update(outputMessage);
-							setChanged();
-							notifyObservers(outputMessage);
-							//game.addOrder(d.getOrder());
-							System.out.println(outputMessage);
+							if (d.player == player) {
+								if (d.messageForSelf) {
+									setChanged();
+									notifyObservers(outputMessage);
+								}
+							} else {
+								if (d.messageForOther) {
+									setChanged();
+									notifyObservers(outputMessage);
+								}
+							}
+							
+							//System.out.println(outputMessage);
+							game.addOrder(d.getOrder());
 						}
 					}
 				} catch (IOException e) {

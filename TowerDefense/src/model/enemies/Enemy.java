@@ -138,6 +138,7 @@ public abstract class Enemy extends Drawable {
 	
 	// TODO: This might have bugs
 	public void updatePosition() {
+		System.out.println(pos.getX()+" "+pos.getY());
 		if (currentPath < path.length - 1 && isAlive) {
 			
 			// Set the temp destination

@@ -18,8 +18,8 @@ public class PurchaseOrder implements Serializable{
 	public PurchaseOrder(int p, Item i, int x, int y){
 		setPlayer(p);
 		setItem(i);
-		tile_x = x;
-		tile_y = y;
+		setTile_x(x);
+		setTile_y(y);
 	}
 
 	public Item getItem() {
@@ -36,5 +36,21 @@ public class PurchaseOrder implements Serializable{
 
 	public void setPlayer(int player) {
 		this.player = player;
+	}
+
+	public int getTile_x() {
+		return tile_x;
+	}
+
+	public void setTile_x(int tile_x) {
+		this.tile_x = tile_x;
+	}
+
+	public int getTile_y() {
+		return tile_y;
+	}
+
+	public void setTile_y(int tile_y) {
+		this.tile_y = tile_y;
 	}
 }

@@ -143,7 +143,7 @@ public class SingleGameControllerSkel implements GameControllerInterface {
 
 	@Override
 	public void sendDelivery(Delivery d) {
-		// TODO Auto-generated method stub
+		//Not avalible in singlePlayer
 	}
 
 	@Override

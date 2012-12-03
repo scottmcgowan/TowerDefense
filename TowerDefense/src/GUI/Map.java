@@ -1,17 +1,18 @@
 package GUI;
 
+import resources.Res;
 import model.towers.Tower;
 
 public class Map {
 
 	public enum Tile {
-		ENVIRONMENT(Tower.EMPTY), 
-		START(Tower.UNBUILDABLE), 
-		GOAL(Tower.UNBUILDABLE), 
-		PATH(Tower.UNBUILDABLE),
-		ICE_TOWER(Tower.ICE_TYPE), 
-		FIRE_TOWER(Tower.FIRE_TYPE), 
-		LIGHTNING_TOWER(Tower.LIGHTNING_TYPE);
+		ENVIRONMENT(Res.SPACE_EMPTY), 
+		START(Res.SPACE_UNBUILDABLE), 
+		GOAL(Res.SPACE_UNBUILDABLE), 
+		PATH(Res.SPACE_UNBUILDABLE),
+		ICE_TOWER(Res.TOWER_ICE_TYPE), 
+		FIRE_TOWER(Res.TOWER_FIRE_TYPE), 
+		LIGHTNING_TOWER(Res.TOWER_LIGHTNING_TYPE);
 		
 		public int tileType;
 		

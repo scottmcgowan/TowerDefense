@@ -125,6 +125,9 @@ public abstract class Enemy extends Drawable {
 		return isAlive;
 	}
 	
+	public void kill() {
+		isAlive = false;
+	}
 	
 	/**
 	 * Deal damage to this enemy

@@ -193,5 +193,28 @@ public class GameTest {
 		assertEquals(path.get(5), enemy.getPosition());
 		assertFalse(enemy.isAlive());
 	}
+	
+	@Test
+	public void testFunds() {
+		Game game = new Game();
+		assertEquals(100, game.getFunds());
+		game.setFunds(50);
+		assertEquals(50, game.getFunds());
+		
+		Enemy enemy = new Grunt(0, 0);
+		game.addEnemy(enemy);
+		assertEquals(100, enemy.getHP());
+		for (int i = 0; i < 9; i++) {
+			game.addProjectile(new Pellet(0, 0, 0, 0));
+			game.update();			
+			System.out.println(enemy.getHP());
+		}
+		assertEquals(10, enemy.getHP());
+		assertEquals(50, game.getFunds());
+		game.addProjectile(new Pellet(0, 0, 0, 0));
+		game.update();
+		assertFalse(enemy.isAlive());
+		assertEquals(75, game.getFunds());
+	}
 
 }

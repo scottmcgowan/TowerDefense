@@ -211,18 +211,6 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public void updateShopWithCurrentMoney() {
 		
 	}
-	
-	@Override
-	public void notifyShopOfSelection(String s) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void drawMapSelection() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void sendDelivery(Delivery d) {

@@ -274,16 +274,4 @@ public class MultiPlayerGameControllerSkel implements GameControllerInterface {
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 
-	@Override
-	public void drawMapSelection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyShopOfSelection(String s) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

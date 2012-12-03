@@ -30,6 +30,7 @@ public class MultiPlayerShopPanel extends JPanel {
 	private int player;
 	private int currentTileX;
 	private int currentTileY;
+	private int tile_type = Res.SPACE_UNBUILDABLE;
 
 	// GUI for the shop buttons
 	public MultiPlayerShopPanel(int p, GameControllerInterface game) {
@@ -45,9 +46,9 @@ public class MultiPlayerShopPanel extends JPanel {
 					i.name() + "  " + "(" + i.value + ")", i);
 			buttons.add(b);
 			b.addActionListener(listenerToAllButtons);
-			if (b.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+			//if (b.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
 				b.setEnabled(false);
-			}
+			//}
 			add(b);
 		}
 		repaint();
@@ -90,6 +91,7 @@ public class MultiPlayerShopPanel extends JPanel {
 		// TODO Auto-generated method stub
 		currentTileX = tileX;
 		currentTileY = tileY;
+		tile_type = tileType;
 		for (ShopButton b : buttons) {
 			b.setEnabled(true);
 		}
@@ -124,9 +126,11 @@ public class MultiPlayerShopPanel extends JPanel {
 	public void updateWithMoney(int money) {
 		// TODO Auto-generated method stub
 		for (ShopButton b : buttons) {
+			b.setEnabled(true);
 			if (b.getItem().value >= money)
 				b.setEnabled(false);
 		}
+		updateButtons(currentTileX, currentTileY, tile_type);
 	}
 
 }

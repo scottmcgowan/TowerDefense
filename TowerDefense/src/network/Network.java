@@ -9,19 +9,19 @@ import java.util.Observable;
 import model.Delivery;
 import model.GameControllerInterface;
 
-public class Network extends Observable{
+public class Network extends Observable {
 
 	public ObjectOutputStream outputToLiasonLoop; // stream to server
 	private ObjectInputStream inputFromServerLoop; // stream from server
 	public int player;
 	private GameControllerInterface game;
-	
-	public Network(NetworkPanel np, int player, GameControllerInterface gc){
+
+	public Network(NetworkPanel np, int player, MultiPlayerGameController gc) {
 		game = gc;
 		addObserver(np);
-		openForConnection();
+		openForConnection(gc);
 	}
-	
+
 	public void sendMessage(String text) {
 		try {
 			outputToLiasonLoop.writeObject(text);
@@ -33,8 +33,9 @@ public class Network extends Observable{
 
 	public void sendDelivery(Delivery d) {
 		try {
-			if(d==null){
-			System.out.print("failed!");}
+			if (d == null) {
+				System.out.print("failed!");
+			}
 			outputToLiasonLoop.writeObject(d);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -42,7 +43,7 @@ public class Network extends Observable{
 		}
 	}
 
-	public void openForConnection() {
+	public void openForConnection(final MultiPlayerGameController gc) {
 		Thread clientThread = new Thread() {
 			// Override run() to provide the running behavior of this thread.
 			@Override
@@ -53,9 +54,22 @@ public class Network extends Observable{
 						Delivery d = (Delivery) inputFromServerLoop
 								.readObject();
 						String outputMessage = d.getMessage();
+						if (d.newGameReady) {
+							gc.gameStart();
+							System.out.println("New Game Started");
+						} else if (d.lose) {
+							if (d.player == player) {
+								gc.lost();
+							} else {
+								gc.won();
+							}
+						} else if (d.tieMet) {
+							gc.checkForTie();
+						}
+						
 						// Does not update if message is empty, otherwise alerts
 						// gui to update with the message.
-						if (!outputMessage.trim().equals("")) {
+						else if (!outputMessage.trim().equals("")) {
 							// gui.update(outputMessage);
 							if (d.player == player) {
 								if (d.messageForSelf) {
@@ -68,8 +82,8 @@ public class Network extends Observable{
 									notifyObservers(outputMessage);
 								}
 							}
-							
-							//System.out.println(outputMessage);
+
+							// System.out.println(outputMessage);
 							game.addOrder(d.getOrder());
 						}
 					}

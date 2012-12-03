@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import model.enemies.Enemy;
 import model.projectiles.*;
-import model.projectiles.Projectile;
 import model.towers.Tower;
 
 
@@ -32,6 +31,8 @@ public class Game {
 	// Player Health
 	private int playerHealth = 100;
 	
+	private int playerMoney;
+	
 	
 	public Game() {
 		towerList = new ArrayList<Tower>();
@@ -42,6 +43,8 @@ public class Game {
 		gameOver = false;
 		
 		counter = 0;
+		
+		playerMoney = 100;
 	}
 	
 	
@@ -85,6 +88,24 @@ public class Game {
 	 */
 	public int getPlayerHealth() {
 		return playerHealth;
+	}
+	
+	/**
+	 * @return How much money the player has
+	 */
+	public int getFunds() {
+		return playerMoney;
+	}
+
+	/**
+	 * Set the player's money in the Game model, so that shop can decrement the
+	 * funds in the model
+	 * 
+	 * @param money
+	 *            Value to set model funds to
+	 */
+	public void setFunds(int money) {
+		playerMoney = money;
 	}
 	
 	
@@ -170,9 +191,11 @@ public class Game {
 			for (Enemy enemy : enemyList) {
 				if (projectile.getBounds().intersects((Rectangle2D) enemy.getBounds())) {
 					
-					// Deal damage, remove enemy if damage kills it
+					// Deal damage, if enemy is killed remove enemy and add funds
 					if (enemy.wound(projectile.getDamage())) {
 						tempEnemy.add(enemy);
+						enemy.kill();
+						playerMoney += 25;
 					}
 					
 					// Destroy projectile

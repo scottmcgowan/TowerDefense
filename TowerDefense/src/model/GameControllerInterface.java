@@ -9,6 +9,7 @@ import network.MultiPlayerShop;
 public interface GameControllerInterface{
 
 	//public ArrayList<PurchaseOrder> listOrders;
+	
 	public void sendDelivery(Delivery d);
 	public void addOrder(PurchaseOrder po);
 	void gameLoop();
@@ -18,5 +19,7 @@ public interface GameControllerInterface{
 	void drawHealthBars();
 	public void notifyShopOfSelection(int tileX, int tileY, Map.Tile tile);
 	void updateShopWithCurrentMoney();
+	public void gameStart();
 
 }
+

@@ -103,7 +103,6 @@ public abstract class Enemy extends Drawable {
 		int left = path.get(0).x - (width / 2);
 		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
 		
-		currentPath = 0;
 	}
 	
 	public Shape getBounds() {
@@ -126,6 +125,9 @@ public abstract class Enemy extends Drawable {
 		return isAlive;
 	}
 	
+	public void kill() {
+		isAlive = false;
+	}
 	
 	/**
 	 * Deal damage to this enemy
@@ -171,7 +173,6 @@ public abstract class Enemy extends Drawable {
 	
 	// TODO: This might have bugs
 	public void updatePosition() {
-		
 		if (currentPath < path.size() - 1 && isAlive && canMove) {
 			
 			// Set the temp destination

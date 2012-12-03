@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -36,14 +37,22 @@ public class ActorPanel extends JPanel {
 
 		for (Drawable d : drawList) {
 			if (d instanceof Tower) {
+				gr.setColor(Color.blue);
+				gr.draw(((Tower) d).getRange());
+				gr.setColor(Color.red);
 				gr.drawString("T", (int) ((Tower) d).getPosition().getX(),
 						(int) ((Tower) d).getPosition().getY());
 			} else if (d instanceof Enemy) {
+				gr.setColor(Color.blue);
+				gr.draw(((Enemy) d).getBounds());
+				gr.setColor(Color.red);
 				gr.drawString("E", (int) ((Enemy) d).getPosition().getX(),
 						(int) ((Enemy) d).getPosition().getY());
 			} else if (d instanceof Projectile) {
+				gr.setColor(Color.black);
 				gr.drawString("P", (int) ((Projectile) d).getPosition().getX(),
 						(int) ((Projectile) d).getPosition().getY());
+				gr.draw(((Projectile) d).getBounds());
 			}
 		}
 	}

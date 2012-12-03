@@ -7,7 +7,7 @@ public abstract class Drawable {
 	protected Point pos;
 	
 	public Drawable(Point position) {
-		pos = position;
+		pos = new Point(position.x, position.y);
 	}
 	
 	/**

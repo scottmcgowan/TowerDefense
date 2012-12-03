@@ -117,10 +117,15 @@ public class Game {
 		
 		// Move all enemies first
 		for (Enemy enemy : enemyList) {
-			enemy.updatePosition();
+			if (enemy.canMove()) {
+				enemy.updatePosition();
+			} else {
+				enemy.rest();
+			}
 			
 			// An enemy has died, but no shots were fired,
 			// this enemy has reached the goal
+			
 			if (!enemy.isAlive()) {
 				tempEnemy.add(enemy);
 				// Enemy scored, decrement player health

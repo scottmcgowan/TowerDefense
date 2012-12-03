@@ -10,10 +10,11 @@ import javax.swing.JPanel;
 
 import resources.Res;
 
+import GUI.BackgroundPanel;
 import GUI.GameCanvas;
 import GUI.Map.Tile;
 
-import network.MultiPlayerGameControllerSkel;
+import network.MultiPlayerGameController;
 
 import model.Delivery;
 import model.GameControllerInterface;
@@ -21,7 +22,7 @@ import model.PurchaseOrder;
 import model.towers.Tower;
 
 public class MultiPlayerShopPanel extends JPanel {
-	GameCanvas canvas;
+	BackgroundPanel backgroundPanel;
 	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 100;
@@ -52,8 +53,8 @@ public class MultiPlayerShopPanel extends JPanel {
 		repaint();
 	}
 
-	public void connectToMap(GameCanvas game) {
-		this.canvas = game;
+	public void connectToMap(GameCanvas gameCanvas) {
+		this.backgroundPanel = gameCanvas.getBackgroundPanel();
 	}
 
 	private class AllButtonListener implements ActionListener {
@@ -64,10 +65,6 @@ public class MultiPlayerShopPanel extends JPanel {
 			String text = clickButton.getText().substring(0,
 					clickButton.getText().length() - 7);
 			// game.sendMessage(text);
-			canvas.setSelected(text);
-
-			if (canvas.getClicked() != null)
-				canvas.purchase();
 
 			PurchaseOrder boughtItem = new PurchaseOrder(player,
 					clickButton.getItem());

@@ -3,6 +3,7 @@ package model.enemies;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import resources.Res;
 
@@ -11,6 +12,9 @@ import model.Drawable;
 public abstract class Enemy extends Drawable {
 	
 	// Data fields every enemy must maintain
+
+	// Position in super class
+	// Point pos;
 	
 	// Enemy's initial health
 	private int maxHP;
@@ -22,7 +26,7 @@ public abstract class Enemy extends Drawable {
 	private boolean isAlive;
 	
 	// Movement speed
-	private int speed;
+	private int framesPerMove;
 	
 	// Attack damage
 	private int damage;
@@ -30,14 +34,14 @@ public abstract class Enemy extends Drawable {
 	// Attack radius
 	private int radius;
 	
-	// Position on the map
-	private Point pos;
-	
 	// The shape of this enemy for collision detection
 	private Shape cBox;
 	
-	private Point[] path;
+	private ArrayList<Point> path;
 	private int currentPath;
+	
+	private boolean canMove;
+	private int moveCount;
 	
 	/**
 	 * Create an enemy with an explicit starting position, strictly for testing
@@ -49,6 +53,8 @@ public abstract class Enemy extends Drawable {
 	 *            Topmost point of this enemy
 	 */
 	public Enemy(int xPos, int yPos) {
+		super(new Point(xPos, yPos));
+		this.framesPerMove = 1;
 		
 		hp = 100;
 		maxHP = hp;
@@ -56,15 +62,13 @@ public abstract class Enemy extends Drawable {
 		
 		isAlive = true;
 		
-		path = new Point[0];
+		path = new ArrayList<Point>();
 		
 		int width = Res.GRID_WIDTH;
 		int height = Res.GRID_HEIGHT;
 		
 		// TODO: For now enemies take up 1 grid space, may change
 		cBox = new Rectangle2D.Double(xPos, yPos, xPos + width, yPos + height);
-		
-		pos = new Point(xPos, yPos);
 	}
 
 	/**
@@ -75,13 +79,16 @@ public abstract class Enemy extends Drawable {
 	 *            is the starting location, and initPath[length-1] is the goal.
 	 *            Points in this array are midpoints for each step in the path.
 	 */
-	public Enemy(Point[] initPath) {
+	public Enemy(ArrayList<Point> initPath, int speed, int hp, int damage) {
+		super(initPath.get(0));
 		
-		hp = 100;
-		maxHP = hp;
-		damage = 10;
+		this.hp = hp;
+		this.maxHP = hp;
+		this.damage = damage;
 		
-		speed = 1;
+		canMove = true;
+		this.framesPerMove = speed;
+		moveCount = 1;
 		
 		isAlive = true;
 		
@@ -89,22 +96,18 @@ public abstract class Enemy extends Drawable {
 		int height = Res.GRID_HEIGHT;
 		
 		path = initPath;
+		currentPath = 0;
 		
 		// path contains midpoint coordinates, get the top-left point
-		int top = path[0].y - (height / 2);
-		int left = path[0].x - (width / 2);
+		int top = path.get(0).y - (height / 2);
+		int left = path.get(0).x - (width / 2);
 		cBox = new Rectangle2D.Double(left, top, left + width, top + height);
 		
-		pos = path[0];
 		currentPath = 0;
 	}
 	
 	public Shape getBounds() {
 		return cBox;
-	}
-	
-	public Point getPosition() {
-		return pos;
 	}
 	
 	public int getHP() {
@@ -115,13 +118,14 @@ public abstract class Enemy extends Drawable {
 		return maxHP;
 	}
 	
+	public int getDamage() {
+		return damage;
+	}
+	
 	public boolean isAlive() {
 		return isAlive;
 	}
 	
-	public int getDamage() {
-		return damage;
-	}
 	
 	/**
 	 * Deal damage to this enemy
@@ -136,23 +140,52 @@ public abstract class Enemy extends Drawable {
 		return false;
 	}
 	
+	/**
+	 * This getter is for testing
+	 * 
+	 * @return The frames that must pass for this enemy to move one pixel.
+	 */
+	public int getSpeed() {
+		return framesPerMove;
+	}
+	
+	public void setSpeed(int frames) {
+		framesPerMove = frames;
+	}
+	
+	/**
+	 * @return true if this enemy can move this frame
+	 */
+	public boolean canMove() {
+		return canMove;
+	}
+	
+	/**
+	 * The enemy is resting, wait to move
+	 */
+	public void rest() {
+		moveCount += 1;
+		if (moveCount % framesPerMove == 0)
+			canMove = true;
+	}
+	
 	// TODO: This might have bugs
 	public void updatePosition() {
-		System.out.println(pos.getX()+" "+pos.getY());
-		if (currentPath < path.length - 1 && isAlive) {
+		
+		if (currentPath < path.size() - 1 && isAlive && canMove) {
 			
 			// Set the temp destination
-			Point next = path[currentPath + 1];
+			Point next = path.get(currentPath + 1);
 			
 			// The enemy is moving horizontally
 			if (pos.y == next.y) {
 				if (pos.x < next.x) {
-					pos.x += speed;
+					pos.x += 1;
 					if (pos.x >= next.x)
 						currentPath++;
 				}
 				else {
-					pos.x -= speed;
+					pos.x -= 1;
 					if (pos.x <= next.x)
 						currentPath++;
 				}
@@ -161,24 +194,25 @@ public abstract class Enemy extends Drawable {
 			// The enemy is moving vertically
 			else if (pos.x == next.x) {
 				if (pos.y < next.y) {
-					pos.y += speed;
+					pos.y += 1;
 					if (pos.y >= next.y)
 						currentPath++;
 				}
 				else {
-					pos.y -= speed;
+					pos.y -= 1;
 					if (pos.y <= next.y)
 						currentPath++;
 				}
 			}
 			
-			if (currentPath >= path.length - 1)
+			if (currentPath >= path.size() - 1)
 				isAlive = false;
+			
+			canMove = false;
+			moveCount = 1;
 		}
 	}
 	
-	public void attack() {
-		// TODO
-	}
+	public abstract void attack();
 
 }

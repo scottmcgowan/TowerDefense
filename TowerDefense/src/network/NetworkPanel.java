@@ -3,15 +3,10 @@ package network;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.crypto.spec.GCMParameterSpec;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,7 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import model.Delivery;
-import model.GameControllerInterface;
 
 public class NetworkPanel extends JPanel implements Observer {
 

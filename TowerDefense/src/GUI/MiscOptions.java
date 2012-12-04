@@ -23,8 +23,8 @@ public class MiscOptions extends JFrame{
 	
 	public static void setHelpMessage() {
 		JOptionPane help = new JOptionPane();
-		help.showMessageDialog(null, "How to Play\n\n" + "You will have 100 geaktg.\n" +
-				"You will lose 5 life whenever an enemy finishes traversing the path.\n" 
+		help.showMessageDialog(null, "How to Play\n\n" + "You will have 100 health.\n" +
+				"You will lose 10 life whenever an enemy finishes traversing the path.\n" 
 		+ "Defend against the enemies by building towers.\n" +
 		"To purchase a tower:\t Click a grass tile and then press a buy tower button.\n\n" +
 		"Multiplayer\n" +

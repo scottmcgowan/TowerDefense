@@ -31,7 +31,6 @@ public class MultiPlayerShopPanel extends JPanel {
 		this.player = p;
 		setLayout(new GridLayout(3, 9, 5, 5));
 		setSize(PANEL_WIDTH, PANEL_HEIGHT);
-
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
 		String[] tooltip = {"Damage: " + Res.DAMAGE_FIRE_1 + "  " + "Fire Rate: " + Res.RATE_FIRE_1 + "  " + "Range: " + Res.RANGE_FIRE_1, 
@@ -44,6 +43,8 @@ public class MultiPlayerShopPanel extends JPanel {
 			if(j < tooltip.length)
 				b.setToolTipText(tooltip[j]);
 			j++;
+			
+			b.setFocusable(false);
 			buttons.add(b);
 			b.addActionListener(listenerToAllButtons);
 			//if (b.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {

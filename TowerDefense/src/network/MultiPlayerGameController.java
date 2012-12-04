@@ -146,6 +146,7 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		}
 
 		gui.setLayout(new FlowLayout());
+		gui.setFocusable(true);
 		shop = new MultiPlayerShopPanel(player, this);
 		gameCanvas = new GameCanvas(this);
 		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
@@ -179,9 +180,11 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		fileMenu.add(exit);
 		newGame.addActionListener(new allMenuAction());
 		exit.addActionListener(new allMenuAction());
-
+		
+		gui.addKeyListener(new keyAction());
 		gui.setVisible(true);
 		gui.repaint();
+
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -195,6 +198,31 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		}
 	}
 
+	private class keyAction implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			if (arg0.getKeyChar() == ' ')
+				updateRate();
+			if (arg0.getKeyChar() == 'p')
+				System.out.print("I pressed space!");
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 	public void addOrder(PurchaseOrder po) {
 		if (po.getPlayer() == player) {
 			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);

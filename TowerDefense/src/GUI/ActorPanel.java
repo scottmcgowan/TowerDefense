@@ -38,7 +38,7 @@ public class ActorPanel extends JPanel {
 	public static final int PANEL_WIDTH = 480;
 	public static final int PANEL_HEIGHT = 360;
 	public ArrayList<Drawable> drawList = new ArrayList<Drawable>();
-	
+
 	private BufferedImage fireTower;
 	private BufferedImage fireTower2;
 	private BufferedImage fireTower3;
@@ -48,13 +48,13 @@ public class ActorPanel extends JPanel {
 	private BufferedImage lightningTower;
 	private BufferedImage lightningTower2;
 	private BufferedImage lightningTower3;
-	
+
 	private static final int CHAR_WIDTH = 30;
 	private static final int CHAR_HEIGHT = 30;
 	private BufferedImage enemySprites;
 	private static final int spriteCount = 3;
 	private int counter;
-	
+
 	private BufferedImage cirEnemy;
 
 	public ActorPanel() {
@@ -63,7 +63,7 @@ public class ActorPanel extends JPanel {
 		loadImages();
 		counter = 0;
 	}
-	
+
 	public void loadImages() {
 		try {
 			fireTower = ImageIO.read(new File("images/FireTower.png"));
@@ -163,22 +163,20 @@ public class ActorPanel extends JPanel {
 					spriteY = CHAR_WIDTH * 3;
 				
 				// Get the correct block of sprite characters
-				if (d instanceof Buff) {
+				if (d instanceof Buff)
 					spriteX = 0;
-				} else if (d instanceof Speedy) {
+				else if (d instanceof Speedy)
 					spriteX = CHAR_WIDTH * 3;
-				} else if (d instanceof Grunt) {
+				else if (d instanceof Grunt)
 					spriteX = CHAR_WIDTH * 6;
-				}
 				
 				// Display the right sequence of the animation
-				if (num == 0) {
+				if (num == 0)
 					spriteX += 0;
-				} else if (num == 1) {
+				else if (num == 1)
 					spriteX += 30;
-				} else if (num == 2) {
+				else if (num == 2)
 					spriteX += 60;
-				}
 				
 				gr.drawImage(enemySprites.getSubimage(spriteX, spriteY,
 						CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
@@ -194,7 +192,7 @@ public class ActorPanel extends JPanel {
 				gr.draw(((Projectile) d).getBounds());
 			}
 		} // end for
-		
+			
 		// Draw health bars on top of everything else
 		for (Drawable d : drawList) {
 			if (d instanceof Enemy) {

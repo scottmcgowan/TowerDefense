@@ -38,9 +38,11 @@ public class Network extends Observable {
 				System.out.print("failed!");
 			}
 			outputToLiasonLoop.writeObject(d);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Player 2 has left the game");
+			System.out.println("In Client.sendDelivery");
 		}
 	}
 
@@ -57,7 +59,8 @@ public class Network extends Observable {
 						String outputMessage = d.getMessage();
 						if (d.newGameReady) {
 							gc.gameStart();
-							System.out.println("New Game Started");
+							setChanged();
+							notifyObservers(outputMessage);
 						} else if (d.lose) {
 							if (d.player == player) {
 								gc.lost();
@@ -65,24 +68,27 @@ public class Network extends Observable {
 								gc.won();
 							}
 						} else if (d.tieMet) {
-							if(player!=d.player && gc.checkOnesidedTieConditions()){
-								sendDelivery(new Delivery("", player, false, false, false, true, true));
+							if (player != d.player
+									&& gc.checkOnesidedTieConditions()) {
+								sendDelivery(new Delivery("", player, false,
+										false, false, true, true));
 							}
-						} else if (d.tied){
+						} else if (d.tied) {
 							gc.tie();
-						} else if (d.pause){
-							//System.out.println("sdasdasda");
+						} else if (d.pause) {
+							// System.out.println("sdasdasda");
 							gc.pause(true);
 							setChanged();
 							notifyObservers(outputMessage);
-						} else if (d.rate){
-							//System.out.println("sdasdasda");
-							if(player != d.player){
-							gc.updateRate(true);
+						} else if (d.rate) {
+							// System.out.println("sdasdasda");
+							if (player != d.player) {
+								gc.updateRate(true);
+							}
 							setChanged();
-							notifyObservers(outputMessage);}
+							notifyObservers(outputMessage);
 						}
-						
+
 						// Does not update if message is empty, otherwise alerts
 						// gui to update with the message.
 						else if (!outputMessage.trim().equals("")) {
@@ -100,18 +106,20 @@ public class Network extends Observable {
 							}
 
 							// System.out.println(outputMessage);
-							if(d.getOrder()!=null){
-							game.addOrder(d.getOrder());}
+							if (d.getOrder() != null) {
+								game.addOrder(d.getOrder());
+							}
 						}
 					}
-				} catch (IOException e) {
+				} catch (Exception e) {
 					System.out.println("In Client.connectToServer");
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
+					System.out.println("Player 2 has left the game");
+					//e.printStackTrace();
+				} /*catch (ClassNotFoundException e) {
 					System.out
 							.println("Trying to read an object of a different written type from Liason");
 					e.printStackTrace();
-				}
+				}*/
 			}
 		};
 

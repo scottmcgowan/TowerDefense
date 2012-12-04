@@ -255,7 +255,7 @@ public class Game {
 	 * @param enemy The Enemy object to add to the game
 	 */
 	public void addEnemy(Enemy enemy) {
-		enemyList.add(enemy);
+		enemyList.add(0, enemy);
 	}
 	
 	

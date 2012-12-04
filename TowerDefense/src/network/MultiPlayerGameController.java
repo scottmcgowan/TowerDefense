@@ -144,7 +144,9 @@ public class MultiPlayerGameController implements GameControllerInterface {
 
 		gui.setLayout(new FlowLayout());
 		gui.setFocusable(true);
+		gui.setResizable(false);
 		shop = new MultiPlayerShopPanel(player, this);
+		stats = new LogisticsPanel();
 		gameCanvas = new GameCanvas(this);
 		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
 		shop.connectToMap(gameCanvas);
@@ -158,7 +160,6 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
-		stats = new LogisticsPanel();
 		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
@@ -179,6 +180,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.addKeyListener(new keyAction());
 		gui.setVisible(true);
 		gui.repaint();
+		if(player == Server.SERVER_PLAYER){
+			wait(1);
+			screens.setServerMessage();			
+		}
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -290,6 +295,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public void gameStart() {
+		wait(1);
 		shop.updateWithMoney(thisPlayer.getMoney());
 		// gui = new GameGUI();
 		// Create a new thread

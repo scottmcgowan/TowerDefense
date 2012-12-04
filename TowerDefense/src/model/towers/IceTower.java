@@ -5,7 +5,7 @@ import resources.Res;
 public class IceTower extends Tower {
 
 	public IceTower(int xPos, int yPos) {
-		super(xPos, yPos);
+		super(xPos, yPos, 80, 2.3);
 		// TODO: stuff
 	}
 	

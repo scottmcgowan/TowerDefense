@@ -169,16 +169,15 @@ public class Game {
 						Point pos = tower.getPosition();
 						Point des = enemy.getPosition();
 						
-						switch (tower.getID()) {
-						case Res.TOWER_NO_TYPE:
+						int id = tower.getID();
+						if (id == Res.TOWER_NO_TYPE)
 							addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));							
-						case Res.TOWER_FIRE_TYPE:
+						else if (id == Res.TOWER_FIRE_TYPE)
 							addProjectile(new Flame(pos.x, pos.y, des.x, des.y));
-						case Res.TOWER_ICE_TYPE:
+						else if (id == Res.TOWER_ICE_TYPE)
 							addProjectile(new IceBeam(pos.x, pos.y, des.x, des.y));
-						case Res.TOWER_LIGHTNING_TYPE:
+						else if (id == Res.TOWER_LIGHTNING_TYPE)
 							addProjectile(new Lightning(pos.x, pos.y, des.x, des.y));
-						}
 						tower.fire();
 						
 						// this tower has fired, move on to the next one

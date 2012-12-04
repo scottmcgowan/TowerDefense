@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Buff extends Enemy {
 
-	private static int buffSpeed = 5;
+	private static int buffSpeed = 3;
 	private static int buffHP = 200;
 	private static int buffDamage = 50;
 	

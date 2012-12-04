@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Speedy extends Enemy {
 	
-	private static int speedySpeed = 2;
+	private static int speedySpeed = 1;
 	private static int speedyHP = 50;
 	private static int speedyDamage = 5;
 

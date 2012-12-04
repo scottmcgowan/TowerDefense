@@ -30,9 +30,10 @@ public class ActorPanel extends JPanel {
 
 	public void drawDrawables(ArrayList<Drawable> arr) {
 		drawList = arr;
+		repaint();
 	}
 
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 
 		super.paintComponent(g);
 		Graphics2D gr = (Graphics2D) g;

@@ -3,20 +3,11 @@ package model;
 import java.awt.Shape;
 
 public class Player {
-	private int health = 20;
 	private int money = 600;
 	private int towers = 0;
 	private Shape shape;
 
 	public Player(){}
-	
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
 
 	public int getMoney() {
 		return money;

@@ -1,35 +1,15 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Stack;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 
 import model.Drawable;
 import model.GameControllerInterface;
-import model.enemies.Enemy;
-import model.projectiles.Projectile;
-import model.towers.Tower;
-import GUI.Map.Tile;
 
 
 // Main component to display the map
@@ -43,14 +23,16 @@ public class GameCanvas extends JLayeredPane{
 	private ActorPanel actorPane;
 	Map map = new Map();
 	private final ArrayList<Point> path;
-
+	private boolean paintMap = true;
+	
 	// Constructor
 	public GameCanvas(GameControllerInterface gc) {
 		setFocusable(true); // so that can receive key-events
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		requestFocus();
 		setBackground(Color.WHITE);
-
+		setIgnoreRepaint(true);
+		
 		game = gc;
 		actorPane = new ActorPanel();
 		actorPane.setSize(PANEL_WIDTH, PANEL_HEIGHT);
@@ -64,13 +46,27 @@ public class GameCanvas extends JLayeredPane{
 
 	public void drawDrawables(ArrayList<Drawable> arr){
 		actorPane.drawDrawables(arr);
-		actorPane.repaint();
 	}
 
 	public BackgroundPanel getBackgroundPanel(){
 		return backgroundPanel;
 	}
 
+	
+	@Override
+	public void paintComponent(Graphics g){
+		//super.paintComponent(g);
+		/*
+		if(paintMap){
+		g.setClip(new Rectangle(0,0,1000,1000));
+		paintChildren(g);
+		paintMap = false;}
+		else{
+			g.setClip(new Rectangle(0,0,0,0));}*/
+		//paintMap=false;}
+		//paintComponent(g);
+	}
+	
 	public void addTower(int tileX, int tileY, int tower_type) {
 		backgroundPanel.purchase(tileX, tileY, tower_type);
 	}

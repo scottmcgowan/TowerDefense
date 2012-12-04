@@ -14,4 +14,8 @@ public class Res {
 	public static final int TOWER_ICE_TYPE = 2;
 	public static final int TOWER_LIGHTNING_TYPE = 3;
 	public static final int SPACE_UNBUILDABLE = -1;
+	public static final int ENEMY_NO_TYPE = 0;
+	public static final int ENEMY_GRUNT_TYPE = 1;
+	public static final int ENEMY_SPEEDY_TYPE = 2;
+	public static final int ENEMY_BUFF_TYPE = 3;
 }

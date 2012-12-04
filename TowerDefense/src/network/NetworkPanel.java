@@ -69,12 +69,12 @@ public class NetworkPanel extends JPanel implements Observer {
 	private class ChatAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String text = chatBar.getText();
 			chatBar.setText("");
-			String text = chatBar.getText().trim();
 			if (text.equals("\\rate")) {
-				game.updateRate();
+				game.updateRate(false);
 			} else {
-				String input = "Player " + player + "> " + chatBar.getText();
+				String input = "Player " + player + "> " + text;
 				// game.sendMessage(input);
 				interpretDelivery(new Delivery(input, null, true, true, player));
 			}

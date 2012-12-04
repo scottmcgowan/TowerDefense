@@ -11,10 +11,12 @@ public class Delivery implements Serializable{
 	public boolean messageForSelf;
 	public boolean messageForOther;
 	public int player;
-	public final boolean newGameReady;
-	public final boolean lose;
-	public final boolean tieMet;
-	public final boolean tied;
+	public boolean newGameReady = false;
+	public boolean lose = false;
+	public boolean tieMet = false;
+	public boolean tied = false;
+	public boolean pause = false;
+	public boolean rate = false;
 	
 	public Delivery(String s, PurchaseOrder purchase, boolean self, boolean other, int p){
 		message = s;
@@ -22,10 +24,6 @@ public class Delivery implements Serializable{
 		player = p;
 		messageForSelf = self;
 		messageForOther = other;
-		newGameReady = false;
-		lose = false;
-		tieMet = false;
-		tied = false;
 	}
 	
 	public Delivery(String s, int p, boolean gameReady, boolean lost, boolean tieCondition, boolean tiedEnd, boolean self){
@@ -37,6 +35,13 @@ public class Delivery implements Serializable{
 		tied = tiedEnd;
 		messageForSelf = self;
 		messageForOther = true;
+	}
+	
+	public Delivery(String s, int p, boolean ps, boolean r){
+		pause = ps;
+		rate = r;
+		message = s;
+		player = p;
 	}
 	
 	public String getMessage(){return message;}

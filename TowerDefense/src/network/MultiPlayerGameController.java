@@ -35,7 +35,7 @@ import GUI.LogisticsPanel;
 import GUI.Map;
 import GUI.MiscOptions;
 
-public class MultiPlayerGameController implements GameControllerInterface{
+public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
 	static int UPDATE_RATE = 60; // number of game update per second
@@ -101,9 +101,6 @@ public class MultiPlayerGameController implements GameControllerInterface{
 	}
 
 	public boolean checkOnesidedTieConditions() {
-		for (Enemy e : game.getEnemies()) {
-			System.out.println(e);
-		}
 		return thisPlayer.getMoney() < 100 && game.getEnemies().isEmpty();
 	}
 
@@ -166,7 +163,6 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(stats);
-		
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
 
@@ -180,11 +176,9 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		fileMenu.add(exit);
 		newGame.addActionListener(new allMenuAction());
 		exit.addActionListener(new allMenuAction());
-		
 		gui.addKeyListener(new keyAction());
 		gui.setVisible(true);
 		gui.repaint();
-
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -204,9 +198,9 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		public void keyPressed(KeyEvent arg0) {
 			// TODO Auto-generated method stub
 			if (arg0.getKeyChar() == ' ')
-				updateRate();
+				updateRate(false);
 			if (arg0.getKeyChar() == 'p')
-				System.out.print("I pressed space!");
+				pause(false);
 			
 		}
 
@@ -223,6 +217,7 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		}
 		
 	}
+
 	public void addOrder(PurchaseOrder po) {
 		if (po.getPlayer() == player) {
 			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);
@@ -405,12 +400,30 @@ public class MultiPlayerGameController implements GameControllerInterface{
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 
-	public void updateRate(){
-		if(UPDATE_RATE==60){
-		UPDATE_RATE = 90;}
-		else{UPDATE_RATE=60;}
-		UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
-		System.out.println("Rate changed to "+UPDATE_RATE);
+	public void updateRate(boolean fromNetwork) {
+		String rateString = new String();
+		if(UPDATE_RATE==60){rateString = "90";}
+		if(UPDATE_RATE==90){rateString = "60";}
+		if (fromNetwork) {
+			if (UPDATE_RATE == 60) {
+				UPDATE_RATE = 90;
+			} else {
+				UPDATE_RATE = 60;
+			}
+			UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
+		} else {
+			sendDelivery(new Delivery("Player " + player + " changed game rate to "
+					+ rateString, player, false, true));
+		}
 	}
-	
+
+	public void pause(boolean fromNetwork) {
+		// TODO Auto-generated method stub
+		if (fromNetwork) {
+			gamePaused = !gamePaused;
+		} else {
+			//sendDelivery(new Delivery("", player, true, false));
+			sendDelivery(new Delivery("Player " + player + " paused the game", player, true, false));
+		}
+	}
 }

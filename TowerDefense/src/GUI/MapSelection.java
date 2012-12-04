@@ -14,12 +14,10 @@ import network.MultiPlayerGameController;
 import network.Server;
 
 public class MapSelection extends JFrame {
+	int player;
 	
-	public static void main(String[] args) {
-		new MapSelection();
-	}
-
-	public MapSelection() {
+	public MapSelection(int i) {
+		player = i;
 		setLayout(new FlowLayout());
 		setSize(250, 100);
 		setTitle("Map");
@@ -56,15 +54,24 @@ public class MapSelection extends JFrame {
 			JButton clickButton = (JButton) arg0.getSource();
 			if (clickButton.getText().equals("1")) {
 				dispose();
-				new MultiPlayerGameController(Server.SERVER_PLAYER, 1);
+				if(player == 1)
+					new MultiPlayerGameController(Server.SERVER_PLAYER, 1);
+				else
+					new MultiPlayerGameController(Server.CLIENT_PLAYER, 1);
 			}
 			if (clickButton.getText().equals("2")) {
 				dispose();
-				new MultiPlayerGameController(Server.SERVER_PLAYER, 2);
+				if(player == 1)
+					new MultiPlayerGameController(Server.SERVER_PLAYER, 2);
+				else
+					new MultiPlayerGameController(Server.CLIENT_PLAYER, 2);
 			}
 			if (clickButton.getText().equals("3")) {
 				dispose();
-				new MultiPlayerGameController(Server.SERVER_PLAYER,3);
+				if(player == 1)
+					new MultiPlayerGameController(Server.SERVER_PLAYER, 3);
+				else
+					new MultiPlayerGameController(Server.CLIENT_PLAYER, 3);
 			}
 		}
 	}

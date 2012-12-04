@@ -114,6 +114,8 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			System.out.println("Tie conditions met");
 			screens.setTieMessage();
 			gameOver = true;
+			gui.dispose();
+			new MainMenu();
 		}
 	}
 
@@ -135,12 +137,12 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		}
 	}
 
+	Server server = new Server(Server.PORT_NUMBER);
 	public MultiPlayerGameController(int player, int map) {
 		game = new Game();
 		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
 		if (player == Server.SERVER_PLAYER) {
-			Server server = new Server(Server.PORT_NUMBER);
 			server.start();
 			network = new Network(networkPanel, Server.SERVER_PLAYER, this);
 		} else {

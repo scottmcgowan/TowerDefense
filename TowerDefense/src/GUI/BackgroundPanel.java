@@ -54,6 +54,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 	private GameControllerInterface game;
 	private BufferedImage background;
 	Map map = new Map();
+	private boolean bufferSaved = false;
 	
 	// Constructor
 	public BackgroundPanel(GameControllerInterface gc) {
@@ -116,9 +117,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		rerenderBackground();
 	}
 
-	public void work(){
-		timer++;
-		if(timer>60){
+	public void saveBufferedImage(){
+		if(!bufferSaved){
 			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 			// Render the component and all its sub components
 			paintAll(background.getGraphics());
@@ -132,13 +132,20 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			}
 			timer = 0;
 			System.out.println("saved");
+			bufferSaved = true;
 		}
 	}
+	
 	@Override
 	public void paint(Graphics g){
+		Graphics2D g2 = (Graphics2D)g;
+		if(!bufferSaved){
 		paintChildren(g);
 		paintComponents(g);
-		g.drawImage(background, PANEL_WIDTH, PANEL_HEIGHT, null);
+		}
+		else{
+			g2.drawImage(background, 0, 0, null);
+		}
 	}
 	
 	public void rerenderBackground(){
@@ -152,7 +159,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			}
 		}
 		repaint();
-	    
 	}
 	
 	private class PaintSquare extends JComponent {
@@ -312,6 +318,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			map.tileMap[tileY][tileX] = Tile.LIGHTNING_TOWER;
 			break;
 		}
+		bufferSaved = false;
 		gameMap[tileY][tileX].repaint();
 	}
 

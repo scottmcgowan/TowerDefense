@@ -35,7 +35,7 @@ import GUI.Map;
 public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
-	static final int UPDATE_RATE = 60; // number of game update per second
+	static final int UPDATE_RATE = 30; // number of game update per second
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
@@ -270,6 +270,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			}
 			updateLogisticSender();
 			draw(game.getDrawable());
+			gameCanvas.optimizeBakcground();
 			processOrders();
 			processSpawnQueue();
 		} else {

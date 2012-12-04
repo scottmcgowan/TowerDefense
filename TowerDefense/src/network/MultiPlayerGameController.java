@@ -126,7 +126,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		shop.connectToMap(gameCanvas);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH,
 				networkPanel.PANEL_HEIGHT);
-		LogisticsPanel health = new LogisticsPanel();
+		LogisticsPanel stats = new LogisticsPanel();
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
 //		gameCanvas.setLocation(20, 20);
 //		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
@@ -138,7 +138,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(health);
+		gui.add(stats);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
@@ -266,7 +266,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 
 	public void processSpawnQueue() {
 		spawn_timer += 1;
-		if (spawn_timer >= 60 && !spawnQueue.isEmpty()) {
+		if (spawn_timer >= 300 && !spawnQueue.isEmpty()) {
 			game.addEnemy(spawnQueue.poll());
 			spawn_timer = 0;
 			System.out.println("Player " + player + " enemy added");

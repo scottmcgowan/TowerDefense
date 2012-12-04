@@ -34,7 +34,7 @@ public class NetworkPanel extends JPanel implements Observer {
 		setLayout(null);
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		setVisible(true);
-
+		setFocusable(false);
 		chatBar.setSize(PANEL_WIDTH, 20);
 		chatBar.setLocation(0, 6);
 		chatBar.setEditable(true);

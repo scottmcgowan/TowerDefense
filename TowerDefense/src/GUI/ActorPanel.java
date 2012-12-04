@@ -1,10 +1,12 @@
 package GUI;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -137,13 +139,18 @@ public class ActorPanel extends JPanel {
 			}else if (d instanceof Enemy) {
 				gr.drawImage(cirEnemy, (int) ((Enemy) d).getPosition().getX(),
 						(int) ((Enemy) d).getPosition().getY(), this);
+				
 				// Health bars
 				gr.setColor(Color.RED);
+				gr.setStroke(new BasicStroke(3));
 				gr.drawLine(d.getX(), d.getY(), d.getX() + ((Enemy) d).getWidth(), d.getY());
+				
 				double health = (((Enemy) d).getHP() / ((Enemy) d).getMaxHP()) * ((Enemy) d).getWidth();
 				int size = (int) Math.floor(health);
 				gr.setColor(Color.GREEN);
 				gr.drawLine(d.getX(), d.getY(), d.getX() + size, d.getY());
+				
+				gr.setStroke(new BasicStroke(1));
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
 			} else if (d instanceof Projectile) {

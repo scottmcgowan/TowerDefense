@@ -5,7 +5,7 @@ import resources.Res;
 public class FireTower extends Tower {
 
 	public FireTower(int xPos, int yPos) {
-		super(xPos, yPos, 60, Res.RANGE_FIRE_1, Res.DAMAGE_FIRE_1);
+		super(xPos, yPos, Res.RATE_FIRE_1, Res.RANGE_FIRE_1, Res.DAMAGE_FIRE_1);
 		// TODO: stuff
 	}
 	

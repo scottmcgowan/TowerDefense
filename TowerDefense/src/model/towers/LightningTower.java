@@ -5,7 +5,7 @@ import resources.Res;
 public class LightningTower extends Tower{
 	
 	public LightningTower(int xPos, int yPos) {
-		super(xPos, yPos, 80, Res.RANGE_LIGHTNING_1, Res.DAMAGE_LIGHTNING_1);
+		super(xPos, yPos, Res.RATE_LIGHTNING_1, Res.RANGE_LIGHTNING_1, Res.DAMAGE_LIGHTNING_1);
 		// TODO: stuff
 	}
 	

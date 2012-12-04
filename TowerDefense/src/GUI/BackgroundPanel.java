@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -26,7 +27,6 @@ import resources.Res;
 import model.Drawable;
 import model.GameControllerInterface;
 import GUI.Map.Tile;
-
 
 // Main component to display the map
 public class BackgroundPanel extends JPanel implements KeyListener {
@@ -55,6 +55,10 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 	private BufferedImage background;
 	Map map = new Map();
 	private boolean bufferSaved = false;
+	private int hoverTileX = -1;
+	private int hoverTileY = -1;
+	private int selectTileX = -1;
+	private int selectTileY = -1;
 	
 	// Constructor
 	public BackgroundPanel(GameControllerInterface gc) {
@@ -62,7 +66,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		setFocusable(true); // so that can receive key-events
 		addKeyListener(this);
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-		setLayout(new GridLayout(12,16));
+		setLayout(new GridLayout(12, 16));
 		requestFocus();
 		setBackground(Color.WHITE);
 		// Initialize a new path
@@ -117,38 +121,38 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		rerenderBackground();
 	}
 
-	public void saveBufferedImage(){
-		if(!bufferSaved){
-			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+	public void saveBufferedImage() {
+		if (!bufferSaved) {
+			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT,
+					BufferedImage.TYPE_INT_ARGB);
 			// Render the component and all its sub components
-			paintAll(background.getGraphics());
-		    paint(background.getGraphics());
-			
-			try {
-				ImageIO.write(background, "png", new File("test.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// paintAll(background.getGraphics());
+			paint(background.getGraphics());
 			timer = 0;
 			System.out.println("saved");
 			bufferSaved = true;
 		}
 	}
-	
-	@Override
-	public void paint(Graphics g){
-		Graphics2D g2 = (Graphics2D)g;
-		if(!bufferSaved){
-		paintChildren(g);
-		paintComponents(g);
-		}
-		else{
+
+	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		if (!bufferSaved) {
+			paintChildren(g);
+			paintComponents(g);
+		} else {
 			g2.drawImage(background, 0, 0, null);
+			Rectangle highlight = new Rectangle(hoverTileX * gridWidth,
+					hoverTileY * gridHeight, gridWidth, gridHeight);
+			g2.setColor(Color.WHITE);
+			g2.draw(highlight);
+			Rectangle selected = new Rectangle(selectTileX * gridWidth,
+					selectTileY * gridHeight, gridWidth, gridHeight);
+			g2.setColor(Color.YELLOW);
+			g2.draw(selected);
 		}
 	}
-	
-	public void rerenderBackground(){
+
+	public void rerenderBackground() {
 
 		for (int y = 0; y < map.getRow(); y++) {
 			for (int x = 0; x < map.getCol(); x++) {
@@ -160,34 +164,32 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		}
 		repaint();
 	}
-	
+
 	private class PaintSquare extends JComponent {
 		// Locations used to identify the component
 		private int locationX;
 		private int locationY;
 
-		//Fix these!!!!
 		public int getTileX(){
 			return locationX;
 		}
 
-		public int getTileY(){
+		public int getTileY() {
 			return locationY;
 		}
-		
+
 		PaintSquare(int y, int x) {
 			locationX = x;
 			locationY = y;
 			setIgnoreRepaint(true);
 		}
-		
+
 		public void paint(Graphics g) {
-			
+
 			Graphics2D gr = (Graphics2D) g;
-			//System.out.println("repainsdasdasting");
-			
+
 			Tile current = map.tileMap[locationY][locationX];
-			
+
 			switch (current) {
 			case ENVIRONMENT:
 				try {
@@ -196,6 +198,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find grass.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case PATH:
 				try {
@@ -204,6 +208,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find path.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case START:
 				try {
@@ -212,6 +218,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find start.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case GOAL:
 				try {
@@ -220,50 +228,30 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find goal.png");
 				}
-				break;
-			case ICE_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/IceTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find IceTower.png");
-				}
-				break;
-			case FIRE_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/FireTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find FireTower.png");
-				}
-				break;
-			case LIGHTNING_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/LightningTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find LightningTower.png");
-				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			}
 		}
 	}
-	
+
 	// Finds the path coordinates for enemy
 	public ArrayList<Point> pathTrail() {
 		ArrayList<Point> trail = new ArrayList<Point>();
 
 		// Push start points if start tile is on the horizontal walls
 		for (int i = 0; i < map.tileMap[0].length; i++) {
-			if (map.tileMap[0][i] == Tile.START || map.tileMap[map.tileMap.length-1][i] == Tile.START) {
-				trail.add(new Point((i*30), 0));
+			if (map.tileMap[0][i] == Tile.START
+					|| map.tileMap[map.tileMap.length - 1][i] == Tile.START) {
+				trail.add(new Point((i * 30), 0));
 			}
 		}
 
 		// Push start points if start tile is on the vertical walls
 		for (int j = 0; j < map.tileMap.length; j++) {
-			if (map.tileMap[j][0] == Tile.START || map.tileMap[j][map.tileMap[0].length-1] == Tile.START) {
-				trail.add(new Point(0, (j*30)));
+			if (map.tileMap[j][0] == Tile.START
+					|| map.tileMap[j][map.tileMap[0].length - 1] == Tile.START) {
+				trail.add(new Point(0, (j * 30)));
 			}
 		}
 
@@ -274,40 +262,43 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		Tile current = Tile.START;
 		Point currentPoint = trail.get(0);
 		int pointY = currentPoint.y, pointX = currentPoint.x;
-		
-		while (current != Tile.GOAL) {	
-			if(currentPoint.x >= 30)
+
+		while (current != Tile.GOAL) {
+			if (currentPoint.x >= 30)
 				pointX = currentPoint.x;
-				pointX /= 30;
-			
-			if(currentPoint.y >= 30)
+			pointX /= 30;
+
+			if (currentPoint.y >= 30)
 				pointY = currentPoint.y;
-				pointY /=  30;
-			
+			pointY /= 30;
+
 			for (int i = pointY - 1; i <= pointY + 1; i++)
 				for (int j = pointX - 1; j <= pointX + 1; j++) {
-					
-					Point check = new Point((j*30), (i*30));
-					if (i > -1 && i < map.tileMap.length && j > -1 && j < map.tileMap[0].length) {
-						if((j == pointX && (i == pointY-1 || i == pointY+1)) || (i == pointY && (j == pointX-1 || j == pointX+1)))
-						if (map.tileMap[i][j] != Tile.ENVIRONMENT && trail.contains(check) == false) {
-							current = map.tileMap[i][j];
-							currentPoint = new Point((j * 30),(i * 30));
-							trail.add(currentPoint);
-						}
+
+					Point check = new Point((j * 30), (i * 30));
+					if (i > -1 && i < map.tileMap.length && j > -1
+							&& j < map.tileMap[0].length) {
+						if ((j == pointX && (i == pointY - 1 || i == pointY + 1))
+								|| (i == pointY && (j == pointX - 1 || j == pointX + 1)))
+							if (map.tileMap[i][j] != Tile.ENVIRONMENT
+									&& trail.contains(check) == false) {
+								current = map.tileMap[i][j];
+								currentPoint = new Point((j * 30), (i * 30));
+								trail.add(currentPoint);
+							}
 					}
 				}
 		}
 		return trail;
 	}
-	
+
 	public Component getClicked() {
 		return clicked;
 	}
 
 	// Makes sure an environment tile is clicked and then does a tower purchase
 	public void purchase(int tileX, int tileY, int towerType) {
-		switch(towerType){
+		switch (towerType) {
 		case Res.TOWER_FIRE_TYPE:
 			map.tileMap[tileY][tileX] = Tile.FIRE_TOWER;
 			break;
@@ -318,7 +309,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			map.tileMap[tileY][tileX] = Tile.LIGHTNING_TOWER;
 			break;
 		}
-		bufferSaved = false;
+		// bufferSaved = false;
 		gameMap[tileY][tileX].repaint();
 	}
 
@@ -334,21 +325,33 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			clicked = arg0.getComponent();
-			PaintSquare click = (PaintSquare)(arg0.getComponent());
+			PaintSquare click = (PaintSquare) (arg0.getComponent());
 			System.out.println(click.getTileX());
 			System.out.println(click.getTileY());
-			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileY()][click.getTileX()]);
+			selectTileX = click.getTileX();
+			selectTileY = click.getTileY();
+			game.notifyShopOfSelection(click.getTileX(), click.getTileY(),
+					map.tileMap[click.getTileY()][click.getTileX()]);
 			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
-			Component hover = arg0.getComponent();
-				((JComponent) hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+			PaintSquare hover = (PaintSquare) (arg0.getComponent());
+			hoverTileY = hover.getTileY();
+			hoverTileX = hover.getTileX();
+			// ((JComponent)
+			// hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
 		}
 
 		public void mouseExited(MouseEvent arg0) {
-			Component hover = arg0.getComponent();
-			((JComponent) hover).setBorder(BorderFactory.createEmptyBorder());
+			PaintSquare hover = (PaintSquare) (arg0.getComponent());
+			if (hoverTileY == hover.getTileY()
+					&& hoverTileX == hover.getTileX()) {
+				hoverTileY = -1;
+				hoverTileX = -1;
+			}
+			// ((JComponent)
+			// hover).setBorder(BorderFactory.createEmptyBorder());
 		}
 
 		public void mousePressed(MouseEvent arg0) {
@@ -359,11 +362,14 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {}
+	public void keyPressed(KeyEvent arg0) {
+	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {}
+	public void keyReleased(KeyEvent arg0) {
+	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {}
+	public void keyTyped(KeyEvent arg0) {
+	}
 }

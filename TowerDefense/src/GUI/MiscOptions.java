@@ -23,8 +23,8 @@ public class MiscOptions extends JFrame{
 	
 	public static void setHelpMessage() {
 		JOptionPane help = new JOptionPane();
-		help.showMessageDialog(null, "How to Play\n\n" + "You will have 20 lives.\n" +
-				"You will lose one life whenever an enemy finishes traversing the path.\n" 
+		help.showMessageDialog(null, "How to Play\n\n" + "You will have 100 health.\n" +
+				"You will lose 10 life whenever an enemy finishes traversing the path.\n" 
 		+ "Defend against the enemies by building towers.\n" +
 		"To purchase a tower:\t Click a grass tile and then press a buy tower button.\n\n" +
 		"Multiplayer\n" +
@@ -37,6 +37,11 @@ public class MiscOptions extends JFrame{
 	public static void setWinMessage() {
 		JOptionPane win = new JOptionPane();
 		win.showMessageDialog(null, "Congratulations! You won!");
+	}
+
+	public static void setTieMessage() {
+		JOptionPane win = new JOptionPane();
+		win.showMessageDialog(null, "It's a tie!");
 	}
 	
 	public static void setLoseMessage() {

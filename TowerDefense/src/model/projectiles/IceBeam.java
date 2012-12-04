@@ -4,9 +4,8 @@ public class IceBeam extends Projectile {
 	
 	private static int speed = 3;
 	private static boolean splash = false;
-	private static int damage = 30;
 
-	public IceBeam(int xPos, int yPos, int xDes, int yDes) {
+	public IceBeam(int xPos, int yPos, int xDes, int yDes, int damage) {
 		super(xPos, yPos, xDes, yDes, speed, damage, splash);
 		// TODO stuff
 	}

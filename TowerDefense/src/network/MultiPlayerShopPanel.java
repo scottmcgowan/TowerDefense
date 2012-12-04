@@ -125,12 +125,11 @@ public class MultiPlayerShopPanel extends JPanel {
 
 	public void updateWithMoney(int money) {
 		// TODO Auto-generated method stub
+		updateButtons(currentTileX, currentTileY, tile_type);
 		for (ShopButton b : buttons) {
-			b.setEnabled(true);
-			if (b.getItem().value >= money)
+			if (b.getItem().value > money)
 				b.setEnabled(false);
 		}
-		updateButtons(currentTileX, currentTileY, tile_type);
 	}
 
 }

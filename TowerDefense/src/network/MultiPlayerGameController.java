@@ -31,20 +31,21 @@ import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
 import GUI.Map;
+import GUI.MiscOptions;
 
 public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
-	static final int UPDATE_RATE = 30; // number of game update per second
+	static final int UPDATE_RATE = 60; // number of game update per second
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
-	boolean gameOver = false;
-	boolean gamePaused = false;
-	public int frameCounter = 0;
-	public int secondCounter = 0;
-	public NetworkPanel networkPanel;
-	public Network network;
+	private boolean gameOver = false;
+	private boolean gamePaused = false;
+	private int frameCounter = 0;
+	private int secondCounter = 0;
+	private NetworkPanel networkPanel;
+	private Network network;
 	private GameCanvas gameCanvas;
 	private MultiPlayerShopPanel shop;
 	private Player thisPlayer = new Player();
@@ -59,6 +60,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private int currentTileY;
 	private int tower_count;
 	private LogisticsPanel stats;
+	private MiscOptions screens = new MiscOptions();
 
 	public static void main(String[] args) {
 		MultiPlayerGameController game = new MultiPlayerGameController(
@@ -77,8 +79,11 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public void lost() {
-		gameOver = true;
-		System.out.println("Losing conditions met");
+		if (!gameOver) {
+			gameOver = true;
+			System.out.println("Losing conditions met");
+			screens.setLoseMessage();
+		}
 	}
 
 	public boolean hasLost() {
@@ -86,17 +91,26 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public void won() {
-		gameOver = true;
-		System.out.println("Winning conditions met");
+		if (!gameOver) {
+			System.out.println("Winning conditions met");
+			screens.setWinMessage();
+			gameOver = true;
+		}
 	}
 
 	public boolean checkOnesidedTieConditions() {
+		for (Enemy e : game.getEnemies()) {
+			System.out.println(e);
+		}
 		return thisPlayer.getMoney() < 100 && game.getEnemies().isEmpty();
 	}
 
 	public void tie() {
-		gameOver = true;
-		System.out.println("Tie conditions met");
+		if (!gameOver) {
+			System.out.println("Tie conditions met");
+			screens.setTieMessage();
+			gameOver = true;
+		}
 	}
 
 	public void updateLogisticSender() {
@@ -110,6 +124,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			sendDelivery(new Delivery(log, player, false, false,
 					checkOnesidedTieConditions(), false, false));
 			spawn_timer = 0;
+		}
+		if (spawn_timer % 120 == 0) {
+			sendDelivery(new Delivery("", player, false, false,
+					checkOnesidedTieConditions(), false, false));
 		}
 	}
 

@@ -35,7 +35,7 @@ public class ActorPanel extends JPanel {
 	public static final int PANEL_WIDTH = 480;
 	public static final int PANEL_HEIGHT = 360;
 	public ArrayList<Drawable> drawList = new ArrayList<Drawable>();
-	
+
 	private BufferedImage fireTower;
 	private BufferedImage fireTower2;
 	private BufferedImage fireTower3;
@@ -45,13 +45,13 @@ public class ActorPanel extends JPanel {
 	private BufferedImage lightningTower;
 	private BufferedImage lightningTower2;
 	private BufferedImage lightningTower3;
-	
+
 	private static final int CHAR_WIDTH = 30;
 	private static final int CHAR_HEIGHT = 30;
 	private BufferedImage enemySprites;
 	private static final int spriteCount = 3;
 	private int counter;
-	
+
 	private BufferedImage cirEnemy;
 
 	public ActorPanel() {
@@ -60,7 +60,7 @@ public class ActorPanel extends JPanel {
 		loadImages();
 		counter = 0;
 	}
-	
+
 	public void loadImages() {
 		try {
 			fireTower = ImageIO.read(new File("images/FireTower.png"));
@@ -146,7 +146,7 @@ public class ActorPanel extends JPanel {
 				gr.draw(((Tower) d).getRange());
 			}else if (d instanceof Enemy) {
 				int num = ((Enemy) d).getSpriteCount();
-				
+
 				if (((Enemy) d).getDirection() == Res.Dir.NORTH) {
 					if (num == 0) {
 						gr.drawImage(enemySprites.getSubimage(0, 90, CHAR_WIDTH,
@@ -215,15 +215,15 @@ public class ActorPanel extends JPanel {
 								.getPosition().getY(), this);
 					}
 				}
-				
+
 //				counter++;
 //				if (counter == 30)
 //					counter = 0;
-				
+
 //				gr.drawImage(cirEnemy, (int) ((Enemy) d).getPosition().getX(),
 //						(int) ((Enemy) d).getPosition().getY(), this);
-				
-				
+
+
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
 			} else if (d instanceof Projectile) {
@@ -233,7 +233,7 @@ public class ActorPanel extends JPanel {
 				gr.draw(((Projectile) d).getBounds());
 			}
 		} // end for
-		
+
 		for (Drawable d : drawList) {
 			if (d instanceof Enemy) {
 				// Health bars

@@ -122,8 +122,9 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 			// Render the component and all its sub components
 			paintAll(background.getGraphics());
-		    paint(background.getGraphics());
-			
+
+//		    paint(background.getGraphics());
+	
 			timer = 0;
 			System.out.println("saved");
 			bufferSaved = true;
@@ -133,6 +134,11 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 	@Override
 	public void paint(Graphics g){
 		Graphics2D g2 = (Graphics2D)g;
+		if(clicked != null) {
+			g2.setColor(Color.BLACK);
+			g2.drawRect(clicked.getX(), clicked.getY(), clicked.getX()+30, clicked.getHeight());
+		}
+		
 		if(!bufferSaved){
 		paintChildren(g);
 		paintComponents(g);
@@ -160,7 +166,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		private int locationX;
 		private int locationY;
 
-		//Fix these!!!!
 		public int getTileX(){
 			return locationX;
 		}
@@ -190,6 +195,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find grass.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case PATH:
 				try {
@@ -198,6 +205,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find path.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case START:
 				try {
@@ -206,6 +215,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find start.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 			case GOAL:
 				try {
@@ -214,6 +225,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find goal.png");
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				break;
 //			case ICE_TOWER:
 //				try {
@@ -329,15 +342,15 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		public void mouseClicked(MouseEvent arg0) {
 			clicked = arg0.getComponent();
 			PaintSquare click = (PaintSquare)(arg0.getComponent());
-			System.out.println(click.getTileX());
-			System.out.println(click.getTileY());
 			game.notifyShopOfSelection(click.getTileX(),click.getTileY(),map.tileMap[click.getTileY()][click.getTileX()]);
 			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
 			Component hover = arg0.getComponent();
-				((JComponent) hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+//			GameCanvas canvas = new GameCanvas();	
+			((JComponent) hover).setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+				
 		}
 
 		public void mouseExited(MouseEvent arg0) {

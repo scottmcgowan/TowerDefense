@@ -1,15 +1,20 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import model.Drawable;
@@ -50,6 +55,8 @@ public class ActorPanel extends JPanel {
 							(int) ((Tower) d).getPosition().getY(), this);
 				} catch (IOException e) {
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			} else if (d instanceof IceTower) {
@@ -59,6 +66,8 @@ public class ActorPanel extends JPanel {
 							(int) ((Tower) d).getPosition().getY(), this);
 				} catch (IOException e) {
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			} else if (d instanceof LightningTower) {
@@ -68,6 +77,8 @@ public class ActorPanel extends JPanel {
 							(int) ((Tower) d).getPosition().getY(), this);
 				} catch (IOException e) {
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			}else if (d instanceof Enemy) {
@@ -77,6 +88,8 @@ public class ActorPanel extends JPanel {
 							(int) ((Enemy) d).getPosition().getY(), this);
 				} catch (IOException e) {
 				}
+				gr.setColor(Color.BLACK);
+				gr.draw(getVisibleRect());
 			} else if (d instanceof Projectile) {
 				gr.setColor(Color.black);
 				gr.drawString("P", (int) ((Projectile) d).getPosition().getX(),
@@ -85,5 +98,4 @@ public class ActorPanel extends JPanel {
 			}
 		}
 	}
-
 }

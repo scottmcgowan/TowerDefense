@@ -26,6 +26,9 @@ import model.enemies.Buff;
 import model.enemies.Enemy;
 import model.enemies.Grunt;
 import model.enemies.Speedy;
+import model.projectiles.Flame;
+import model.projectiles.IceBeam;
+import model.projectiles.Lightning;
 import model.projectiles.Projectile;
 import model.towers.FireTower;
 import model.towers.IceTower;
@@ -48,6 +51,11 @@ public class ActorPanel extends JPanel {
 	private BufferedImage lightningTower;
 	private BufferedImage lightningTower2;
 	private BufferedImage lightningTower3;
+	
+	private BufferedImage lightning;
+	private BufferedImage fire;
+	private BufferedImage ice;
+	private static int projectileSize = 10;
 
 	private static final int CHAR_WIDTH = 30;
 	private static final int CHAR_HEIGHT = 30;
@@ -76,6 +84,11 @@ public class ActorPanel extends JPanel {
 			lightningTower2 = ImageIO.read(new File("images/LightningTower2.png"));
 			lightningTower3 = ImageIO.read(new File("images/LightningTower3.png"));
 			cirEnemy = ImageIO.read(new File("images/circenemy.png"));
+			
+			fire = ImageIO.read(new File("images/FireProjectile.png"));
+			lightning = ImageIO.read(new File("images/LightningProjectile.png"));
+			ice = ImageIO.read(new File("images/IceProjectile.png"));
+			
 			enemySprites = ImageIO.read(new File("images/EnemySprites.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading images!");
@@ -174,9 +187,9 @@ public class ActorPanel extends JPanel {
 				if (num == 0)
 					spriteX += 0;
 				else if (num == 1)
-					spriteX += 30;
+					spriteX += CHAR_WIDTH;
 				else if (num == 2)
-					spriteX += 60;
+					spriteX += CHAR_WIDTH * 2;
 				
 				gr.drawImage(enemySprites.getSubimage(spriteX, spriteY,
 						CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
@@ -185,11 +198,12 @@ public class ActorPanel extends JPanel {
 				
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
-			} else if (d instanceof Projectile) {
-				gr.setColor(Color.black);
-				gr.drawString("P", (int) ((Projectile) d).getPosition().getX(),
-						(int) ((Projectile) d).getPosition().getY());
-				gr.draw(((Projectile) d).getBounds());
+			} else if (d instanceof Lightning) {
+				gr.drawImage(lightning, d.getX(), d.getY(), projectileSize, projectileSize, this);
+			} else if (d instanceof Flame) {
+				gr.drawImage(fire, d.getX(), d.getY(), projectileSize, projectileSize, this);
+			} else if (d instanceof IceBeam) {
+				gr.drawImage(ice, d.getX(), d.getY(), projectileSize, projectileSize, this);
 			}
 		} // end for
 			

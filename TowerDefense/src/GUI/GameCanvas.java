@@ -46,6 +46,7 @@ public class GameCanvas extends JLayeredPane{
 
 	public void drawDrawables(ArrayList<Drawable> arr){
 		actorPane.drawDrawables(arr);
+		backgroundPanel.work();
 	}
 
 	public BackgroundPanel getBackgroundPanel(){

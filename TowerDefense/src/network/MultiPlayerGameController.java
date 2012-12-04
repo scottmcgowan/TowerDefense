@@ -32,6 +32,7 @@ import model.towers.LightningTower;
 import model.towers.Tower;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
+import GUI.MainMenu;
 import GUI.Map;
 import GUI.MiscOptions;
 
@@ -85,6 +86,8 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			gameOver = true;
 			System.out.println("Losing conditions met");
 			screens.setLoseMessage();
+			gui.dispose();
+			new MainMenu();
 		}
 	}
 
@@ -97,6 +100,8 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			System.out.println("Winning conditions met");
 			screens.setWinMessage();
 			gameOver = true;
+			gui.dispose();
+			new MainMenu();
 		}
 	}
 

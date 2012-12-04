@@ -116,11 +116,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		rerenderBackground();
 	}
 
-	@Override
-	public void paint(Graphics g){
-		paintChildren(g);
-		paintComponents(g);
-		g.drawImage(background, PANEL_WIDTH, PANEL_HEIGHT, null);
+	public void work(){
 		timer++;
 		if(timer>60){
 			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -137,6 +133,12 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			timer = 0;
 			System.out.println("saved");
 		}
+	}
+	@Override
+	public void paint(Graphics g){
+		paintChildren(g);
+		paintComponents(g);
+		g.drawImage(background, PANEL_WIDTH, PANEL_HEIGHT, null);
 	}
 	
 	public void rerenderBackground(){

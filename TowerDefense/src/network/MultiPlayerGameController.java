@@ -1,5 +1,6 @@
 package network;
 
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
 import GUI.GameCanvas;
+import GUI.LogisticsPanel;
 import GUI.Map;
 
 public class MultiPlayerGameController implements GameControllerInterface {
@@ -137,10 +139,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
+		LogisticsPanel health = new LogisticsPanel();
+		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(gameCanvas);
-		LogisticsPanel health = new LogisticsPanel();
 		gui.add(health);
 
 		JMenuBar menubar = new JMenuBar();

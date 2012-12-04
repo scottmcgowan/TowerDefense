@@ -111,7 +111,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
 		shop = new SinglePlayerShopPanel();
-		canvas = new GameCanvas(this);
+		canvas = new GameCanvas(this, 1);
 		stats = new LogisticsPanel();
 //		health.setSize(100,100);
 		shop.connectToMap(canvas);

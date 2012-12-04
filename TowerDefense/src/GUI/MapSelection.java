@@ -14,14 +14,12 @@ import network.MultiPlayerGameController;
 import network.Server;
 
 public class MapSelection extends JFrame {
-	MultiPlayerGameController server;
 	
 	public static void main(String[] args) {
-		new MapSelection(new MultiPlayerGameController(Server.SERVER_PLAYER));
+		new MapSelection();
 	}
 
-	public MapSelection(MultiPlayerGameController server) {
-		this.server = server;
+	public MapSelection() {
 		setLayout(new FlowLayout());
 		setSize(250, 100);
 		setTitle("Map");
@@ -37,6 +35,10 @@ public class MapSelection extends JFrame {
 		JButton map2 = new JButton("2");
 		JButton map3 = new JButton("3");
 
+		map1.addActionListener(new buttonAction());
+		map2.addActionListener(new buttonAction());
+		map3.addActionListener(new buttonAction());
+		
 		select.add(map1);
 		select.add(map2);
 		select.add(map3);
@@ -52,21 +54,17 @@ public class MapSelection extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			JButton clickButton = (JButton) arg0.getSource();
-			BackgroundPanel panel = new BackgroundPanel(server);
 			if (clickButton.getText().equals("1")) {
 				dispose();
-				panel.setPath(1);
-				new MultiPlayerGameController(Server.SERVER_PLAYER);
+				new MultiPlayerGameController(Server.SERVER_PLAYER, 1);
 			}
 			if (clickButton.getText().equals("2")) {
 				dispose();
-				panel.setPath(2);
-				new MultiPlayerGameController(Server.SERVER_PLAYER);
+				new MultiPlayerGameController(Server.SERVER_PLAYER, 2);
 			}
 			if (clickButton.getText().equals("3")) {
 				dispose();
-				panel.setPath(3);
-				new MultiPlayerGameController(Server.SERVER_PLAYER);
+				new MultiPlayerGameController(Server.SERVER_PLAYER,3);
 			}
 		}
 	}

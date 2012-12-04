@@ -25,14 +25,14 @@ public class MiscOptions extends JFrame{
 	
 	public void setHelpMessage(Component c) {
 		JOptionPane help = new JOptionPane();
-		help.showMessageDialog(c, "How to Play\n\n" + "You will have 100 health.\n" +
+		help.showMessageDialog(c, "How to Play\n\n" + "You will have 50 health.\n" +
 				"You will lose 10 life whenever an enemy finishes traversing the path.\n" 
 		+ "Defend against the enemies by building towers.\n" +
 		"To purchase a tower:\t Click a grass tile and then press a buy tower button.\n\n" +
 		"Multiplayer\n" +
 		"Play against another player by building towers as well as spawning enemies\n" +
 		"A player will lose when they have no more lives.\n" +
-		"A tie will result when both players have no money left and when there are no more enemies." +
+		"A tie will result when both players have no money left and when there are no more enemies.\n" +
 		"Use space bar to toggle speed of gameplay, and use p to pause the game");
 				
 	}

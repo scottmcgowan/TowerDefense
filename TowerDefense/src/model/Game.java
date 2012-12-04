@@ -32,7 +32,7 @@ public class Game {
 	private int counter;
 	
 	// Player Health
-	private int playerHealth = 10;
+	private int playerHealth = 100;
 	
 	private int playerMoney;
 	

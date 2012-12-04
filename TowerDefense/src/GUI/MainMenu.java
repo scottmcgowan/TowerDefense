@@ -4,23 +4,23 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-
-import model.SinglePlayerGameController;
 
 public class MainMenu extends JFrame {
 
+	JPanel buttons; 
+	ArrayList<JButton> listButtons = new ArrayList<JButton>();
+	
 	public static void main(String[] args) {
 		new MainMenu();
 	}
@@ -30,9 +30,9 @@ public class MainMenu extends JFrame {
 		setTitle("Main Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new FlowLayout());
-//		repaint();
-		add(new ContentPanel());
-		JPanel buttons = new JPanel();
+		
+		buttons = new JPanel();
+		buttons.setOpaque(false);
 		buttons.setLayout(new GridLayout(4, 1, 0, 5));
 
 		JButton singlePlayer = new JButton("Single Player");
@@ -45,6 +45,10 @@ public class MainMenu extends JFrame {
 		multiPlayerC.addActionListener(new buttonAction());
 		help.addActionListener(new buttonAction());
 
+		listButtons.add(singlePlayer);
+		listButtons.add(multiPlayerS);
+		listButtons.add(multiPlayerC);
+		listButtons.add(help);
 		buttons.add(singlePlayer);
 		buttons.add(multiPlayerS);
 		buttons.add(multiPlayerC);
@@ -57,31 +61,21 @@ public class MainMenu extends JFrame {
 		setVisible(true);
 	}
 	
-	class ContentPanel extends JPanel {
-		Image bgimage;
 
-		public ContentPanel()  {
-			try {
-				bgimage = ImageIO.read(new File("images/Shovelware.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			setSize(644, 352);
-			repaint();
-			setVisible(true);
-		}
 
 		public void paint(Graphics g) {
 			Graphics2D gr = (Graphics2D) g;
 			try {
+				paintComponents(g);
 				gr.drawImage(ImageIO.read(new File("images/Shovelware.png")),
 						0, 0, this);
+				for(JButton b:listButtons){
+					b.repaint();
+				}
 			} catch (IOException e) {
 			}
 		}
-	}
+
 
 	private class buttonAction implements ActionListener {
 

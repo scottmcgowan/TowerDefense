@@ -10,7 +10,7 @@ public class Buff extends Enemy {
 
 	private static int buffSpeed = 3;
 	private static int buffHP = 150;
-	private static int buffDamage = 50;
+	private static int buffDamage = 10;
 	
 	public Buff(ArrayList<Point> initPath) {
 		super(initPath, buffSpeed, buffHP, buffDamage);

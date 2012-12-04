@@ -94,6 +94,11 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public boolean hasLost() {
 		return game.gameOver();
 	}
+	
+
+	public boolean hasWon() {
+		return comPlayer.wave_remaining<0 && game.getEnemies().isEmpty();
+	}
 
 	public void won() {
 		if (!gameOver) {
@@ -184,9 +189,11 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			gameCanvas.optimizeBakcground();
 			processOrders();
 			processSpawnQueue();
-			if(hasLost()){
+			if(hasLost())
 				lost();
-			}
+			if(hasWon())
+				won();
+			gui.setTitle("Tower Defense! "+"Wave remaining: " + comPlayer.wave_remaining);
 		} else {
 			if (!gameOver) {
 				gameOver = true;
@@ -332,7 +339,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	
 	public void updateRate() {
 			if (UPDATE_RATE == 60) {
-				UPDATE_RATE = 90;
+				UPDATE_RATE = 120;
 			} else {
 				UPDATE_RATE = 60;
 			}

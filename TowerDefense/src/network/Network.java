@@ -65,7 +65,7 @@ public class Network extends Observable {
 								gc.won();
 							}
 						} else if (d.tieMet) {
-							if(gc.checkOnesidedTieConditions()){
+							if(player!=d.player && gc.checkOnesidedTieConditions()){
 								sendDelivery(new Delivery("", player, false, false, false, true, true));
 							}
 						} else if (d.tied){

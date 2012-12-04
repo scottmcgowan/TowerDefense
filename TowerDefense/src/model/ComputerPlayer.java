@@ -27,6 +27,12 @@ public class ComputerPlayer extends Player{
 			case 720:
 				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
 				break;
+			case 750:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				break;
+			case 780:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				break;
 		}
 	}
 }

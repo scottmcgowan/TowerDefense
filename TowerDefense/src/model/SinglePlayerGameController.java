@@ -3,6 +3,8 @@ package model;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -12,7 +14,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import network.MultiPlayerShop;
-
 import model.Delivery;
 import model.Drawable;
 import model.Game;
@@ -39,12 +40,13 @@ import GUI.SinglePlayerShopPanel;
 public class SinglePlayerGameController implements GameControllerInterface {
 
 	// main game class
-	private static final int UPDATE_RATE = 60; // number of game updates per
+	private static int UPDATE_RATE = 60; // number of game updates per
 												// second
-	private static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	private static long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
 	private Player user = new Player();
+	private ComputerPlayer comPlayer = new ComputerPlayer(this);
 	private Game game;
 	private boolean gameOver = false;
 	private boolean gamePaused = false;
@@ -84,6 +86,8 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			gameOver = true;
 			System.out.println("Losing conditions met");
 			screens.setLoseMessage();
+			gui.dispose();
+			new MainMenu();
 		}
 	}
 
@@ -96,26 +100,11 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			System.out.println("Winning conditions met");
 			screens.setWinMessage();
 			gameOver = true;
+			gui.dispose();
+			new MainMenu();
 		}
 	}
 	
-	
-
-	public boolean checkForTie() {
-		int userMoney = user.getMoney();
-		ArrayList<Enemy> enemyList = game.getEnemies();
-		return userMoney < 100 && enemyList.isEmpty();
-	}
-
-	// ?!?!?!
-	public void updateLogisticSender() {
-		spawnTimer++;
-		if (spawnTimer >= 1200) {
-			System.out.println("Sending logistics...");
-			spawnTimer = 0;
-		}
-	}
-
 	public SinglePlayerGameController() {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
@@ -124,8 +113,11 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		stats = new LogisticsPanel();
 		// health.setSize(100,100);
 		shop.connectToMap(gameCanvas);
+		gui.setFocusable(true);
+		gui.setResizable(false);
 		gui.setTitle("Game");
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);;
+		gui.addKeyListener(new keyAction());
 		gui.setSize(shop.PANEL_WIDTH + 75 + 50, gameCanvas.PANEL_HEIGHT
 				+ shop.PANEL_HEIGHT + 100);
 		gui.add(gameCanvas);
@@ -181,6 +173,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public void gameUpdate() {
 		if (!hasLost()) {
 			game.update();
+			comPlayer.update();
 			if (game.getFunds() != 0) {
 				user.setMoney(user.getMoney() + game.getFunds());
 				shop.updateWithMoney(user.getMoney());
@@ -191,6 +184,9 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			gameCanvas.optimizeBakcground();
 			processOrders();
 			processSpawnQueue();
+			if(hasLost()){
+				lost();
+			}
 		} else {
 			if (!gameOver) {
 				gameOver = true;
@@ -333,5 +329,44 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		// Not necessary...
 
 	}
+	
+	public void updateRate() {
+			if (UPDATE_RATE == 60) {
+				UPDATE_RATE = 90;
+			} else {
+				UPDATE_RATE = 60;
+			}
+			UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
+	}
 
+	public void pause() {
+		// TODO Auto-generated method stub
+			gamePaused = !gamePaused;
+	}
+
+	private class keyAction implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			if (arg0.getKeyChar() == ' ')
+				updateRate();
+			if (arg0.getKeyChar() == 'p')
+				pause();
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }

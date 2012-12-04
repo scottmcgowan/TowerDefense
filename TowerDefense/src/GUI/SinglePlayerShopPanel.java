@@ -34,6 +34,7 @@ public class SinglePlayerShopPanel extends JPanel {
 			if (i.type != 3) {
 				ShopButton b = new ShopButton(i.name() + "  " + "(" + i.value + ")", i);
 				buttons.add(b);
+				b.setFocusable(false);
 				b.addActionListener(listenerToAllButtons);
 				add(b);
 			}

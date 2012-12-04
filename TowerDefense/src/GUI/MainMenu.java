@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import model.SinglePlayerGameController;
 import network.MultiPlayerGameController;
 import network.Server;
 
@@ -54,6 +55,8 @@ public class MainMenu extends JFrame {
 			MiscOptions options = new MiscOptions();
 			JButton clickButton = (JButton) arg0.getSource();
 			if (clickButton.getText().equals("Single Player")) {
+				dispose();
+				new SinglePlayerGameController();
 			}
 			if (clickButton.getText().equals("MultiPlayer (Server)")) {
 				dispose();

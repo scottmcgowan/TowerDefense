@@ -1,18 +1,12 @@
 package model.enemies;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import javax.swing.Timer;
-
-import resources.Res;
-
 import model.Drawable;
+import resources.Res;
 
 public abstract class Enemy extends Drawable {
 	
@@ -30,14 +24,15 @@ public abstract class Enemy extends Drawable {
 	// Is the enemy active in game
 	private boolean isAlive;
 	
-	// Movement speed
-	private int framesPerMove;
-	
 	// Attack damage
 	private int damage;
 	
 	// Attack radius
 	private int radius;
+
+	// Movement speed
+	private int framesPerMove;
+	protected int counter;
 	
 	// The shape of this enemy for collision detection
 	private Shape cBox;
@@ -49,6 +44,8 @@ public abstract class Enemy extends Drawable {
 	
 	private boolean canMove;
 	private int moveCount;
+	
+	private Res.Dir moving;
 	
 	/**
 	 * Create an enemy with an explicit starting position, strictly for testing
@@ -70,6 +67,8 @@ public abstract class Enemy extends Drawable {
 		isAlive = true;
 		
 		path = new ArrayList<Point>();
+		
+		moving = Res.Dir.EAST;
 		
 		width = Res.GRID_WIDTH;
 		height = Res.GRID_HEIGHT;
@@ -96,6 +95,7 @@ public abstract class Enemy extends Drawable {
 		canMove = true;
 		this.framesPerMove = speed;
 		moveCount = 1;
+		counter = 0;
 		
 		isAlive = true;
 		
@@ -114,6 +114,10 @@ public abstract class Enemy extends Drawable {
 		return cBox;
 	}
 	
+	public Res.Dir getDirection() {
+		return moving;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -129,6 +133,7 @@ public abstract class Enemy extends Drawable {
 	public int getDamage() {
 		return damage;
 	}
+	
 	
 	public boolean isAlive() {
 		return isAlive;
@@ -190,11 +195,13 @@ public abstract class Enemy extends Drawable {
 			// The enemy is moving horizontally
 			if (pos.y == next.y) {
 				if (pos.x < next.x) {
+					moving = Res.Dir.EAST;
 					pos.x += 1;
 					if (pos.x >= next.x)
 						currentPath++;
 				}
 				else {
+					moving = Res.Dir.WEST;
 					pos.x -= 1;
 					if (pos.x <= next.x)
 						currentPath++;
@@ -204,11 +211,13 @@ public abstract class Enemy extends Drawable {
 			// The enemy is moving vertically
 			else if (pos.x == next.x) {
 				if (pos.y < next.y) {
+					moving = Res.Dir.SOUTH;
 					pos.y += 1;
 					if (pos.y >= next.y)
 						currentPath++;
 				}
 				else {
+					moving = Res.Dir.NORTH;
 					pos.y -= 1;
 					if (pos.y <= next.y)
 						currentPath++;
@@ -222,9 +231,12 @@ public abstract class Enemy extends Drawable {
 			cBox = new Rectangle2D.Double(pos.x + 5, pos.y + 5, width - 10, height - 10);
 			
 			canMove = false;
+			counter++;
 			rest();
 		}
 	}
+
+	public abstract int getSpriteCount();
 	
 	public abstract void attack();
 

@@ -46,12 +46,19 @@ public class ActorPanel extends JPanel {
 	private BufferedImage lightningTower2;
 	private BufferedImage lightningTower3;
 	
+	private static final int CHAR_WIDTH = 30;
+	private static final int CHAR_HEIGHT = 30;
+	private BufferedImage enemySprites;
+	private static final int spriteCount = 3;
+	private int counter;
+	
 	private BufferedImage cirEnemy;
 
 	public ActorPanel() {
 		setOpaque(false);
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 		loadImages();
+		counter = 0;
 	}
 	
 	public void loadImages() {
@@ -66,6 +73,7 @@ public class ActorPanel extends JPanel {
 			lightningTower2 = ImageIO.read(new File("images/LightningTower2.png"));
 			lightningTower3 = ImageIO.read(new File("images/LightningTower3.png"));
 			cirEnemy = ImageIO.read(new File("images/circenemy.png"));
+			enemySprites = ImageIO.read(new File("images/EnemySprites.png"));
 		} catch (IOException e) {
 			System.out.println("Error loading images!");
 		}
@@ -137,20 +145,85 @@ public class ActorPanel extends JPanel {
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			}else if (d instanceof Enemy) {
-				gr.drawImage(cirEnemy, (int) ((Enemy) d).getPosition().getX(),
-						(int) ((Enemy) d).getPosition().getY(), this);
+				int num = ((Enemy) d).getSpriteCount();
 				
-				// Health bars
-				gr.setColor(Color.RED);
-				gr.setStroke(new BasicStroke(3));
-				gr.drawLine(d.getX(), d.getY(), d.getX() + ((Enemy) d).getWidth(), d.getY());
+				if (((Enemy) d).getDirection() == Res.Dir.NORTH) {
+					if (num == 0) {
+						gr.drawImage(enemySprites.getSubimage(0, 90, CHAR_WIDTH,
+								CHAR_HEIGHT), (int) ((Enemy) d).getPosition().getX(),
+								(int) ((Enemy) d).getPosition().getY(), this);
+					} else if (num == 1) {
+						gr.drawImage(enemySprites.getSubimage(30, 90,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					} else if (num == 2) {
+						gr.drawImage(enemySprites.getSubimage(60, 90,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					}
+				}
+				else if (((Enemy) d).getDirection() == Res.Dir.SOUTH) {
+					if (num == 0) {
+						gr.drawImage(enemySprites.getSubimage(0, 0, CHAR_WIDTH,
+								CHAR_HEIGHT), (int) ((Enemy) d).getPosition().getX(),
+								(int) ((Enemy) d).getPosition().getY(), this);
+					} else if (num == 1) {
+						gr.drawImage(enemySprites.getSubimage(30, 0,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					} else if (num == 2) {
+						gr.drawImage(enemySprites.getSubimage(60, 0,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					}
+				}
+				else if (((Enemy) d).getDirection() == Res.Dir.EAST) {
+					if (num == 0) {
+						gr.drawImage(enemySprites.getSubimage(0, 60, CHAR_WIDTH,
+								CHAR_HEIGHT), (int) ((Enemy) d).getPosition().getX(),
+								(int) ((Enemy) d).getPosition().getY(), this);
+					} else if (num == 1) {
+						gr.drawImage(enemySprites.getSubimage(30, 60,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					} else if (num == 2) {
+						gr.drawImage(enemySprites.getSubimage(60, 60,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					}
+				}
+				else if (((Enemy) d).getDirection() == Res.Dir.WEST) {
+					if (num == 0) {
+						gr.drawImage(enemySprites.getSubimage(0, 30, CHAR_WIDTH,
+								CHAR_HEIGHT), (int) ((Enemy) d).getPosition().getX(),
+								(int) ((Enemy) d).getPosition().getY(), this);
+					} else if (num == 1) {
+						gr.drawImage(enemySprites.getSubimage(30, 30,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					} else if (num == 2) {
+						gr.drawImage(enemySprites.getSubimage(60, 30,
+								CHAR_WIDTH, CHAR_HEIGHT), (int) ((Enemy) d)
+								.getPosition().getX(), (int) ((Enemy) d)
+								.getPosition().getY(), this);
+					}
+				}
 				
-				double health = (((Enemy) d).getHP() / ((Enemy) d).getMaxHP()) * ((Enemy) d).getWidth();
-				int size = (int) Math.floor(health);
-				gr.setColor(Color.GREEN);
-				gr.drawLine(d.getX(), d.getY(), d.getX() + size, d.getY());
+//				counter++;
+//				if (counter == 30)
+//					counter = 0;
 				
-				gr.setStroke(new BasicStroke(1));
+//				gr.drawImage(cirEnemy, (int) ((Enemy) d).getPosition().getX(),
+//						(int) ((Enemy) d).getPosition().getY(), this);
+				
+				
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
 			} else if (d instanceof Projectile) {
@@ -158,6 +231,24 @@ public class ActorPanel extends JPanel {
 				gr.drawString("P", (int) ((Projectile) d).getPosition().getX(),
 						(int) ((Projectile) d).getPosition().getY());
 				gr.draw(((Projectile) d).getBounds());
+			}
+		} // end for
+		
+		for (Drawable d : drawList) {
+			if (d instanceof Enemy) {
+				// Health bars
+				gr.setColor(Color.RED);
+				gr.setStroke(new BasicStroke(3));
+				gr.drawLine(d.getX(), d.getY(),
+						d.getX() + ((Enemy) d).getWidth(), d.getY());
+
+				double health = (((Enemy) d).getHP() / ((Enemy) d).getMaxHP())
+						* ((Enemy) d).getWidth();
+				int size = (int) Math.floor(health);
+				gr.setColor(Color.GREEN);
+				gr.drawLine(d.getX(), d.getY(), d.getX() + size, d.getY());
+
+				gr.setStroke(new BasicStroke(1));
 			}
 		}
 	}

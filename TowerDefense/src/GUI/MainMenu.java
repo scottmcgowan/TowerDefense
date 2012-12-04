@@ -60,7 +60,6 @@ public class MainMenu extends JFrame {
 		buttons.repaint();
 		setVisible(true);
 	}
-	
 
 
 		public void paint(Graphics g) {

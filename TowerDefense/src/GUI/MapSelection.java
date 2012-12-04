@@ -56,7 +56,7 @@ public class MapSelection extends JFrame {
 			if (clickButton.getText().equals("1")) {
 				dispose();
 				if(player == 0)
-					new SinglePlayerGameController();
+					new SinglePlayerGameController(1);
 				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 1);
 				else
@@ -65,7 +65,7 @@ public class MapSelection extends JFrame {
 			if (clickButton.getText().equals("2")) {
 				dispose();
 				if(player == 0)
-					new SinglePlayerGameController();
+					new SinglePlayerGameController(2);
 				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 2);
 				else
@@ -74,7 +74,7 @@ public class MapSelection extends JFrame {
 			if (clickButton.getText().equals("3")) {
 				dispose();
 				if(player == 0)
-					new SinglePlayerGameController();
+					new SinglePlayerGameController(3);
 				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 3);
 				else

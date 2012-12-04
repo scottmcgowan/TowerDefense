@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -182,43 +184,43 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
 		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        gui.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        gui.addWindowListener( new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                tryShuttingServer();
+                gui.dispose();
+                System.exit(0);
+            }
+        } );
+        
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
 		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(stats);
-		JMenuBar menubar = new JMenuBar();
-		gui.setJMenuBar(menubar);
+		//JMenuBar menubar = new JMenuBar();
+		//gui.setJMenuBar(menubar);
 
-		JMenu fileMenu = new JMenu("File");
-		menubar.add(fileMenu);
+		//JMenu fileMenu = new JMenu("File");
+		//menubar.add(fileMenu);
 
-		JMenuItem newGame = new JMenuItem("New Game");
-		JMenuItem exit = new JMenuItem("Exit");
-		fileMenu.add(newGame);
-		fileMenu.addSeparator();
-		fileMenu.add(exit);
-		newGame.addActionListener(new allMenuAction());
-		exit.addActionListener(new allMenuAction());
+		//JMenuItem newGame = new JMenuItem("New Game");
+		//JMenuItem exit = new JMenuItem("Exit");
+		//fileMenu.add(newGame);
+		//fileMenu.addSeparator();
+		//fileMenu.add(exit);
+		//newGame.addActionListener(new allMenuAction());
+		//exit.addActionListener(new allMenuAction());
 		gui.addKeyListener(new keyAction());
 		gui.setVisible(true);
 		gui.repaint();
 		if(player == Server.SERVER_PLAYER){
 			wait(1);
 			screens.setServerMessage(gui);			
-		}
-	}
-
-	private class allMenuAction implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			JMenuItem menuItem = (JMenuItem) arg0.getSource();
-			if (menuItem.getText() == "New Game") {
-			} else {
-				gui.dispose();
-			}
 		}
 	}
 

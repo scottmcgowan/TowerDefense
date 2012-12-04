@@ -67,10 +67,11 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	private final int player = 1;
 	private int tower_count = 0;
 	private MiscOptions screens = new MiscOptions();
+	private int map;
 
 	public static void main(String[] args) {
 		// JFrame menu = new MainMenu();
-		SinglePlayerGameController game = new SinglePlayerGameController();
+		SinglePlayerGameController game = new SinglePlayerGameController(1);
 	}
 
 	public static void wait(int n) {
@@ -109,11 +110,13 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		}
 	}
 
-	public SinglePlayerGameController() {
+	public SinglePlayerGameController(int map) {
+		this.map = map;
 		game = new Game();
 		gui.setLayout(new FlowLayout());
 		shop = new SinglePlayerShopPanel(this, player);
-		gameCanvas = new GameCanvas(this, 1);
+		//gameCanvas = new GameCanvas(this, 1);
+		gameCanvas = new GameCanvas(this, map);
 		stats = new LogisticsPanel();
 		// health.setSize(100,100);
 		shop.connectToMap(gameCanvas);
@@ -121,7 +124,6 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		gui.setResizable(false);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		;
 		gui.addKeyListener(new keyAction());
 		gui.setSize(shop.PANEL_WIDTH + 75 + 50, gameCanvas.PANEL_HEIGHT
 				+ shop.PANEL_HEIGHT + 100);
@@ -152,7 +154,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		public void actionPerformed(ActionEvent arg0) {
 			JMenuItem menuItem = (JMenuItem) arg0.getSource();
 			if (menuItem.getText() == "New Game") {
-				SinglePlayerGameController newGame = new SinglePlayerGameController();
+				SinglePlayerGameController newGame = new SinglePlayerGameController(map);
 			}
 			gui.dispose();
 		}

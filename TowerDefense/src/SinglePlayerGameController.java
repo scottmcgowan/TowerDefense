@@ -22,6 +22,7 @@ import model.towers.Tower;
 import resources.Res;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
+import GUI.MainMenu;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
 
@@ -49,6 +50,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	private int secondCounter = 0;
 
 	public static void main(String[] args) {
+		JFrame menu = new MainMenu();
 		SinglePlayerGameController game = new SinglePlayerGameController();
 	}
 

@@ -1,4 +1,4 @@
-package GUI;
+package run;
 
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -15,6 +15,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+
+import GUI.MapSelection;
+import GUI.MiscOptions;
 
 public class MainMenu extends JFrame {
 

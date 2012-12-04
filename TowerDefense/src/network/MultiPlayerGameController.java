@@ -1,9 +1,6 @@
 package network;
 
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -13,11 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-
-import resources.Res;
 
 import model.Delivery;
 import model.Drawable;
@@ -33,9 +25,10 @@ import model.towers.FireTower;
 import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
+import resources.Res;
+import run.MainMenu;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
-import GUI.MainMenu;
 import GUI.Map;
 import GUI.MiscOptions;
 

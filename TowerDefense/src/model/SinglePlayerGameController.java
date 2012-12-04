@@ -30,9 +30,9 @@ import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
 import resources.Res;
+import run.MainMenu;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
-import GUI.MainMenu;
 import GUI.MiscOptions;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
@@ -128,8 +128,8 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		gui.setSize(shop.PANEL_WIDTH + 75 + 50, gameCanvas.PANEL_HEIGHT
 				+ shop.PANEL_HEIGHT + 100);
 		gui.add(gameCanvas);
-		gui.add(shop);
 		gui.add(stats);
+		gui.add(shop);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);

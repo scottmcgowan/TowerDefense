@@ -47,7 +47,9 @@ public class ActorPanel extends JPanel {
 						(int) ((Tower) d).getPosition().getY());
 			} else if (d instanceof Enemy) {
 				try {
-					gr.drawImage(ImageIO.read(new File("images/circenemy.png")), (int) ((Enemy) d).getPosition().getX(),
+					gr.drawImage(
+							ImageIO.read(new File("images/circenemy.png")),
+							(int) ((Enemy) d).getPosition().getX(),
 							(int) ((Enemy) d).getPosition().getY(), this);
 				} catch (IOException e) {
 					System.out.println("Could not find circenemy.png");

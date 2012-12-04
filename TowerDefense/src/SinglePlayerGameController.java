@@ -30,7 +30,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	// main game class
 	private static final int UPDATE_RATE = 60; // number of game updates per second
 	private static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
-	
+
 	// Is this even necessary...?
 	private static final int HUMAN_PLAYER_VAL = 1;
 	private static final int COM_PLAYER_VAL = 2;
@@ -55,7 +55,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public SinglePlayerGameController() {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
-		// shop = new SinglePlayerShopPanel();
+		shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas(this);
 		LogisticsPanel health = new LogisticsPanel();
 //		health.setSize(100,100);
@@ -84,7 +84,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		gui.setVisible(true);
 		gui.repaint();
 		gameStart();
-		
+
 	}
 
 	private class allMenuAction implements ActionListener {
@@ -167,7 +167,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 
 	@Override
 	public void processOrders() {
-		
+
 		for (PurchaseOrder po : listOfOrders) {
 			if (po.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER) {
 				Tower tower = null;
@@ -194,30 +194,30 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			} 
 		}
 		listOfOrders.clear();
-		
+
 	}
 
 	@Override
 	public void drawHealthBars() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notifyShopOfSelection(int tileX, int tileY, Tile tile) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void updateShopWithCurrentMoney() {
-		
+
 	}
 
 	@Override
 	public void sendDelivery(Delivery d) {
 		// Not necessary...
-		
+
 	}
 
 }

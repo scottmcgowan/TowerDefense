@@ -25,7 +25,7 @@ public class MultiPlayerShopPanel extends JPanel {
 	BackgroundPanel backgroundPanel;
 	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
-	public static final int PANEL_HEIGHT = 100;
+	public static final int PANEL_HEIGHT = 150;
 	private GameControllerInterface game;
 	private int player;
 	private int currentTileX;

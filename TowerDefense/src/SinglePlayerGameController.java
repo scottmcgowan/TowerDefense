@@ -56,7 +56,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public SinglePlayerGameController() {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
-		shop = new SinglePlayerShopPanel();
+		// shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas(this);
 		shop.connectToMap(canvas);
 		gui.setTitle("Game");

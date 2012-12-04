@@ -67,10 +67,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 
 	public static void main(String[] args) {
 		MultiPlayerGameController game = new MultiPlayerGameController(
-				Server.SERVER_PLAYER);
+				Server.SERVER_PLAYER, 1);
 		wait(1);
 		MultiPlayerGameController game2 = new MultiPlayerGameController(
-				Server.CLIENT_PLAYER);
+				Server.CLIENT_PLAYER, 1);
 	}
 
 	public static void wait(int n) {
@@ -135,7 +135,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		}
 	}
 
-	public MultiPlayerGameController(int player) {
+	public MultiPlayerGameController(int player, int map) {
 		game = new Game();
 		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
@@ -152,7 +152,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setResizable(false);
 		shop = new MultiPlayerShopPanel(player, this);
 		stats = new LogisticsPanel();
-		gameCanvas = new GameCanvas(this);
+		gameCanvas = new GameCanvas(this, map);
 		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
 		shop.connectToMap(gameCanvas);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH,

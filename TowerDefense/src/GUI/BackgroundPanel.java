@@ -124,12 +124,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			paintAll(background.getGraphics());
 		    paint(background.getGraphics());
 			
-			try {
-				ImageIO.write(background, "png", new File("test.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			timer = 0;
 			System.out.println("saved");
 			bufferSaved = true;

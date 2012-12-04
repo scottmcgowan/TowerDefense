@@ -221,30 +221,30 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 					System.out.println("Could not find goal.png");
 				}
 				break;
-			case ICE_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/IceTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find IceTower.png");
-				}
-				break;
-			case FIRE_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/FireTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find FireTower.png");
-				}
-				break;
-			case LIGHTNING_TOWER:
-				try {
-					gr.drawImage(ImageIO.read(new File("images/LightningTower.png")), 0,
-							0, this);
-				} catch (IOException e) {
-					System.out.println("Could not find LightningTower.png");
-				}
-				break;
+//			case ICE_TOWER:
+//				try {
+//					gr.drawImage(ImageIO.read(new File("images/IceTower.png")), 0,
+//							0, this);
+//				} catch (IOException e) {
+//					System.out.println("Could not find IceTower.png");
+//				}
+//				break;
+//			case FIRE_TOWER:
+//				try {
+//					gr.drawImage(ImageIO.read(new File("images/FireTower.png")), 0,
+//							0, this);
+//				} catch (IOException e) {
+//					System.out.println("Could not find FireTower.png");
+//				}
+//				break;
+//			case LIGHTNING_TOWER:
+//				try {
+//					gr.drawImage(ImageIO.read(new File("images/LightningTower.png")), 0,
+//							0, this);
+//				} catch (IOException e) {
+//					System.out.println("Could not find LightningTower.png");
+//				}
+//				break;
 			}
 		}
 	}
@@ -318,7 +318,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 			map.tileMap[tileY][tileX] = Tile.LIGHTNING_TOWER;
 			break;
 		}
-		bufferSaved = false;
+//		bufferSaved = false;
 		gameMap[tileY][tileX].repaint();
 	}
 

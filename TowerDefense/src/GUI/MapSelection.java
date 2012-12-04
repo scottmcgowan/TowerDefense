@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.SinglePlayerGameController;
 import network.MultiPlayerGameController;
 import network.Server;
 
@@ -54,21 +55,27 @@ public class MapSelection extends JFrame {
 			JButton clickButton = (JButton) arg0.getSource();
 			if (clickButton.getText().equals("1")) {
 				dispose();
-				if(player == 1)
+				if(player == 0)
+					new SinglePlayerGameController();
+				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 1);
 				else
 					new MultiPlayerGameController(Server.CLIENT_PLAYER, 1);
 			}
 			if (clickButton.getText().equals("2")) {
 				dispose();
-				if(player == 1)
+				if(player == 0)
+					new SinglePlayerGameController();
+				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 2);
 				else
 					new MultiPlayerGameController(Server.CLIENT_PLAYER, 2);
 			}
 			if (clickButton.getText().equals("3")) {
 				dispose();
-				if(player == 1)
+				if(player == 0)
+					new SinglePlayerGameController();
+				else if(player == 1)
 					new MultiPlayerGameController(Server.SERVER_PLAYER, 3);
 				else
 					new MultiPlayerGameController(Server.CLIENT_PLAYER, 3);

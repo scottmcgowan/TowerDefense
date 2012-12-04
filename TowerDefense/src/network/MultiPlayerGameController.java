@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -39,8 +40,8 @@ import GUI.MiscOptions;
 public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
-	static int UPDATE_RATE = 60; // number of game update per second
-	static long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	int UPDATE_RATE = 60; // number of game update per second
+	long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
 	private boolean gameOver = false;
@@ -62,6 +63,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private int currentTileX;
 	private int currentTileY;
 	private int tower_count;
+	private Server server;
 	private LogisticsPanel stats;
 	private MiscOptions screens = new MiscOptions();
 
@@ -82,15 +84,28 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public void lost() {
+		System.out.println(gameOver);
 		if (!gameOver) {
+			System.out.println("lost really called");
 			gameOver = true;
 			System.out.println("Losing conditions met");
-			screens.setLoseMessage();
+			screens.setLoseMessage(gui);
 			gui.dispose();
 			new MainMenu();
+			tryShuttingServer();
 		}
 	}
 
+	public void tryShuttingServer(){
+		if(server!=null){
+			try {
+				server.myServerSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			server.interrupt();}
+	}
+	
 	public boolean hasLost() {
 		return game.gameOver();
 	}
@@ -98,10 +113,11 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public void won() {
 		if (!gameOver) {
 			System.out.println("Winning conditions met");
-			screens.setWinMessage();
+			screens.setWinMessage(gui);
 			gameOver = true;
 			gui.dispose();
 			new MainMenu();
+			tryShuttingServer();
 		}
 	}
 
@@ -112,10 +128,12 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public void tie() {
 		if (!gameOver) {
 			System.out.println("Tie conditions met");
-			screens.setTieMessage();
+			screens.setLocationRelativeTo(gui);
+			screens.setTieMessage(gui);
 			gameOver = true;
 			gui.dispose();
 			new MainMenu();
+			tryShuttingServer();
 		}
 	}
 
@@ -137,12 +155,12 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		}
 	}
 
-	Server server = new Server(Server.PORT_NUMBER);
 	public MultiPlayerGameController(int player, int map) {
 		game = new Game();
 		this.player = player;
 		networkPanel = new NetworkPanel(player, this);
 		if (player == Server.SERVER_PLAYER) {
+			server = new Server(Server.PORT_NUMBER);
 			server.start();
 			network = new Network(networkPanel, Server.SERVER_PLAYER, this);
 		} else {
@@ -189,7 +207,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.repaint();
 		if(player == Server.SERVER_PLAYER){
 			wait(1);
-			screens.setServerMessage();			
+			screens.setServerMessage(gui);			
 		}
 	}
 
@@ -336,7 +354,6 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			if (!gameOver) {
 				sendDelivery(new Delivery("", player, false, true, false,
 						false, false));
-				gameOver = true;
 			}
 		}
 	}
@@ -415,8 +432,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		if (fromNetwork) {
 			if (UPDATE_RATE == 60) {
 				UPDATE_RATE = 90;
+				System.out.println("Rate changed to 90");
 			} else {
 				UPDATE_RATE = 60;
+				System.out.println("Rate changed to 60");
 			}
 			UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
 		} else {

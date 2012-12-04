@@ -73,6 +73,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		int[][] path = new int[map.getRow()][map.getCol()];
 
 		// Example path; 2 = start, 1 = path, 3 = end
+		// Preset 1
 //		path[5][0] = 2;
 //		path[5][1] = 1;
 //		path[5][2] = 1;
@@ -105,33 +106,82 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 //		path[8][14] = 1;
 //		path[8][15] = 3;
 
+		// Preset 2
+//		path[0][0] = 2;
+//		path[0][1] = 1;
+//		path[0][2] = 1;
+//		path[0][3] = 1;
+//		path[1][3] = 1;
+//		path[2][3] = 1;
+//		path[3][3] = 1;
+//		path[3][4] = 1;
+//		path[3][5] = 1;
+//		path[3][6] = 1;
+//		path[4][6] = 1;
+//		path[5][6] = 1;
+//		path[6][6] = 1;
+//		path[6][7] = 1;
+//		path[6][8] = 1;
+//		path[6][9] = 1;
+//		path[7][9] = 1;
+//		path[8][9] = 1;
+//		path[9][9] = 1;
+//		path[9][10] = 1;
+//		path[9][11] = 1;
+//		path[9][12] = 1;
+//		path[10][12] = 1;
+//		path[11][12] = 1;
+//		path[11][13] = 1;
+//		path[11][14] = 1;
+//		path[11][15] = 3;
+		
 		path[0][0] = 2;
 		path[0][1] = 1;
 		path[0][2] = 1;
 		path[0][3] = 1;
-		path[1][3] = 1;
-		path[2][3] = 1;
-		path[3][3] = 1;
-		path[3][4] = 1;
-		path[3][5] = 1;
+		path[0][4] = 1;
+		path[0][5] = 1;
+		path[0][6] = 1;
+		path[1][6] = 1;
+		path[2][6] = 1;
 		path[3][6] = 1;
 		path[4][6] = 1;
-		path[5][6] = 1;
-		path[6][6] = 1;
-		path[6][7] = 1;
-		path[6][8] = 1;
-		path[6][9] = 1;
-		path[7][9] = 1;
-		path[8][9] = 1;
+		path[4][5] = 1;
+		path[4][4] = 1;
+		path[4][3] = 1;
+		path[5][3] = 1;
+		path[6][3] = 1;
+		path[7][3] = 1;
+		path[8][3] = 1;
+		path[9][3] = 1;
+		path[9][4] = 1;
+		path[9][5] = 1;
+		path[9][6] = 1;
+		path[9][7] = 1;
+		path[9][8] = 1;
 		path[9][9] = 1;
 		path[9][10] = 1;
 		path[9][11] = 1;
 		path[9][12] = 1;
-		path[10][12] = 1;
-		path[11][12] = 1;
-		path[11][13] = 1;
-		path[11][14] = 1;
-		path[11][15] = 3;
+		path[9][13] = 1;
+		path[8][13] = 1;
+		path[7][13] = 1;
+		path[6][13] = 1;
+		path[5][13] = 1;
+		path[4][13] = 1;
+		path[4][12] = 1;
+		path[4][11] = 1;
+		path[4][10] = 1;
+		path[3][10] = 1;
+		path[2][10] = 1;
+		path[1][10] = 1;
+		path[0][10] = 1;
+		path[0][11] = 1;
+		path[0][12] = 1;
+		path[0][13] = 1;
+		path[0][14] = 1;
+		path[0][15] = 3;
+		
 		
 		map.setPath(path);
 

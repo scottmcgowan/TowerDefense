@@ -70,6 +70,17 @@ public class Network extends Observable {
 							}
 						} else if (d.tied){
 							gc.tie();
+						} else if (d.pause){
+							//System.out.println("sdasdasda");
+							gc.pause(true);
+							setChanged();
+							notifyObservers(outputMessage);
+						} else if (d.rate){
+							//System.out.println("sdasdasda");
+							if(player != d.player){
+							gc.updateRate(true);
+							setChanged();
+							notifyObservers(outputMessage);}
 						}
 						
 						// Does not update if message is empty, otherwise alerts

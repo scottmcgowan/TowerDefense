@@ -66,15 +66,10 @@ public abstract class Projectile extends Drawable {
 	}
 	
 	public void updatePosition() {
-		if (pos.x != destination.x && pos.y != destination.y) {
-			
 			
 			pos.setLocation(pos.x + vector.getX(), pos.y + vector.getY());
 			cBox = new Ellipse2D.Double(pos.x, pos.y, width, height);
 			
-		} else if (pos.x == destination.x && pos.y == destination.y) {
-			isAlive = false;
-		}
 	}
 	
 	public boolean isAlive() {

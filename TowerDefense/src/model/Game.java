@@ -239,11 +239,11 @@ public class Game {
 	 * @param y
 	 */
 	public void upgradeTower(int x, int y) {
-		Point temp = new Point(x * Res.GRID_WIDTH, y * Res.GRID_HEIGHT);
-		
+		System.out.println("upgrade called");
 		for (Tower t : towerList) {
-			if (t.pos == temp) {
+			if (t.getTileX()==x && t.getTileY()==y) {
 				t.upgrade();
+				System.out.println("upgrade");
 				break;
 			}
 		}

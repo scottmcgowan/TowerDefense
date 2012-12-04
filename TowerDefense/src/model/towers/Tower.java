@@ -19,7 +19,7 @@ public abstract class Tower extends Drawable {
 	private int fireRate;
 	private int reloadCount;
 	private boolean canFire;
-	
+	private int tileX, tileY;
 	private int damage;
 	
 	protected int level;
@@ -56,7 +56,8 @@ public abstract class Tower extends Drawable {
 		reloadCount = 1;
 
 		pos = new Point(xPos, yPos);
-		
+		setTileX(xPos/Res.GRID_WIDTH);
+		setTileY(yPos/Res.GRID_HEIGHT);
 		cBox = new Rectangle2D.Double(pos.x, pos.y, Res.GRID_WIDTH, Res.GRID_HEIGHT);
 		
 		setDamage(damage);
@@ -123,5 +124,21 @@ public abstract class Tower extends Drawable {
 	public abstract int getID();
 	
 	public abstract void upgrade();
+
+	public int getTileX() {
+		return tileX;
+	}
+
+	public void setTileX(int tileX) {
+		this.tileX = tileX;
+	}
+
+	public int getTileY() {
+		return tileY;
+	}
+
+	public void setTileY(int tileY) {
+		this.tileY = tileY;
+	}
 	
 }

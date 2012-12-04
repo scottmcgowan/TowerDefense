@@ -4,9 +4,8 @@ public class Flame extends Projectile {
 	
 	private static int speed = 3;
 	private static boolean splash = true;
-	private static int damage = 30;
 
-	public Flame(int xPos, int yPos, int xDes, int yDes) {
+	public Flame(int xPos, int yPos, int xDes, int yDes, int damage) {
 		super(xPos, yPos, xDes, yDes, speed, damage, splash);
 		// TODO stuff
 	}

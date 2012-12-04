@@ -178,13 +178,13 @@ public class Game {
 						
 						int id = tower.getID();
 						if (id == Res.TOWER_NO_TYPE)
-							addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));							
+							addProjectile(new Pellet(pos.x, pos.y, des.x, des.y, tower.getDamage()));							
 						else if (id == Res.TOWER_FIRE_TYPE)
-							addProjectile(new Flame(pos.x, pos.y, des.x, des.y));
+							addProjectile(new Flame(pos.x, pos.y, des.x, des.y, tower.getDamage()));
 						else if (id == Res.TOWER_ICE_TYPE)
-							addProjectile(new IceBeam(pos.x, pos.y, des.x, des.y));
+							addProjectile(new IceBeam(pos.x, pos.y, des.x, des.y, tower.getDamage()));
 						else if (id == Res.TOWER_LIGHTNING_TYPE)
-							addProjectile(new Lightning(pos.x, pos.y, des.x, des.y));
+							addProjectile(new Lightning(pos.x, pos.y, des.x, des.y, tower.getDamage()));
 						tower.fire();
 						
 						// this tower has fired, move on to the next one
@@ -231,6 +231,22 @@ public class Game {
 		
 		// Increment frame counter for tower fireRate calculations
 		counter++;
+	}
+	
+	/**
+	 * Upgrades the tower at a tile position
+	 * @param x
+	 * @param y
+	 */
+	public void upgradeTower(int x, int y) {
+		Point temp = new Point(x * Res.GRID_WIDTH, y * Res.GRID_HEIGHT);
+		
+		for (Tower t : towerList) {
+			if (t.pos == temp) {
+				t.upgrade();
+				break;
+			}
+		}
 	}
 	
 	

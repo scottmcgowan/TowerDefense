@@ -16,6 +16,8 @@ import model.towers.Tower;
 
 import org.junit.Test;
 
+import resources.Res;
+
 public class GameTest {
 
 	@Test
@@ -23,13 +25,13 @@ public class GameTest {
 		Game game = new Game();
 		
 		// add 3 projectiles, 2 enemies, 2 towers
-		game.addProjectile(new Pellet(0, 0, 75, 75));
-		game.addProjectile(new Pellet(0, 0, 100, 100));
+		game.addProjectile(new Pellet(0, 0, 75, 75, Res.DAMAGE_PELLET_1));
+		game.addProjectile(new Pellet(0, 0, 100, 100, Res.DAMAGE_PELLET_1));
 		game.addEnemy(new Grunt(0, 0));
 		game.addTower(new PelletTower(0, 0));
 		game.addEnemy(new Grunt(50, 50));
 		game.addTower(new PelletTower(50, 50));
-		game.addProjectile(new Pellet(0, 0, 50, 50));
+		game.addProjectile(new Pellet(0, 0, 50, 50, Res.DAMAGE_PELLET_1));
 		
 		// check order of the list
 		assertTrue(game.getDrawable().get(0) instanceof Tower);
@@ -116,7 +118,7 @@ public class GameTest {
 	
 	@Test
 	public void testUpdateProjectile() {
-		Projectile proj = new Pellet(0, 0, 30, 50);
+		Projectile proj = new Pellet(0, 0, 30, 50, Res.DAMAGE_PELLET_1);
 		assertEquals(new Point(0, 0), proj.getPosition());
 		System.out.println(proj.getPosition());
 		proj.updatePosition();
@@ -204,13 +206,13 @@ public class GameTest {
 		game.addEnemy(enemy);
 		assertEquals(100, enemy.getHP());
 		for (int i = 0; i < 9; i++) {
-			game.addProjectile(new Pellet(0, 0, 0, 0));
+			game.addProjectile(new Pellet(0, 0, 0, 0, Res.DAMAGE_PELLET_1));
 			game.update();			
 			System.out.println(enemy.getHP());
 		}
 		assertEquals(10, enemy.getHP());
 		assertEquals(0, game.getFunds());
-		game.addProjectile(new Pellet(0, 0, 0, 0));
+		game.addProjectile(new Pellet(0, 0, 0, 0, Res.DAMAGE_PELLET_1));
 		game.update();
 		assertFalse(enemy.isAlive());
 		assertEquals(25, game.getFunds());

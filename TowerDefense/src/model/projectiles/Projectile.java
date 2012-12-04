@@ -25,6 +25,7 @@ public abstract class Projectile extends Drawable {
 
 	// Does this projectile cause splash damage
 	private boolean splash;
+	private int splashSize = 30;
 
 	// If disposable, how long until burnout
 	private int duration;
@@ -38,6 +39,8 @@ public abstract class Projectile extends Drawable {
 	private int height;
 	private Point2D vector;
 	private boolean isAlive;
+	
+	private Shape splashRadius;
 
 	public Projectile(int xPos, int yPos, int xDes, int yDes, int speed,
 			int damage, boolean splash) {
@@ -64,19 +67,25 @@ public abstract class Projectile extends Drawable {
 		double yDis = vector.getY() / distance;
 
 		vector.setLocation(xDis * speed, yDis * speed);
-		// TODO: will need to adjust for GUI
 		cBox = new Ellipse2D.Double(xPos, yPos, width, height);
+		
+		splashRadius = new Ellipse2D.Double(pos.x, pos.y, splashSize, splashSize);
 	}
-
+	
 	public void updatePosition() {
 
 		pos.setLocation(pos.x + vector.getX(), pos.y + vector.getY());
 		cBox = new Ellipse2D.Double(pos.x, pos.y, width, height);
+		splashRadius = new Ellipse2D.Double(pos.x, pos.y, splashSize, splashSize);
 
 		if (pos.x > GameCanvas.PANEL_WIDTH || pos.y > GameCanvas.PANEL_HEIGHT
 				|| pos.x < 0 || pos.y < 0) {
 			isAlive = false;
 		}
+	}
+	
+	public void kill() {
+		isAlive = false;
 	}
 
 	public boolean isAlive() {
@@ -89,6 +98,10 @@ public abstract class Projectile extends Drawable {
 
 	public Shape getBounds() {
 		return cBox;
+	}
+	
+	public Shape getSplash() {
+		return splashRadius;
 	}
 
 	public int getDamage() {

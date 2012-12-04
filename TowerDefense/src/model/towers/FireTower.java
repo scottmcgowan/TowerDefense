@@ -15,11 +15,11 @@ public class FireTower extends Tower {
 
 	public void upgrade() {
 		if (level == 1) {
-			super.setDamage(Res.DAMAGE_FIRE_2);
+			super.setRange(Res.RANGE_FIRE_2);
 			level++;
 		}
 		else if (level == 2) {
-			super.setRange(Res.RANGE_FIRE_2);
+			super.setDamage(Res.DAMAGE_FIRE_2);
 			level++;
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import resources.Res;
 
 import model.enemies.Enemy;
+import model.enemies.Grunt;
 import model.projectiles.*;
 import model.towers.Tower;
 
@@ -180,7 +181,7 @@ public class Game {
 						if (id == Res.TOWER_NO_TYPE)
 							addProjectile(new Pellet(pos.x, pos.y, des.x, des.y, tower.getDamage()));							
 						else if (id == Res.TOWER_FIRE_TYPE)
-							addProjectile(new Flame(pos.x, pos.y, des.x, des.y, tower.getDamage()));
+							addProjectile(new Flame(pos.x, pos.y, des.x, des.y, tower.getDamage(), true));
 						else if (id == Res.TOWER_ICE_TYPE)
 							addProjectile(new IceBeam(pos.x, pos.y, des.x, des.y, tower.getDamage()));
 						else if (id == Res.TOWER_LIGHTNING_TYPE)
@@ -195,23 +196,28 @@ public class Game {
 				tower.reload(); // The tower is waiting to fire
 		} // end outer
 		
+		ArrayList<Projectile> toAddProj = new ArrayList<Projectile>();
+		
 		// Check for projectile collision last
 		for (Projectile projectile : projectileList) {
 			projectile.updatePosition();
+			Enemy target = new Grunt(0, 0);
 			
 			for (Enemy enemy : enemyList) {
+				target = enemy;
 				if (projectile.getBounds().intersects((Rectangle2D) enemy.getBounds())) {
 					
 					// Deal damage, if enemy is killed remove enemy and add funds
 					if (enemy.wound(projectile.getDamage())) {
 						tempEnemy.add(enemy);
 						enemy.kill();
-						playerMoney += 25;
+						playerMoney += 10;
 					}
 					
 					// Destroy projectile
 					if (!tempProj.contains(projectile))
 						tempProj.add(projectile);
+					projectile.kill();
 					
 					// Break the loop if this projectile should only affect one enemy
 					if (!projectile.isSplash())
@@ -219,14 +225,28 @@ public class Game {
 				} 
 			}
 			
+			enemyList.removeAll(tempEnemy);
+			
 			if (!projectile.isAlive()) {
 				if (!tempProj.contains(projectile))
 					tempProj.add(projectile);
+				if (projectile.isSplash()) {
+					int splashCount = 0;
+					for (Enemy enemy : enemyList) {
+						if (!enemy.equals(target) && projectile.getSplash().intersects((Rectangle2D) enemy.getBounds())) {
+							toAddProj.add(new Flame(projectile.getX(), projectile.getY(), enemy.getX(), enemy.getY(), Res.DAMAGE_SPLASH, false));
+							splashCount++;
+						}
+						if (splashCount > 2)
+							break;
+					}
+				}
 			}
 		}
 		
 		// Cleanup lists
 		projectileList.removeAll(tempProj);
+		projectileList.addAll(toAddProj);
 		enemyList.removeAll(tempEnemy);
 		
 		// Increment frame counter for tower fireRate calculations

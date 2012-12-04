@@ -32,6 +32,7 @@ public class Res {
 	public static final int DAMAGE_ICE_2 = 40;
 	public static final int DAMAGE_PELLET_1 = 25;
 	public static final int DAMAGE_PELLET_2 = 35;
+	public static final int DAMAGE_SPLASH = 15;
 	
 	// Tower Range Multipliers
 	public static final double RANGE_FIRE_1 = 2.0;

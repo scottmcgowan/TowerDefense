@@ -3,9 +3,9 @@ package model.projectiles;
 public class Flame extends Projectile {
 	
 	private static int speed = 3;
-	private static boolean splash = true;
+//	private static boolean splash = true;
 
-	public Flame(int xPos, int yPos, int xDes, int yDes, int damage) {
+	public Flame(int xPos, int yPos, int xDes, int yDes, int damage, boolean splash) {
 		super(xPos, yPos, xDes, yDes, speed, damage, splash);
 		// TODO stuff
 	}

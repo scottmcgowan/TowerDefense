@@ -15,11 +15,11 @@ public class IceTower extends Tower {
 	
 	public void upgrade() {
 		if (level == 1) {
-			super.setDamage(Res.DAMAGE_ICE_2);
+			super.setRange(Res.RANGE_ICE_2);
 			level++;
 		}
 		else if (level == 2) {
-			super.setRange(Res.RANGE_ICE_2);
+			super.setDamage(Res.DAMAGE_ICE_2);
 			level++;
 		}
 	}

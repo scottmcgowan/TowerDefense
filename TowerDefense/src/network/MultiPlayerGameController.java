@@ -35,7 +35,7 @@ import GUI.Map;
 public class MultiPlayerGameController implements GameControllerInterface {
 
 	// main game class
-	static final int UPDATE_RATE = 30; // number of game update per second
+	static final int UPDATE_RATE = 60; // number of game update per second
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
@@ -91,6 +91,8 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	}
 
 	public boolean checkOnesidedTieConditions() {
+		for(Enemy e: game.getEnemies()){
+		System.out.println(e);}
 		return thisPlayer.getMoney() < 100 && game.getEnemies().isEmpty();
 	}
 
@@ -110,6 +112,10 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			sendDelivery(new Delivery(log, player, false, false,
 					checkOnesidedTieConditions(), false, false));
 			spawn_timer = 0;
+		}
+		if (spawn_timer % 120 == 0){
+			sendDelivery(new Delivery("", player, false, false,
+					checkOnesidedTieConditions(), false, false));
 		}
 	}
 

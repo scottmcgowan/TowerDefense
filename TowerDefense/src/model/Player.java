@@ -3,7 +3,7 @@ package model;
 import java.awt.Shape;
 
 public class Player {
-	private int money = 600;
+	private int money = 100;
 	private int towers = 0;
 	private Shape shape;
 

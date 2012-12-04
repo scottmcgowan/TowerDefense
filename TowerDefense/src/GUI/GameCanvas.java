@@ -59,7 +59,7 @@ public class GameCanvas extends JLayeredPane{
 		backgroundPanel.setSize(PANEL_WIDTH, PANEL_HEIGHT);
 		add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
 		backgroundPanel.repaint();
-		path = backgroundPanel.pathTrail();
+		path = backgroundPanel.pathTrail();	
 	}
 
 	public void drawDrawables(ArrayList<Drawable> arr){

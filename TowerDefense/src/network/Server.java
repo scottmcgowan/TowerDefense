@@ -77,8 +77,8 @@ public class Server extends Thread {
 					// the run method.
 					t.start();
 					if(listLiasons.size()==2){
-						listOutputStreams.get(0).writeObject(new Delivery("New Game Started", true, false, false, false, false));
-						listOutputStreams.get(1).writeObject(new Delivery("New Game Started", true, false, false, false, false));
+						listOutputStreams.get(0).writeObject(new Delivery("New Game Started", 0, true, false, false, false, false));
+						listOutputStreams.get(1).writeObject(new Delivery("New Game Started", 0, true, false, false, false, false));
 					}
 				}
 			}

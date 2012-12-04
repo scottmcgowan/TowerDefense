@@ -3,6 +3,8 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import resources.Res;
+
 import model.enemies.Enemy;
 import model.projectiles.*;
 import model.towers.Tower;
@@ -13,14 +15,14 @@ import model.towers.Tower;
  */
 public class Game {
 
-	private ArrayList<Tower> towerList;
+	private ArrayList<Tower> towerList = new ArrayList<Tower>();
 	
-	private ArrayList<Enemy> enemyList;
+	private ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
 	
-	private ArrayList<Projectile> projectileList;
+	private ArrayList<Projectile> projectileList = new ArrayList<Projectile>();
 	
 	// A list of all objects to be drawn
-	private ArrayList<Drawable> drawable;
+	private ArrayList<Drawable> drawable = new ArrayList<Drawable>();
 	
 	// false if game is in play
 	private boolean gameOver;
@@ -80,6 +82,10 @@ public class Game {
 	 */
 	public boolean gameOver() {
 		return gameOver;
+	}
+	
+	public void setGameOver(boolean over){
+		gameOver = over;
 	}
 	
 	
@@ -155,15 +161,30 @@ public class Game {
 		for (Tower tower : towerList) {
 			
 			// First check that the tower can fire, to avoid unnecessary collision detection
-//			if (counter % tower.getFireRate() == 0) {
 			if (tower.canFire()) {
 				
 				for (Enemy enemy: enemyList) {
 					if (tower.getRange().intersects((Rectangle2D) enemy.getBounds())) {
 						
-						Point pos = tower.getPosition();
-						Point des = enemy.getPosition();
-						addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));
+						Point pos = new Point(tower.getPosition());
+						// point projectile to middle of grid space
+						pos.x += Res.GRID_WIDTH / 2;
+						pos.y += Res.GRID_HEIGHT / 2;
+						
+						Point des = new Point(enemy.getPosition());
+						// point projectile to middle of grid space
+						des.x += Res.GRID_WIDTH / 2;
+						des.y += Res.GRID_HEIGHT / 2;
+						
+						int id = tower.getID();
+						if (id == Res.TOWER_NO_TYPE)
+							addProjectile(new Pellet(pos.x, pos.y, des.x, des.y));							
+						else if (id == Res.TOWER_FIRE_TYPE)
+							addProjectile(new Flame(pos.x, pos.y, des.x, des.y));
+						else if (id == Res.TOWER_ICE_TYPE)
+							addProjectile(new IceBeam(pos.x, pos.y, des.x, des.y));
+						else if (id == Res.TOWER_LIGHTNING_TYPE)
+							addProjectile(new Lightning(pos.x, pos.y, des.x, des.y));
 						tower.fire();
 						
 						// this tower has fired, move on to the next one
@@ -171,7 +192,7 @@ public class Game {
 					}
 				} // end inner
 			} else
-				tower.reload();
+				tower.reload(); // The tower is waiting to fire
 		} // end outer
 		
 		// Check for projectile collision last
@@ -191,6 +212,10 @@ public class Game {
 					// Destroy projectile
 					if (!tempProj.contains(projectile))
 						tempProj.add(projectile);
+					
+					// Break the loop if this projectile should only affect one enemy
+					if (!projectile.isSplash())
+						break;
 				} 
 			}
 			

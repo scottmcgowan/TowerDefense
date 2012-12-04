@@ -1,12 +1,14 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Drawable;
@@ -43,9 +45,12 @@ public class ActorPanel extends JPanel {
 				gr.drawString("T", (int) ((Tower) d).getPosition().getX(),
 						(int) ((Tower) d).getPosition().getY());
 			} else if (d instanceof Enemy) {
-				gr.setColor(Color.blue);
-				gr.draw(((Enemy) d).getBounds());
-				gr.setColor(Color.red);
+				try {
+					gr.drawImage(ImageIO.read(new File("images/circenemy.png")), (int) ((Enemy) d).getPosition().getX(),
+							(int) ((Enemy) d).getPosition().getY(), this);
+				} catch (IOException e) {
+					System.out.println("Could not find circenemy.png");
+				}
 				gr.drawString("E", (int) ((Enemy) d).getPosition().getX(),
 						(int) ((Enemy) d).getPosition().getY());
 			} else if (d instanceof Projectile) {

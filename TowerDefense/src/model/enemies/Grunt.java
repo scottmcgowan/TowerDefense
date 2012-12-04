@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Grunt extends Enemy {
 	
-	private static int gruntSpeed = 1;
+	private static int gruntSpeed = 4;
 	private static int gruntHP = 100;
 	private static int gruntDamage = 10;
 	

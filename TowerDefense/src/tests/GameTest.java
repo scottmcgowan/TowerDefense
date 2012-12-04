@@ -10,6 +10,7 @@ import model.enemies.Enemy;
 import model.enemies.Grunt;
 import model.projectiles.Pellet;
 import model.projectiles.Projectile;
+import model.towers.FireTower;
 import model.towers.PelletTower;
 import model.towers.Tower;
 
@@ -213,6 +214,12 @@ public class GameTest {
 		game.update();
 		assertFalse(enemy.isAlive());
 		assertEquals(25, game.getFunds());
+	}
+	
+	@Test
+	public void testTowerProjectileTypes() {
+		Game game = new Game();
+		game.addTower(new FireTower(0, 5));
 	}
 
 }

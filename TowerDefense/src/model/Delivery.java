@@ -28,15 +28,15 @@ public class Delivery implements Serializable{
 		tied = false;
 	}
 	
-	public Delivery(String s, boolean gameReady, boolean lost, boolean tieCondition, boolean tiedEnd, boolean self){
+	public Delivery(String s, int p, boolean gameReady, boolean lost, boolean tieCondition, boolean tiedEnd, boolean self){
 		message = s;
+		player = p;
 		newGameReady = gameReady;
 		lose = lost;
 		tieMet = tieCondition;
 		tied = tiedEnd;
 		messageForSelf = self;
 		messageForOther = true;
-		player = 0;
 	}
 	
 	public String getMessage(){return message;}

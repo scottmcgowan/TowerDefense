@@ -1,9 +1,14 @@
 package model.enemies;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
 
 import resources.Res;
 
@@ -94,16 +99,14 @@ public abstract class Enemy extends Drawable {
 		
 		isAlive = true;
 		
-		int width = Res.GRID_WIDTH;
-		int height = Res.GRID_HEIGHT;
+		this.width = Res.GRID_WIDTH;
+		this.height = Res.GRID_HEIGHT;
 		
 		path = initPath;
 		currentPath = 0;
 		
-		// path contains midpoint coordinates, get the top-left point
-//		int top = pos.y - (height / 2);
-//		int left = pos.x - (width / 2);
-		cBox = new Rectangle2D.Double(pos.x, pos.y, pos.x + width, pos.y + height);
+		// Magic numbers to pad enemy cBox from the sides of the path
+		cBox = new Rectangle2D.Double(pos.x + 5, pos.y + 5, width - 10, height - 10);
 		
 	}
 	
@@ -210,11 +213,12 @@ public abstract class Enemy extends Drawable {
 			
 			if (currentPath >= path.size() - 1)
 				isAlive = false;
-
-			cBox = new Rectangle2D.Double(pos.x, pos.y, pos.x + width, pos.y + height);
+			
+			// Magic numbers to pad enemy cBox from the sides of the path
+			cBox = new Rectangle2D.Double(pos.x + 5, pos.y + 5, width - 10, height - 10);
 			
 			canMove = false;
-			moveCount = 1;
+			rest();
 		}
 	}
 	

@@ -70,7 +70,7 @@ public class NetworkPanel extends JPanel implements Observer {
 	private class ChatAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String input = chatBar.getText();
+			String input = "Player " + player + "> " +chatBar.getText();
 			// game.sendMessage(input);
 			interpretDelivery(new Delivery(input, null, true, true, player));
 			chatBar.setText("");

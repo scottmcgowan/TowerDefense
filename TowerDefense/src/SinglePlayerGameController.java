@@ -1,5 +1,4 @@
 import java.awt.FlowLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
-import resources.Res;
 
 import model.Delivery;
 import model.Drawable;
@@ -22,7 +19,9 @@ import model.towers.FireTower;
 import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
+import resources.Res;
 import GUI.GameCanvas;
+import GUI.LogisticsPanel;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
 
@@ -58,12 +57,15 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		gui.setLayout(new FlowLayout());
 		// shop = new SinglePlayerShopPanel();
 		canvas = new GameCanvas(this);
+		LogisticsPanel health = new LogisticsPanel();
+//		health.setSize(100,100);
 		shop.connectToMap(canvas);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(shop.PANEL_WIDTH + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
+		gui.setSize(shop.PANEL_WIDTH + 75 + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
 		gui.add(canvas);
 		gui.add(shop);
+		gui.add(health);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);

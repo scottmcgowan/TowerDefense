@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Grunt extends Enemy {
 	
 	private static int gruntSpeed = 2;
-	private static int gruntHP = 100;
+	private static int gruntHP = 50;
 	private static int gruntDamage = 10;
 	
 	public Grunt(ArrayList<Point> initPath) {

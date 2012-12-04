@@ -44,7 +44,7 @@ public class LogisticsPanel extends JPanel{
 					gr.drawImage(ImageIO.read(new File("images/Heart.png")), 0,
 							0, this);
 				} catch (IOException e) {
-					System.out.println("Could not find grass.png");
+					System.out.println("Could not find Heart.png");
 				}
 			}
 			else
@@ -52,7 +52,7 @@ public class LogisticsPanel extends JPanel{
 					gr.drawImage(ImageIO.read(new File("images/Coin.png")), 0,
 							0, this);
 				} catch (IOException e) {
-					System.out.println("Could not find grass.png");
+					System.out.println("Could not find Coin.png");
 				}
 		}
 	}

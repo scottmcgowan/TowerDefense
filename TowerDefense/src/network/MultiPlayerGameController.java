@@ -58,6 +58,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private int currentTileX;
 	private int currentTileY;
 	private int tower_count;
+	private LogisticsPanel stats;
 
 	public static void main(String[] args) {
 		MultiPlayerGameController game = new MultiPlayerGameController(
@@ -139,11 +140,11 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
-		LogisticsPanel health = new LogisticsPanel();
+		stats = new LogisticsPanel();
 		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(health);
+		gui.add(stats);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
@@ -268,6 +269,8 @@ public class MultiPlayerGameController implements GameControllerInterface {
 				thisPlayer.setMoney(thisPlayer.getMoney() + game.getFunds());
 				shop.updateWithMoney(thisPlayer.getMoney());
 			}
+			stats.updateHealth(game.getPlayerHealth());
+			stats.updateMoney(thisPlayer.getMoney());
 			updateLogisticSender();
 			draw(game.getDrawable());
 			gameCanvas.optimizeBakcground();
@@ -284,7 +287,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 
 	public void processSpawnQueue() {
 		spawn_timer += 1;
-		if (spawn_timer >= 60 && !spawnQueue.isEmpty()) {
+		if (spawn_timer >= 150 && !spawnQueue.isEmpty()) {
 			game.addEnemy(spawnQueue.poll());
 			spawn_timer = 0;
 			System.out.println("Player " + player + " enemy added");

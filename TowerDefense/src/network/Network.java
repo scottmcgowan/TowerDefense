@@ -40,7 +40,7 @@ public class Network extends Observable {
 			outputToLiasonLoop.writeObject(d);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("Player 2 has left the game");
 			System.out.println("In Client.sendDelivery");
 		}
@@ -62,7 +62,10 @@ public class Network extends Observable {
 							setChanged();
 							notifyObservers(outputMessage);
 						} else if (d.lose) {
+							System.out.println("Lose comparing " + player
+									+ " to " + d.player);
 							if (d.player == player) {
+								System.out.println("lost called");
 								gc.lost();
 							} else {
 								gc.won();
@@ -81,10 +84,7 @@ public class Network extends Observable {
 							setChanged();
 							notifyObservers(outputMessage);
 						} else if (d.rate) {
-							// System.out.println("sdasdasda");
-							if (player != d.player) {
-								gc.updateRate(true);
-							}
+							gc.updateRate(true);
 							setChanged();
 							notifyObservers(outputMessage);
 						}
@@ -114,12 +114,12 @@ public class Network extends Observable {
 				} catch (Exception e) {
 					System.out.println("In Client.connectToServer");
 					System.out.println("Player 2 has left the game");
-					//e.printStackTrace();
-				} /*catch (ClassNotFoundException e) {
-					System.out
-							.println("Trying to read an object of a different written type from Liason");
-					e.printStackTrace();
-				}*/
+					// e.printStackTrace();
+				} /*
+				 * catch (ClassNotFoundException e) { System.out .println(
+				 * "Trying to read an object of a different written type from Liason"
+				 * ); e.printStackTrace(); }
+				 */
 			}
 		};
 

@@ -29,7 +29,7 @@ public class Server extends Thread {
 	public static final String HOST_NAME = "localhost";
 	public static final int SERVER_PLAYER = 1;
 	public static final int CLIENT_PLAYER = 2;
-	private ServerSocket myServerSocket; // client request source
+	public ServerSocket myServerSocket; // client request source
 	private Vector<String> connectedClients;
 	private ArrayList<ObjectOutputStream> listOutputStreams = new ArrayList<ObjectOutputStream>();
 	private ArrayList<Liason> listLiasons = new ArrayList<Liason>();

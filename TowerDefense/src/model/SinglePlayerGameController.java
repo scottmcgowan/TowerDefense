@@ -41,7 +41,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 
 	// main game class
 	private static int UPDATE_RATE = 60; // number of game updates per
-												// second
+											// second
 	private static long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
@@ -85,7 +85,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		if (!gameOver) {
 			gameOver = true;
 			System.out.println("Losing conditions met");
-			screens.setLoseMessage();
+			screens.setLoseMessage(gui);
 			gui.dispose();
 			new MainMenu();
 		}
@@ -94,22 +94,21 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public boolean hasLost() {
 		return game.gameOver();
 	}
-	
 
 	public boolean hasWon() {
-		return comPlayer.wave_remaining<0 && game.getEnemies().isEmpty();
+		return comPlayer.wave_remaining < 0 && game.getEnemies().isEmpty();
 	}
 
 	public void won() {
 		if (!gameOver) {
 			System.out.println("Winning conditions met");
-			screens.setWinMessage();
+			screens.setWinMessage(gui);
 			gameOver = true;
 			gui.dispose();
 			new MainMenu();
 		}
 	}
-	
+
 	public SinglePlayerGameController() {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
@@ -121,7 +120,8 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		gui.setFocusable(true);
 		gui.setResizable(false);
 		gui.setTitle("Game");
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);;
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		;
 		gui.addKeyListener(new keyAction());
 		gui.setSize(shop.PANEL_WIDTH + 75 + 50, gameCanvas.PANEL_HEIGHT
 				+ shop.PANEL_HEIGHT + 100);
@@ -159,7 +159,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	}
 
 	public void gameStart() {
-		
+
 		shop.updateWithMoney(user.getMoney());
 		// gui = new GameGUI();
 		// Create a new thread
@@ -189,11 +189,15 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			gameCanvas.optimizeBakcground();
 			processOrders();
 			processSpawnQueue();
-			if(hasLost())
+			if (hasLost())
 				lost();
-			if(hasWon())
+			if (hasWon())
 				won();
-			gui.setTitle("Tower Defense! "+"Wave remaining: " + comPlayer.wave_remaining);
+			int wave = comPlayer.wave_remaining;
+			if (wave < 0) {
+				wave = 0;
+			}
+			gui.setTitle("Tower Defense! " + "Wave remaining: " + wave);
 		} else {
 			if (!gameOver) {
 				gameOver = true;
@@ -248,15 +252,17 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		if (po.getPlayer() == player) {
 			int userMoney = user.getMoney();
 			int cost = po.getItem().value;
-			user.setMoney(userMoney - cost);}
+			user.setMoney(userMoney - cost);
+		}
 
 		if (po.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
 			shop.updateButtons(po.getTile_x(), po.getTile_y(),
-					po.getItem().towerType);}
-		
-			orders.add(po);
-			System.out.println("Called the addOrder method");
-			shop.updateWithMoney(user.getMoney());
+					po.getItem().towerType);
+		}
+
+		orders.add(po);
+		System.out.println("Called the addOrder method");
+		shop.updateWithMoney(user.getMoney());
 	}
 
 	@Override
@@ -336,19 +342,19 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		// Not necessary...
 
 	}
-	
+
 	public void updateRate() {
-			if (UPDATE_RATE == 60) {
-				UPDATE_RATE = 120;
-			} else {
-				UPDATE_RATE = 60;
-			}
-			UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
+		if (UPDATE_RATE == 60) {
+			UPDATE_RATE = 120;
+		} else {
+			UPDATE_RATE = 60;
+		}
+		UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
 	}
 
 	public void pause() {
 		// TODO Auto-generated method stub
-			gamePaused = !gamePaused;
+		gamePaused = !gamePaused;
 	}
 
 	private class keyAction implements KeyListener {
@@ -360,20 +366,20 @@ public class SinglePlayerGameController implements GameControllerInterface {
 				updateRate();
 			if (arg0.getKeyChar() == 'p')
 				pause();
-			
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }

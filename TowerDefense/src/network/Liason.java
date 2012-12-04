@@ -48,7 +48,7 @@ class Liason extends Thread {
 		while (stayConnected) {
 			try {
 				deliveryFromClient = (Delivery) readFromClient.readObject();
-				System.out.println("got stuff");
+				//System.out.println("got stuff");
 			} catch (IOException e1) {
 				//Catch the closed connection exception to remove outputStream and Liason related to the client in the server.
 				server.removeLiason(getId());

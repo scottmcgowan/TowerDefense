@@ -102,8 +102,8 @@ public class MainMenu extends JFrame {
 				dispose();
 				new MapSelection(2);
 			}
-			if (clickButton.getText().equals("Help"))
-				options.setHelpMessage();
+			if (clickButton.getText().equals("Help")){
+				options.setHelpMessage(clickButton);}
 		}
 	}
 }

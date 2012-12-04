@@ -19,7 +19,7 @@ public class SinglePlayerShopPanel extends JPanel {
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 50;
 	private SinglePlayerGameController game;
-	private int playerInt, currentTileX, currentTileY, tileType = Res.SPACE_UNBUILDABLE;
+	private int playerInt, currentTileX, currentTileY, tile_type = Res.SPACE_UNBUILDABLE;
 
 	// GUI for the shop buttons
 	public SinglePlayerShopPanel(SinglePlayerGameController game, int player) {
@@ -68,18 +68,18 @@ public class SinglePlayerShopPanel extends JPanel {
 	}
 	
 	public void updateWithMoney(int money) {
+		// TODO Auto-generated method stub
+		updateButtons(currentTileX, currentTileY, tile_type);
 		for (ShopButton b : buttons) {
-			b.setEnabled(true);
-			if (b.getItem().value >= money)
+			if (b.getItem().value > money)
 				b.setEnabled(false);
 		}
-		updateButtons(currentTileX, currentTileY, tileType);
 	}
 	
 	public void updateButtons(int x, int y, int type) {
 		currentTileX = x;
 		currentTileY = y;
-		tileType = type;
+		tile_type = type;
 		for (ShopButton b : buttons) {
 			b.setEnabled(true);
 		}

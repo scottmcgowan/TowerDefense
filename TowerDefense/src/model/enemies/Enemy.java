@@ -114,11 +114,15 @@ public abstract class Enemy extends Drawable {
 		return cBox;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	
 	public int getHP() {
 		return hp;
 	}
 	
-	public int getMaxHP() {
+	public double getMaxHP() {
 		return maxHP;
 	}
 	

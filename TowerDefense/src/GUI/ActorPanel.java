@@ -17,6 +17,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import resources.Res;
+
 import model.Drawable;
 import model.enemies.Enemy;
 import model.projectiles.Projectile;
@@ -49,33 +51,99 @@ public class ActorPanel extends JPanel {
 
 		for (Drawable d : drawList) {
 			if (d instanceof FireTower) {
-				try {
-					BufferedImage fireTower = ImageIO.read(new File("images/FireTower.png"));
-					gr.drawImage(fireTower, (int) ((Tower) d).getPosition().getX(),
-							(int) ((Tower) d).getPosition().getY(), this);
-				} catch (IOException e) {
+				if (((FireTower) d).getLevel() == 1) {
+					try {
+						BufferedImage fireTower = ImageIO.read(new File(
+								"images/FireTower.png"));
+						gr.drawImage(fireTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((FireTower) d).getLevel() == 2) {
+					try {
+						BufferedImage fireTower = ImageIO.read(new File(
+								"images/FireTower2.png"));
+						gr.drawImage(fireTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((FireTower) d).getLevel() == 3) {
+					try {
+						BufferedImage fireTower = ImageIO.read(new File(
+								"images/FireTower3.png"));
+						gr.drawImage(fireTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
 				}
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			} else if (d instanceof IceTower) {
-				try {
-					BufferedImage IceTower = ImageIO.read(new File("images/IceTower.png"));
-					gr.drawImage(IceTower, (int) ((Tower) d).getPosition().getX(),
-							(int) ((Tower) d).getPosition().getY(), this);
-				} catch (IOException e) {
+				if (((IceTower) d).getLevel() == 1) {
+					try {
+						BufferedImage IceTower = ImageIO.read(new File(
+								"images/IceTower.png"));
+						gr.drawImage(IceTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((IceTower) d).getLevel() == 2) {
+					try {
+						BufferedImage IceTower = ImageIO.read(new File(
+								"images/IceTower2.png"));
+						gr.drawImage(IceTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((IceTower) d).getLevel() == 3) {
+					try {
+						BufferedImage IceTower = ImageIO.read(new File(
+								"images/IceTower3.png"));
+						gr.drawImage(IceTower, (int) ((Tower) d).getPosition()
+								.getX(), (int) ((Tower) d).getPosition().getY(), this);
+					} catch (IOException e) {
+					}
 				}
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
 				gr.setColor(Color.blue);
 				gr.draw(((Tower) d).getRange());
 			} else if (d instanceof LightningTower) {
-				try {
-					BufferedImage LightningTower = ImageIO.read(new File("images/LightningTower.png"));
-					gr.drawImage(LightningTower, (int) ((Tower) d).getPosition().getX(),
-							(int) ((Tower) d).getPosition().getY(), this);
-				} catch (IOException e) {
+				if (((LightningTower) d).getLevel() == 1) {
+					try {
+						BufferedImage LightningTower = ImageIO.read(new File(
+								"images/LightningTower.png"));
+						gr.drawImage(LightningTower, (int) ((Tower) d)
+								.getPosition().getX(), (int) ((Tower) d)
+								.getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((LightningTower) d).getLevel() == 2) {
+					try {
+						BufferedImage LightningTower = ImageIO.read(new File(
+								"images/LightningTower2.png"));
+						gr.drawImage(LightningTower, (int) ((Tower) d)
+								.getPosition().getX(), (int) ((Tower) d)
+								.getPosition().getY(), this);
+					} catch (IOException e) {
+					}
+				}
+				else if (((LightningTower) d).getLevel() == 3) {
+					try {
+						BufferedImage LightningTower = ImageIO.read(new File(
+								"images/LightningTower3.png"));
+						gr.drawImage(LightningTower, (int) ((Tower) d)
+								.getPosition().getX(), (int) ((Tower) d)
+								.getPosition().getY(), this);
+					} catch (IOException e) {
+					}
 				}
 				gr.setColor(Color.BLACK);
 				gr.draw(getVisibleRect());
@@ -86,6 +154,13 @@ public class ActorPanel extends JPanel {
 					BufferedImage cirEnemy = ImageIO.read(new File("images/circenemy.png"));
 					gr.drawImage(cirEnemy, (int) ((Enemy) d).getPosition().getX(),
 							(int) ((Enemy) d).getPosition().getY(), this);
+					// Health bars
+					gr.setColor(Color.RED);
+					gr.drawLine(d.getX(), d.getY(), d.getX() + ((Enemy) d).getWidth(), d.getY());
+					double health = (((Enemy) d).getHP() / ((Enemy) d).getMaxHP()) * ((Enemy) d).getWidth();
+					int size = (int) Math.floor(health);
+					gr.setColor(Color.GREEN);
+					gr.drawLine(d.getX(), d.getY(), d.getX() + size, d.getY());
 				} catch (IOException e) {
 				}
 				gr.setColor(Color.BLACK);

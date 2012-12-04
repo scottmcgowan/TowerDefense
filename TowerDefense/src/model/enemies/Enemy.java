@@ -105,7 +105,8 @@ public abstract class Enemy extends Drawable {
 		path = initPath;
 		currentPath = 0;
 		
-		cBox = new Rectangle2D.Double(pos.x, pos.y, width, height);
+		// Magic numbers to pad enemy cBox from the sides of the path
+		cBox = new Rectangle2D.Double(pos.x + 5, pos.y + 5, width - 10, height - 10);
 		
 	}
 	
@@ -212,8 +213,9 @@ public abstract class Enemy extends Drawable {
 			
 			if (currentPath >= path.size() - 1)
 				isAlive = false;
-
-			cBox = new Rectangle2D.Double(pos.x, pos.y, width, height);
+			
+			// Magic numbers to pad enemy cBox from the sides of the path
+			cBox = new Rectangle2D.Double(pos.x + 5, pos.y + 5, width - 10, height - 10);
 			
 			canMove = false;
 			rest();

@@ -165,9 +165,16 @@ public class Game {
 				
 				for (Enemy enemy: enemyList) {
 					if (tower.getRange().intersects((Rectangle2D) enemy.getBounds())) {
-												
-						Point pos = tower.getPosition();
-						Point des = enemy.getPosition();
+						
+						Point pos = new Point(tower.getPosition());
+						// point projectile to middle of grid space
+						pos.x += Res.GRID_WIDTH / 2;
+						pos.y += Res.GRID_HEIGHT / 2;
+						
+						Point des = new Point(enemy.getPosition());
+						// point projectile to middle of grid space
+						des.x += Res.GRID_WIDTH / 2;
+						des.y += Res.GRID_HEIGHT / 2;
 						
 						int id = tower.getID();
 						if (id == Res.TOWER_NO_TYPE)

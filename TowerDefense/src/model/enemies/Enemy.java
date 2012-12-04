@@ -32,6 +32,8 @@ public abstract class Enemy extends Drawable {
 
 	// Movement speed
 	private int framesPerMove;
+	private int maxFramesPerMove;
+	private int slowCounter;
 	protected int counter;
 	
 	// The shape of this enemy for collision detection
@@ -42,6 +44,7 @@ public abstract class Enemy extends Drawable {
 	private ArrayList<Point> path;
 	private int currentPath;
 	
+	private boolean isSlowed;
 	private boolean canMove;
 	private int moveCount;
 	
@@ -93,7 +96,10 @@ public abstract class Enemy extends Drawable {
 		this.damage = damage;
 		
 		canMove = true;
+		isSlowed = false;
+		slowCounter = 0;
 		this.framesPerMove = speed;
+		maxFramesPerMove = speed;
 		moveCount = 1;
 		counter = 0;
 		
@@ -139,6 +145,10 @@ public abstract class Enemy extends Drawable {
 		return isAlive;
 	}
 	
+	public boolean isSlowed() {
+		return isSlowed;
+	}
+	
 	public void kill() {
 		isAlive = false;
 	}
@@ -157,16 +167,20 @@ public abstract class Enemy extends Drawable {
 	}
 	
 	/**
-	 * This getter is for testing
-	 * 
 	 * @return The frames that must pass for this enemy to move one pixel.
 	 */
 	public int getSpeed() {
-		return framesPerMove;
+		return maxFramesPerMove;
 	}
 	
 	public void setSpeed(int frames) {
 		framesPerMove = frames;
+		
+	}
+	
+	public void slow() {
+		isSlowed = true;
+		setSpeed(maxFramesPerMove + 1);
 	}
 	
 	/**
@@ -183,6 +197,15 @@ public abstract class Enemy extends Drawable {
 		moveCount += 1;
 		if (moveCount % framesPerMove == 0)
 			canMove = true;
+		if (isSlowed) {
+			if (slowCounter > 200) {
+				setSpeed(maxFramesPerMove);
+				isSlowed = false;
+				slowCounter = 0;
+			} else
+				slowCounter++;
+		}
+			
 	}
 	
 	// TODO: This might have bugs

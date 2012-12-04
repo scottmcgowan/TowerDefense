@@ -212,6 +212,8 @@ public class Game {
 						tempEnemy.add(enemy);
 						enemy.kill();
 						playerMoney += 10;
+					} else if (projectile instanceof IceBeam && !enemy.isSlowed()) {
+						enemy.slow();
 					}
 					
 					// Destroy projectile
@@ -233,8 +235,12 @@ public class Game {
 				if (projectile.isSplash()) {
 					int splashCount = 0;
 					for (Enemy enemy : enemyList) {
-						if (!enemy.equals(target) && projectile.getSplash().intersects((Rectangle2D) enemy.getBounds())) {
-							toAddProj.add(new Flame(projectile.getX(), projectile.getY(), enemy.getX(), enemy.getY(), Res.DAMAGE_SPLASH, false));
+						if (!enemy.equals(target) && 
+							projectile.getSplash().intersects((Rectangle2D) enemy.getBounds())) {
+							
+							toAddProj.add(new Flame(projectile.getX(),
+										  projectile.getY(), enemy.getX(), enemy.getY(), 
+										  Res.DAMAGE_SPLASH, false));
 							splashCount++;
 						}
 						if (splashCount > 2)

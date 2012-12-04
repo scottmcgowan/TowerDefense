@@ -24,12 +24,12 @@ public class Res {
 	public static final int ENEMY_BUFF_TYPE = 3;
 	
 	// Element Damage levels
-	public static final int DAMAGE_FIRE_1 = 30;
-	public static final int DAMAGE_FIRE_2 = 40;
+	public static final int DAMAGE_FIRE_1 = 20;
+	public static final int DAMAGE_FIRE_2 = 30;
 	public static final int DAMAGE_LIGHTNING_1 = 25;
 	public static final int DAMAGE_LIGHTNING_2 = 35;
-	public static final int DAMAGE_ICE_1 = 30;
-	public static final int DAMAGE_ICE_2 = 40;
+	public static final int DAMAGE_ICE_1 = 15;
+	public static final int DAMAGE_ICE_2 = 25;
 	public static final int DAMAGE_PELLET_1 = 25;
 	public static final int DAMAGE_PELLET_2 = 35;
 	public static final int DAMAGE_SPLASH = 15;

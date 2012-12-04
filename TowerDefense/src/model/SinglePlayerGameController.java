@@ -1,6 +1,10 @@
+package model;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -10,7 +14,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import network.MultiPlayerShop;
-
 import model.Delivery;
 import model.Drawable;
 import model.Game;
@@ -30,25 +33,27 @@ import resources.Res;
 import GUI.GameCanvas;
 import GUI.LogisticsPanel;
 import GUI.MainMenu;
+import GUI.MiscOptions;
 import GUI.Map.Tile;
 import GUI.SinglePlayerShopPanel;
 
 public class SinglePlayerGameController implements GameControllerInterface {
 
 	// main game class
-	private static final int UPDATE_RATE = 60; // number of game updates per second
-	private static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
-	private static final int PLAYER_INT = 1;
-	
+	private static int UPDATE_RATE = 60; // number of game updates per
+												// second
+	private static long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+
 	// State of the game
 	private Player user = new Player();
+	private ComputerPlayer comPlayer = new ComputerPlayer(this);
 	private Game game;
 	private boolean gameOver = false;
 	private boolean gamePaused = false;
-	private GameCanvas canvas;
+	private GameCanvas gameCanvas;
 	private JFrame gui = new JFrame();
 	private SinglePlayerShopPanel shop;
-	private LinkedList<PurchaseOrder> listOfOrders = new LinkedList<PurchaseOrder>();
+	private LinkedList<PurchaseOrder> orders = new LinkedList<PurchaseOrder>();
 	private LinkedList<Enemy> spawnQueue = new LinkedList<Enemy>();
 	private int timer;
 	private int frameCounter = 0;
@@ -59,12 +64,15 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	private int currentTileY;
 	private int towerCount;
 	private LogisticsPanel stats;
+	private final int player = 1;
+	private int tower_count = 0;
+	private MiscOptions screens = new MiscOptions();
 
 	public static void main(String[] args) {
-		JFrame menu = new MainMenu();
+		// JFrame menu = new MainMenu();
 		SinglePlayerGameController game = new SinglePlayerGameController();
 	}
-	
+
 	public static void wait(int n) {
 		long t0, t1;
 		t0 = System.currentTimeMillis();
@@ -72,53 +80,52 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			t1 = System.currentTimeMillis();
 		} while (t1 - t0 < 1000);
 	}
-	
-	public void winGame() {
-		gameOver = true;
-		System.out.println("YOU ARE WINNER");
+
+	public void lost() {
+		if (!gameOver) {
+			gameOver = true;
+			System.out.println("Losing conditions met");
+			screens.setLoseMessage();
+			gui.dispose();
+			new MainMenu();
+		}
 	}
-	
-	public void tieGame() {
-		gameOver = true;
-		System.out.println("Game tied.");
-	}
-	
-	public void loseGame() {
-		gameOver = true;
-		System.out.println("You lost the game.");
-	}
-	
+
 	public boolean hasLost() {
 		return game.gameOver();
 	}
 	
-	public boolean checkForTie() {
-		int userMoney = user.getMoney();
-		ArrayList<Enemy> enemyList = game.getEnemies();
-		return userMoney < 100 && enemyList.isEmpty();
-	}
-	
-	// ?!?!?!
-	public void updateLogisticSender() {
-		spawnTimer++;
-		if (spawnTimer >= 1200) {
-			System.out.println("Sending logistics...");
-			spawnTimer = 0;
-		}
+
+	public boolean hasWon() {
+		return comPlayer.wave_remaining<0 && game.getEnemies().isEmpty();
 	}
 
+	public void won() {
+		if (!gameOver) {
+			System.out.println("Winning conditions met");
+			screens.setWinMessage();
+			gameOver = true;
+			gui.dispose();
+			new MainMenu();
+		}
+	}
+	
 	public SinglePlayerGameController() {
 		game = new Game();
 		gui.setLayout(new FlowLayout());
-		shop = new SinglePlayerShopPanel();
-		canvas = new GameCanvas(this, 1);
+		shop = new SinglePlayerShopPanel(this, player);
+		gameCanvas = new GameCanvas(this, 1);
 		stats = new LogisticsPanel();
-//		health.setSize(100,100);
-		shop.connectToMap(canvas);
+		// health.setSize(100,100);
+		shop.connectToMap(gameCanvas);
+		gui.setFocusable(true);
+		gui.setResizable(false);
 		gui.setTitle("Game");
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setSize(shop.PANEL_WIDTH + 75 + 50, canvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 100);
-		gui.add(canvas);
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);;
+		gui.addKeyListener(new keyAction());
+		gui.setSize(shop.PANEL_WIDTH + 75 + 50, gameCanvas.PANEL_HEIGHT
+				+ shop.PANEL_HEIGHT + 100);
+		gui.add(gameCanvas);
 		gui.add(shop);
 		gui.add(stats);
 
@@ -145,13 +152,15 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		public void actionPerformed(ActionEvent arg0) {
 			JMenuItem menuItem = (JMenuItem) arg0.getSource();
 			if (menuItem.getText() == "New Game") {
-				SinglePlayerGameController newGame = new SinglePlayerGameController(); // Is this even acceptable...?
+				SinglePlayerGameController newGame = new SinglePlayerGameController();
 			}
 			gui.dispose();
 		}
 	}
 
 	public void gameStart() {
+		
+		shop.updateWithMoney(user.getMoney());
 		// gui = new GameGUI();
 		// Create a new thread
 		Thread gameThread = new Thread() {
@@ -169,6 +178,7 @@ public class SinglePlayerGameController implements GameControllerInterface {
 	public void gameUpdate() {
 		if (!hasLost()) {
 			game.update();
+			comPlayer.update();
 			if (game.getFunds() != 0) {
 				user.setMoney(user.getMoney() + game.getFunds());
 				shop.updateWithMoney(user.getMoney());
@@ -176,19 +186,24 @@ public class SinglePlayerGameController implements GameControllerInterface {
 			stats.updateHealth(game.getPlayerHealth());
 			stats.updateMoney(user.getMoney());
 			draw(game.getDrawable());
-			canvas.optimizeBakcground();
+			gameCanvas.optimizeBakcground();
 			processOrders();
 			processSpawnQueue();
+			if(hasLost())
+				lost();
+			if(hasWon())
+				won();
+			gui.setTitle("Tower Defense! "+"Wave remaining: " + comPlayer.wave_remaining);
 		} else {
 			if (!gameOver) {
 				gameOver = true;
 			}
 		}
 	}
-	
+
 	public void processSpawnQueue() {
 		spawnTimer++;
-		if (spawnTimer >= 150 && !spawnQueue.isEmpty()) {
+		if (spawnTimer >= 60 && !spawnQueue.isEmpty()) {
 			game.addEnemy(spawnQueue.poll());
 			spawnTimer = 0;
 		}
@@ -230,24 +245,33 @@ public class SinglePlayerGameController implements GameControllerInterface {
 
 	@Override
 	public void addOrder(PurchaseOrder po) {
-		int userMoney = user.getMoney();
-		int cost = po.getItem().value;
-		user.setMoney(userMoney - cost);
-		System.out.println("Called the addOrder method");
+		if (po.getPlayer() == player) {
+			int userMoney = user.getMoney();
+			int cost = po.getItem().value;
+			user.setMoney(userMoney - cost);}
+
+		if (po.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+			shop.updateButtons(po.getTile_x(), po.getTile_y(),
+					po.getItem().towerType);}
+		
+			orders.add(po);
+			System.out.println("Called the addOrder method");
+			shop.updateWithMoney(user.getMoney());
 	}
 
 	@Override
 	public void draw(ArrayList<Drawable> arr) {
 		// TODO Auto-generated method stub
-		if (arr != null && canvas != null)
-			canvas.drawDrawables(arr);
+		if (arr != null && gameCanvas != null)
+			gameCanvas.drawDrawables(arr);
 	}
 
 	@Override
 	public void processOrders() {
 		// TODO Auto-generated method stub
-		for (PurchaseOrder po : listOfOrders) {
-			if (po.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER) {
+		for (PurchaseOrder po : orders) {
+			System.out.print("iterating");
+			if (po.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER) {
 				Tower tower = null;
 				System.out.println(po.getTile_x());
 				System.out.println(po.getTile_y());
@@ -268,13 +292,26 @@ public class SinglePlayerGameController implements GameControllerInterface {
 				setUpTower(po.getTile_x(), po.getTile_y(),
 						po.getItem().towerType);
 				game.addTower(tower);
-				towerCount++;
-				System.out.println("Player " + PLAYER_INT + " tower added.");
-			} else if (po.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER) {
+				tower_count++;
+				System.out.println("Player " + player + " tower added.");
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
+				game.upgradeTower(po.getTile_x(), po.getTile_y());
+			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
 
-			} 
+				for (int i = 0; i < 5; i++) {
+					if (po.getItem().enemyType == Res.ENEMY_GRUNT_TYPE) {
+						spawnQueue.add(new Grunt(gameCanvas.getPath()));
+					} else if (po.getItem().enemyType == Res.ENEMY_SPEEDY_TYPE) {
+						spawnQueue.add(new Speedy(gameCanvas.getPath()));
+					} else if (po.getItem().enemyType == Res.ENEMY_BUFF_TYPE) {
+						spawnQueue.add(new Buff(gameCanvas.getPath()));
+					}
+				}
+				System.out.println("Player " + player
+						+ " enemy order processed.");
+			}
 		}
-		listOfOrders.clear();
+		orders.clear();
 	}
 
 	@Override
@@ -282,19 +319,15 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void setUpTower(int tileX, int tileY, int tower_type) {
-		canvas.addTower(tileX, tileY, tower_type);
-	}
-	
-	@Override
-	public void notifyShopOfSelection(int tileX, int tileY, Tile tile) {
-		shop.updateButtons(tileX, tileY, tile.tileType);
-		shop.updateWithMoney(user.getMoney());
+		gameCanvas.addTower(tileX, tileY, tower_type);
+		System.out.println("Tried adding tower");
 	}
 
 	@Override
-	public void updateShopWithCurrentMoney() {
+	public void notifyShopOfSelection(int tileX, int tileY, Tile tile) {
+		shop.updateButtons(tileX, tileY, tile.tileType);
 		shop.updateWithMoney(user.getMoney());
 	}
 
@@ -303,5 +336,44 @@ public class SinglePlayerGameController implements GameControllerInterface {
 		// Not necessary...
 
 	}
+	
+	public void updateRate() {
+			if (UPDATE_RATE == 60) {
+				UPDATE_RATE = 120;
+			} else {
+				UPDATE_RATE = 60;
+			}
+			UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
+	}
 
+	public void pause() {
+		// TODO Auto-generated method stub
+			gamePaused = !gamePaused;
+	}
+
+	private class keyAction implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			if (arg0.getKeyChar() == ' ')
+				updateRate();
+			if (arg0.getKeyChar() == 'p')
+				pause();
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }

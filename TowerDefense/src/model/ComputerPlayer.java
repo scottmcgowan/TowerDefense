@@ -9,6 +9,7 @@ public class ComputerPlayer extends Player{
 
 	private GameControllerInterface gc;
 	private int counter = 0;
+	public int wave_remaining = 6;
 	
 	public ComputerPlayer(GameControllerInterface gc){
 		super();
@@ -18,14 +19,52 @@ public class ComputerPlayer extends Player{
 	public void update(){
 		counter++;
 		switch(counter){
-			case 120:
+			case 100:
 				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				wave_remaining -=1;
 				break;
-			case 420:
+			case 1300:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
 				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				wave_remaining -=1;
 				break;
-			case 720:
+			case 2200:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				wave_remaining -=1;
+				break;
+			case 3800:
 				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));;
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				wave_remaining -=1;
+				break;
+			case 5500:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				wave_remaining -=1;
+				break;
+			case 7500:
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_BUFF_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_ENEMIES));
+				gc.addOrder(new PurchaseOrder(2,MultiPlayerShop.Item.FIVE_SPEEDY_ENEMIES));
+				wave_remaining -=1;
+				break;
+			case 8500:
+				wave_remaining -=1;
 				break;
 		}
 	}

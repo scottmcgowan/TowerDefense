@@ -1,20 +1,15 @@
 package network;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
-import resources.Res;
 
 import model.Delivery;
 import model.Drawable;
@@ -24,12 +19,13 @@ import model.Player;
 import model.PurchaseOrder;
 import model.enemies.Enemy;
 import model.enemies.Grunt;
-import model.projectiles.Projectile;
 import model.towers.FireTower;
 import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
+import resources.Res;
 import GUI.GameCanvas;
+import GUI.LogisticsPanel;
 import GUI.Map;
 
 public class MultiPlayerGameController implements GameControllerInterface {
@@ -123,24 +119,26 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			network = new Network(networkPanel, Server.CLIENT_PLAYER, this);
 		}
 
-		gui.setLayout(null);
+		gui.setLayout(new FlowLayout());
 		shop = new MultiPlayerShopPanel(player, this);
 		gameCanvas = new GameCanvas(this);
 		gameCanvas.setSize(gameCanvas.PANEL_WIDTH, gameCanvas.PANEL_HEIGHT);
 		shop.connectToMap(gameCanvas);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH,
 				networkPanel.PANEL_HEIGHT);
+		LogisticsPanel health = new LogisticsPanel();
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
-		gameCanvas.setLocation(20, 20);
-		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
-		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
+//		gameCanvas.setLocation(20, 20);
+//		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
+//		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
+		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
-		gui.add(gameCanvas);
+		gui.add(health);
 
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
@@ -170,7 +168,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			}
 		}
 	}
-	
+
 	public void addOrder(PurchaseOrder po) {
 		if (po.getPlayer() == player) {
 			thisPlayer.setMoney(thisPlayer.getMoney() - po.getItem().value);

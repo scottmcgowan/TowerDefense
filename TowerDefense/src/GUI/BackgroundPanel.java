@@ -222,14 +222,14 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		// Push start points if start tile is on the horizontal walls
 		for (int i = 0; i < map.tileMap[0].length; i++) {
 			if (map.tileMap[0][i] == Tile.START || map.tileMap[map.tileMap.length-1][i] == Tile.START) {
-				trail.add(new Point((i*30 + 35), 35));
+				trail.add(new Point((i*30), 0));
 			}
 		}
 
 		// Push start points if start tile is on the vertical walls
 		for (int j = 0; j < map.tileMap.length; j++) {
 			if (map.tileMap[j][0] == Tile.START || map.tileMap[j][map.tileMap[0].length-1] == Tile.START) {
-				trail.add(new Point(35, (j*30 + 35)));
+				trail.add(new Point(0, (j*30)));
 			}
 		}
 
@@ -242,27 +242,24 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		int pointY = currentPoint.y, pointX = currentPoint.x;
 		
 		while (current != Tile.GOAL) {	
-			if(currentPoint.x >= 35)
-				pointX = currentPoint.x - 35;
 			if(currentPoint.x >= 30)
+				pointX = currentPoint.x;
 				pointX /= 30;
 			
-			if(currentPoint.y >= 35)
-				pointY = currentPoint.y - 35;
 			if(currentPoint.y >= 30)
+				pointY = currentPoint.y;
 				pointY /=  30;
 			
 			for (int i = pointY - 1; i <= pointY + 1; i++)
 				for (int j = pointX - 1; j <= pointX + 1; j++) {
 					
-					Point check = new Point((j*30 + 35), (i*30+35));
+					Point check = new Point((j*30), (i*30));
 					if (i > -1 && i < map.tileMap.length && j > -1 && j < map.tileMap[0].length) {
 						if((j == pointX && (i == pointY-1 || i == pointY+1)) || (i == pointY && (j == pointX-1 || j == pointX+1)))
 						if (map.tileMap[i][j] != Tile.ENVIRONMENT && trail.contains(check) == false) {
 							current = map.tileMap[i][j];
-							currentPoint = new Point((j * 30 + 35),(i * 30 + 35));
+							currentPoint = new Point((j * 30),(i * 30));
 							trail.add(currentPoint);
-							System.out.print(currentPoint);
 						}
 					}
 				}

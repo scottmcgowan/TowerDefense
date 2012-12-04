@@ -406,11 +406,6 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
 
-	@Override
-	public void updateShopWithCurrentMoney() {
-		shop.updateWithMoney(thisPlayer.getMoney());
-	}
-
 	public void updateRate(boolean fromNetwork) {
 		String rateString = new String();
 		if(UPDATE_RATE==60){rateString = "90";}

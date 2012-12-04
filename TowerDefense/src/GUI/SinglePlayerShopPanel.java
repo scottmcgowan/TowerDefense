@@ -7,12 +7,9 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import resources.Res;
-
-import model.GameControllerInterface;
+import model.SinglePlayerGameController;
 import model.PurchaseOrder;
-import model.SinglePlayerShop;
 import network.MultiPlayerShop;
 import network.ShopButton;
 
@@ -21,17 +18,19 @@ public class SinglePlayerShopPanel extends JPanel {
 	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 50;
-	private GameControllerInterface game;
+	private SinglePlayerGameController game;
 	private int playerInt, currentTileX, currentTileY, tileType = Res.SPACE_UNBUILDABLE;
 
 	// GUI for the shop buttons
-	public SinglePlayerShopPanel() {
+	public SinglePlayerShopPanel(SinglePlayerGameController game, int player) {
+		playerInt = player;
+		this.game = game;
 		setLayout(new GridLayout(2, 3, 5, 5));
 		setSize(PANEL_WIDTH, PANEL_HEIGHT);
 
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
-		for (SinglePlayerShop.Item i : SinglePlayerShop.Item.values()) {
+		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
 			if (i.type != 3) {
 				ShopButton b = new ShopButton(i.name() + "  " + "(" + i.value + ")", i);
 				buttons.add(b);
@@ -54,15 +53,16 @@ public class SinglePlayerShopPanel extends JPanel {
 			String text = clickButton.getText().substring(0,
 					clickButton.getText().length() - 7);
 			// game.sendMessage(text);
-
+			
 			PurchaseOrder boughtItem = new PurchaseOrder(playerInt, clickButton.getItem());
 			int itemType = clickButton.getItem().type;
-			int purchase = SinglePlayerShop.TYPE_BUY_TOWER;
-			int upgrade = SinglePlayerShop.TYPE_UPGRADE_TOWER;
+			int purchase = MultiPlayerShop.TYPE_BUY_TOWER;
+			int upgrade = MultiPlayerShop.TYPE_UPGRADE_TOWER;
 			if (itemType == purchase || itemType == upgrade) {
 				boughtItem.setTile_x(currentTileX);
 				boughtItem.setTile_y(currentTileY);
 			}
+			game.addOrder(boughtItem);
 		}
 	}
 	
@@ -84,21 +84,21 @@ public class SinglePlayerShopPanel extends JPanel {
 		}
 		if (type == Res.SPACE_UNBUILDABLE) {
 			for (ShopButton b : buttons) {
-				if (b.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER)
+				if (b.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER)
 					b.setEnabled(false);
-				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER)
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER)
 					b.setEnabled(false);
 			}
 		} else if (type == Res.SPACE_EMPTY) {
 			for (ShopButton b : buttons) {
-				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER)
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER)
 					b.setEnabled(false);
 			}
 		} else {
 			for (ShopButton b : buttons) {
-				if (b.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER)
+				if (b.getItem().type == MultiPlayerShop.TYPE_BUY_TOWER)
 					b.setEnabled(false);
-				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER) {
+				if (b.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
 					if (b.getItem().towerType == type) {
 						b.setEnabled(true);
 					} else {

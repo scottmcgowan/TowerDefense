@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -33,11 +35,11 @@ import GUI.LogisticsPanel;
 import GUI.Map;
 import GUI.MiscOptions;
 
-public class MultiPlayerGameController implements GameControllerInterface {
+public class MultiPlayerGameController implements GameControllerInterface{
 
 	// main game class
-	static final int UPDATE_RATE = 60; // number of game update per second
-	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
+	static int UPDATE_RATE = 60; // number of game update per second
+	static long UPDATE_PERIOD = 1000000000L / UPDATE_RATE; // nanoseconds
 
 	// State of the game
 	private boolean gameOver = false;
@@ -163,7 +165,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		gui.add(networkPanel);
 		gui.add(shop);
 		gui.add(stats);
-
+		
 		JMenuBar menubar = new JMenuBar();
 		gui.setJMenuBar(menubar);
 
@@ -241,7 +243,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 				tower_count++;
 				System.out.println("Player " + player + " tower added.");
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
-
+				game.upgradeTower(po.getTile_x(), po.getTile_y());
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
 
 				for (int i = 0; i < 5; i++) {
@@ -374,4 +376,13 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public void updateShopWithCurrentMoney() {
 		shop.updateWithMoney(thisPlayer.getMoney());
 	}
+
+	public void updateRate(){
+		if(UPDATE_RATE==60){
+		UPDATE_RATE = 90;}
+		else{UPDATE_RATE=60;}
+		UPDATE_PERIOD = 1000000000L / UPDATE_RATE;
+		System.out.println("Rate changed to "+UPDATE_RATE);
+	}
+	
 }

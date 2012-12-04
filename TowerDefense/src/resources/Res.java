@@ -38,4 +38,16 @@ public class Res {
 	public static final double RANGE_LIGHTNING_2 = 3.0;
 	public static final double RANGE_PELLET_1 = 2.5;
 	public static final double RANGE_PELLET_2 = 2.8;
+	
+	// Tower Rate of fire
+	
+	public static final int RATE_FIRE_1 = 80;
+	public static final int RATE_FIRE_2 = 80;
+	public static final int RATE_ICE_1 = 60;
+	public static final int RATE_ICE_2 = 60;
+	public static final int RATE_LIGHTNING_1 = 100;
+	public static final int RATE_LIGHTNING_2 = 100;
+	public static final int RATE_PELLET_1 = 70;
+	public static final int RATE_PELLET_2 = 70;
+	
 }

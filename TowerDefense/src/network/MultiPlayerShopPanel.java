@@ -5,21 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import resources.Res;
-
-import GUI.BackgroundPanel;
-import GUI.GameCanvas;
-import GUI.Map.Tile;
-
-import network.MultiPlayerGameController;
 
 import model.Delivery;
 import model.GameControllerInterface;
 import model.PurchaseOrder;
-import model.towers.Tower;
+import resources.Res;
+import GUI.BackgroundPanel;
+import GUI.GameCanvas;
 
 public class MultiPlayerShopPanel extends JPanel {
 	BackgroundPanel backgroundPanel;
@@ -41,9 +34,16 @@ public class MultiPlayerShopPanel extends JPanel {
 
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
+		String[] tooltip = {"Damage: " + Res.DAMAGE_FIRE_1 + "  " + "Fire Rate: " + Res.RATE_FIRE_1 + "  " + "Range: " + Res.RANGE_FIRE_1, 
+				"Damage: " + Res.DAMAGE_ICE_1 + "  " + "Fire Rate: " + Res.RATE_ICE_1 + "  " + "Range: " + Res.RANGE_ICE_1, 
+				"Damage: " + Res.DAMAGE_LIGHTNING_1 + "  " + "Fire Rate: " + Res.RATE_LIGHTNING_1 + "  " + "Range: " + Res.RANGE_LIGHTNING_1};
+		int j = 0;
 		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
 			ShopButton b = new ShopButton(
 					i.name() + "  " + "(" + i.value + ")", i);
+			if(j < tooltip.length)
+				b.setToolTipText(tooltip[j]);
+			j++;
 			buttons.add(b);
 			b.addActionListener(listenerToAllButtons);
 			//if (b.getItem().type != MultiPlayerShop.TYPE_PURCHASE_ENEMY) {

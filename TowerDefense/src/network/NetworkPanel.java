@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.crypto.spec.GCMParameterSpec;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -29,11 +30,11 @@ public class NetworkPanel extends JPanel implements Observer {
 	public JTextArea textArea = new JTextArea();
 	private JScrollPane scrollPane = new JScrollPane(textArea);
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
-	private GameControllerInterface game;
+	private MultiPlayerGameController game;
 	public static final int PANEL_WIDTH = 220;
 	public static final int PANEL_HEIGHT = 372;
 
-	public NetworkPanel(int p, GameControllerInterface game) {
+	public NetworkPanel(int p, MultiPlayerGameController game) {
 		this.game = game;
 		this.player = p;
 		setLayout(null);
@@ -49,12 +50,12 @@ public class NetworkPanel extends JPanel implements Observer {
 		textArea.setSize(PANEL_WIDTH, 332);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
-		
+
 		scrollPane.setSize(PANEL_WIDTH, 332);
 		scrollPane.setLocation(0, 36);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		//scrollPane.setAutoscrolls(true);
+		// scrollPane.setAutoscrolls(true);
 		add(scrollPane);
 
 		int placement = 260;
@@ -74,10 +75,15 @@ public class NetworkPanel extends JPanel implements Observer {
 	private class ChatAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String input = "Player " + player + "> " +chatBar.getText();
-			// game.sendMessage(input);
-			interpretDelivery(new Delivery(input, null, true, true, player));
 			chatBar.setText("");
+			String text = chatBar.getText().trim();
+			if (text.equals("\\rate")) {
+				game.updateRate();
+			} else {
+				String input = "Player " + player + "> " + chatBar.getText();
+				// game.sendMessage(input);
+				interpretDelivery(new Delivery(input, null, true, true, player));
+			}
 		}
 	}
 
@@ -106,6 +112,6 @@ public class NetworkPanel extends JPanel implements Observer {
 		} else if (d.messageForSelf) {
 			update(null, d.getMessage());
 		}
-		
+
 	}
 }

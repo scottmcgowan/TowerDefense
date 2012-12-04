@@ -57,7 +57,7 @@ public class MainMenu extends JFrame {
 			}
 			if (clickButton.getText().equals("MultiPlayer (Server)")) {
 				dispose();
-				new MultiPlayerGameController(Server.SERVER_PLAYER);
+				new MapSelection(new MultiPlayerGameController(Server.SERVER_PLAYER));
 			}
 			if (clickButton.getText().equals("MultiPlayer (Client)")) {
 				dispose();
@@ -65,8 +65,6 @@ public class MainMenu extends JFrame {
 			}
 			if (clickButton.getText().equals("Help"))
 				options.setHelpMessage();
-
 		}
-
 	}
 }

@@ -69,72 +69,132 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		setLayout(new GridLayout(12, 16));
 		requestFocus();
 		setBackground(Color.WHITE);
+
+		int[][] path = new int[map.getRow()][map.getCol()];
+		
+		// Preset 1
+				path[5][0] = 2;
+				path[5][1] = 1;
+				path[5][2] = 1;
+				path[5][3] = 1;
+				path[2][3] = 1;
+				path[3][3] = 1;
+				path[4][3] = 1;
+				path[2][4] = 1;
+				path[2][5] = 1;
+				path[2][6] = 1;
+				path[2][7] = 1;
+				path[3][7] = 1;
+				path[4][7] = 1;
+				path[5][7] = 1;
+				path[6][7] = 1;
+				path[6][8] = 1;
+				path[6][9] = 1;
+				path[6][10] = 1;
+				path[3][10] = 1;
+				path[4][10] = 1;
+				path[5][10] = 1;
+				path[3][11] = 1;
+				path[3][12] = 1;
+				path[3][13] = 1;
+				path[4][13] = 1;
+				path[5][13] = 1;
+				path[6][13] = 1;
+				path[7][13] = 1;
+				path[8][13] = 1;
+				path[8][14] = 1;
+				path[8][15] = 3;
+				
+				map.setPath(path);
+				
+				// Creates each square component according to the map and puts it into a
+				// component array that represents the map
+				for (int i = 0; i < map.getRow(); i++) {
+					for (int j = 0; j < map.getCol(); j++) {
+						PaintSquare e = new PaintSquare(i, j);
+						gameMap[i][j] = e;
+					}
+				}
+
+				// Sets each component's dimensions and adds the component to the
+				// container
+				rerenderBackground();
+	}
+
+	public void setPath(int pathSelection) {
+
 		// Initialize a new path
 		int[][] path = new int[map.getRow()][map.getCol()];
 
+		switch(pathSelection) {
+		case 1:
 		// Example path; 2 = start, 1 = path, 3 = end
 		// Preset 1
-//		path[5][0] = 2;
-//		path[5][1] = 1;
-//		path[5][2] = 1;
-//		path[5][3] = 1;
-//		path[2][3] = 1;
-//		path[3][3] = 1;
-//		path[4][3] = 1;
-//		path[2][4] = 1;
-//		path[2][5] = 1;
-//		path[2][6] = 1;
-//		path[2][7] = 1;
-//		path[3][7] = 1;
-//		path[4][7] = 1;
-//		path[5][7] = 1;
-//		path[6][7] = 1;
-//		path[6][8] = 1;
-//		path[6][9] = 1;
-//		path[6][10] = 1;
-//		path[3][10] = 1;
-//		path[4][10] = 1;
-//		path[5][10] = 1;
-//		path[3][11] = 1;
-//		path[3][12] = 1;
-//		path[3][13] = 1;
-//		path[4][13] = 1;
-//		path[5][13] = 1;
-//		path[6][13] = 1;
-//		path[7][13] = 1;
-//		path[8][13] = 1;
-//		path[8][14] = 1;
-//		path[8][15] = 3;
-
-		// Preset 2
-//		path[0][0] = 2;
-//		path[0][1] = 1;
-//		path[0][2] = 1;
-//		path[0][3] = 1;
-//		path[1][3] = 1;
-//		path[2][3] = 1;
-//		path[3][3] = 1;
-//		path[3][4] = 1;
-//		path[3][5] = 1;
-//		path[3][6] = 1;
-//		path[4][6] = 1;
-//		path[5][6] = 1;
-//		path[6][6] = 1;
-//		path[6][7] = 1;
-//		path[6][8] = 1;
-//		path[6][9] = 1;
-//		path[7][9] = 1;
-//		path[8][9] = 1;
-//		path[9][9] = 1;
-//		path[9][10] = 1;
-//		path[9][11] = 1;
-//		path[9][12] = 1;
-//		path[10][12] = 1;
-//		path[11][12] = 1;
-//		path[11][13] = 1;
-//		path[11][14] = 1;
-//		path[11][15] = 3;
+		path[5][0] = 2;
+		path[5][1] = 1;
+		path[5][2] = 1;
+		path[5][3] = 1;
+		path[2][3] = 1;
+		path[3][3] = 1;
+		path[4][3] = 1;
+		path[2][4] = 1;
+		path[2][5] = 1;
+		path[2][6] = 1;
+		path[2][7] = 1;
+		path[3][7] = 1;
+		path[4][7] = 1;
+		path[5][7] = 1;
+		path[6][7] = 1;
+		path[6][8] = 1;
+		path[6][9] = 1;
+		path[6][10] = 1;
+		path[3][10] = 1;
+		path[4][10] = 1;
+		path[5][10] = 1;
+		path[3][11] = 1;
+		path[3][12] = 1;
+		path[3][13] = 1;
+		path[4][13] = 1;
+		path[5][13] = 1;
+		path[6][13] = 1;
+		path[7][13] = 1;
+		path[8][13] = 1;
+		path[8][14] = 1;
+		path[8][15] = 3;
+		break;
 		
+		case 2:
+		// Preset 2
+		path[0][0] = 2;
+		path[0][1] = 1;
+		path[0][2] = 1;
+		path[0][3] = 1;
+		path[1][3] = 1;
+		path[2][3] = 1;
+		path[3][3] = 1;
+		path[3][4] = 1;
+		path[3][5] = 1;
+		path[3][6] = 1;
+		path[4][6] = 1;
+		path[5][6] = 1;
+		path[6][6] = 1;
+		path[6][7] = 1;
+		path[6][8] = 1;
+		path[6][9] = 1;
+		path[7][9] = 1;
+		path[8][9] = 1;
+		path[9][9] = 1;
+		path[9][10] = 1;
+		path[9][11] = 1;
+		path[9][12] = 1;
+		path[10][12] = 1;
+		path[11][12] = 1;
+		path[11][13] = 1;
+		path[11][14] = 1;
+		path[11][15] = 3;
+		break;
+		
+		case 3:
 		path[0][0] = 2;
 		path[0][1] = 1;
 		path[0][2] = 1;
@@ -181,8 +241,8 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		path[0][13] = 1;
 		path[0][14] = 1;
 		path[0][15] = 3;
-		
-		
+		break;
+	}
 		map.setPath(path);
 
 		// Creates each square component according to the map and puts it into a
@@ -198,7 +258,7 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		// container
 		rerenderBackground();
 	}
-
+	
 	public void saveBufferedImage() {
 		if (!bufferSaved) {
 			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT,
@@ -276,8 +336,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find grass.png");
 				}
-				gr.setColor(Color.BLACK);
-				gr.draw(getVisibleRect());
 				break;
 			case PATH:
 				try {
@@ -286,8 +344,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find path.png");
 				}
-				gr.setColor(Color.BLACK);
-				gr.draw(getVisibleRect());
 				break;
 			case START:
 				try {
@@ -296,8 +352,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find start.png");
 				}
-				gr.setColor(Color.BLACK);
-				gr.draw(getVisibleRect());
 				break;
 			case GOAL:
 				try {
@@ -306,8 +360,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 				} catch (IOException e) {
 					System.out.println("Could not find goal.png");
 				}
-				gr.setColor(Color.BLACK);
-				gr.draw(getVisibleRect());
 				break;
 			}
 		}

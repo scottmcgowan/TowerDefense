@@ -30,9 +30,10 @@ public class ActorPanel extends JPanel {
 
 	public void drawDrawables(ArrayList<Drawable> arr) {
 		drawList = arr;
+		repaint();
 	}
 
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 
 		super.paintComponent(g);
 		Graphics2D gr = (Graphics2D) g;
@@ -46,7 +47,9 @@ public class ActorPanel extends JPanel {
 						(int) ((Tower) d).getPosition().getY());
 			} else if (d instanceof Enemy) {
 				try {
-					gr.drawImage(ImageIO.read(new File("images/circenemy.png")), (int) ((Enemy) d).getPosition().getX(),
+					gr.drawImage(
+							ImageIO.read(new File("images/circenemy.png")),
+							(int) ((Enemy) d).getPosition().getX(),
 							(int) ((Enemy) d).getPosition().getY(), this);
 				} catch (IOException e) {
 					System.out.println("Could not find circenemy.png");

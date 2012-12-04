@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import resources.Res;
+
+import model.GameControllerInterface;
+import model.PurchaseOrder;
+import model.SinglePlayerShop;
 import network.MultiPlayerShop;
+import network.ShopButton;
 
 public class SinglePlayerShopPanel extends JPanel {
-	GameCanvas canvas;
-	private ArrayList<JButton> buttons = new ArrayList<JButton>();
+	BackgroundPanel background;
+	private ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 	public static final int PANEL_WIDTH = 600;
 	public static final int PANEL_HEIGHT = 50;
+	private GameControllerInterface game;
+	private int playerInt, currentTileX, currentTileY, tileType = Res.SPACE_UNBUILDABLE;
 
 	// GUI for the shop buttons
 	public SinglePlayerShopPanel() {
@@ -23,9 +31,9 @@ public class SinglePlayerShopPanel extends JPanel {
 
 		AllButtonListener listenerToAllButtons = new AllButtonListener();
 
-		for (MultiPlayerShop.Item i : MultiPlayerShop.Item.values()) {
+		for (SinglePlayerShop.Item i : SinglePlayerShop.Item.values()) {
 			if (i.type != 3) {
-				JButton b = new JButton(i.name() + "  " + "(" + i.value + ")");
+				ShopButton b = new ShopButton(i.name() + "  " + "(" + i.value + ")", i);
 				buttons.add(b);
 				b.addActionListener(listenerToAllButtons);
 				add(b);
@@ -34,23 +42,71 @@ public class SinglePlayerShopPanel extends JPanel {
 		repaint();
 	}
 
-	public void connectToMap(GameCanvas game) {
-		this.canvas = game;
+	public void connectToMap(GameCanvas canvas) {
+		background = canvas.getBackgroundPanel();
 	}
 
 	private class AllButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent theEvent) {
 			// Determine which of the five buttons was clicked
-			JButton clickButton = (JButton) theEvent.getSource();
+			ShopButton clickButton = (ShopButton) theEvent.getSource();
 			String text = clickButton.getText().substring(0,
 					clickButton.getText().length() - 7);
 			// game.sendMessage(text);
-			// canvas.setSelected(text);
-			/**
-			if (canvas.getClicked() != null) 
-				canvas.purchase();
-			*/
+
+			PurchaseOrder boughtItem = new PurchaseOrder(playerInt, clickButton.getItem());
+			int itemType = clickButton.getItem().type;
+			int purchase = SinglePlayerShop.TYPE_BUY_TOWER;
+			int upgrade = SinglePlayerShop.TYPE_UPGRADE_TOWER;
+			if (itemType == purchase || itemType == upgrade) {
+				boughtItem.setTile_x(currentTileX);
+				boughtItem.setTile_y(currentTileY);
+			}
 		}
+	}
+	
+	public void updateWithMoney(int money) {
+		for (ShopButton b : buttons) {
+			b.setEnabled(true);
+			if (b.getItem().value >= money)
+				b.setEnabled(false);
+		}
+		updateButtons(currentTileX, currentTileY, tileType);
+	}
+	
+	public void updateButtons(int x, int y, int type) {
+		currentTileX = x;
+		currentTileY = y;
+		tileType = type;
+		for (ShopButton b : buttons) {
+			b.setEnabled(true);
+		}
+		if (type == Res.SPACE_UNBUILDABLE) {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER)
+					b.setEnabled(false);
+				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER)
+					b.setEnabled(false);
+			}
+		} else if (type == Res.SPACE_EMPTY) {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER)
+					b.setEnabled(false);
+			}
+		} else {
+			for (ShopButton b : buttons) {
+				if (b.getItem().type == SinglePlayerShop.TYPE_BUY_TOWER)
+					b.setEnabled(false);
+				if (b.getItem().type == SinglePlayerShop.TYPE_UPGRADE_TOWER) {
+					if (b.getItem().towerType == type) {
+						b.setEnabled(true);
+					} else {
+						b.setEnabled(false);
+					}
+				}
+			}
+		}
+		repaint();
 	}
 }

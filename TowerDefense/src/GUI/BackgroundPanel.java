@@ -3,7 +3,6 @@ package GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -16,21 +15,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import resources.Res;
 
 import model.Drawable;
 import model.GameControllerInterface;
-import model.enemies.Enemy;
-import model.projectiles.Projectile;
-import model.towers.Tower;
 import GUI.Map.Tile;
 
 
@@ -52,11 +46,13 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 	// Location of each square
 	private int xTop = 0;
 	private int yTop = 0;
+	private int timer = 0;
 
 	// GUI representation of each square
 	private PaintSquare[][] gameMap = new PaintSquare[rows][cols];
 	private Component clicked;
 	private GameControllerInterface game;
+	private BufferedImage background;
 	Map map = new Map();
 	
 	// Constructor
@@ -68,7 +64,6 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		setLayout(new GridLayout(12,16));
 		requestFocus();
 		setBackground(Color.WHITE);
-		
 		// Initialize a new path
 		int[][] path = new int[map.getRow()][map.getCol()];
 
@@ -118,17 +113,47 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 
 		// Sets each component's dimensions and adds the component to the
 		// container
+		rerenderBackground();
+	}
+
+	@Override
+	public void paint(Graphics g){
+		paintChildren(g);
+		paintComponents(g);
+		g.drawImage(background, PANEL_WIDTH, PANEL_HEIGHT, null);
+		timer++;
+		if(timer>60){
+			background = new BufferedImage(PANEL_WIDTH, PANEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+			// Render the component and all its sub components
+			paintAll(background.getGraphics());
+		    paint(background.getGraphics());
+			
+			try {
+				ImageIO.write(background, "png", new File("test.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			timer = 0;
+			System.out.println("saved");
+		}
+	}
+	
+	public void rerenderBackground(){
+
 		for (int y = 0; y < map.getRow(); y++) {
 			for (int x = 0; x < map.getCol(); x++) {
-				JPanel temp = gameMap[y][x];
+				Component temp = gameMap[y][x];
 				temp.addMouseListener(new MouseClickListener());
 				add(temp);
 				temp.repaint();
 			}
 		}
+		repaint();
+	    
 	}
 	
-	private class PaintSquare extends JPanel {
+	private class PaintSquare extends JComponent {
 		// Locations used to identify the component
 		private int locationX;
 		private int locationY;
@@ -145,12 +170,13 @@ public class BackgroundPanel extends JPanel implements KeyListener {
 		PaintSquare(int y, int x) {
 			locationX = x;
 			locationY = y;
+			setIgnoreRepaint(true);
 		}
 		
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
+		public void paint(Graphics g) {
 			
 			Graphics2D gr = (Graphics2D) g;
+			//System.out.println("repainsdasdasting");
 			
 			Tile current = map.tileMap[locationY][locationX];
 			

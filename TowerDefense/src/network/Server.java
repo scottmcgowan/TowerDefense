@@ -55,7 +55,7 @@ public class Server extends Thread {
 	@Override
 	public void run() {
 		try {
-			while (listLiasons.size()<2) {
+			while (listLiasons.size() < 2) {
 				// accept blocks until request comes over socket
 				Socket intoServer = myServerSocket.accept();
 
@@ -76,9 +76,13 @@ public class Server extends Thread {
 					// always call the start() method on a Thread. Don't call
 					// the run method.
 					t.start();
-					if(listLiasons.size()==2){
-						listOutputStreams.get(0).writeObject(new Delivery("New Game Started", 0, true, false, false, false, false));
-						listOutputStreams.get(1).writeObject(new Delivery("New Game Started", 0, true, false, false, false, false));
+					if (listLiasons.size() == 2) {
+						listOutputStreams.get(0).writeObject(
+								new Delivery("New Game Started", 0, true,
+										false, false, false, false));
+						listOutputStreams.get(1).writeObject(
+								new Delivery("New Game Started", 0, true,
+										false, false, false, false));
 					}
 				}
 			}
@@ -91,37 +95,15 @@ public class Server extends Thread {
 	// Sends message to via all avalible outputStreams to Clients.
 	public void updateMessage(Delivery d) {
 		// ObjectOutputStream current;
-		try {
-			listOutputStreams.get(0).writeObject(d);
-			listOutputStreams.get(1).writeObject(d);
-			/*
-			if (d.player == SERVER_PLAYER) {
-				
-				if (d.messageForSelf) {
-					listOutputStreams.get(0).writeObject(d);
-				}
-				if (d.messageForOther) {
-					if(listOutputStreams.size()>=2){
-					listOutputStreams.get(1).writeObject(d);}
-				}
-			} else {
-				if (d.messageForSelf) {
-					if(listOutputStreams.size()>=2){
-					listOutputStreams.get(1).writeObject(d);}
-				}
-				if (d.messageForOther) {
-					listOutputStreams.get(0).writeObject(d);
-				}
-			}*/
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (listOutputStreams.size() == 2) {
+			try {
+				listOutputStreams.get(0).writeObject(d);
+				listOutputStreams.get(1).writeObject(d);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		/*
-		 * for (int i = 0; i < listOutputStreams.size(); i++) { try {
-		 * listOutputStreams.get(i).writeObject(d); } catch (IOException e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); } }
-		 */
 	}
 
 	// Removes the Liason and the OutputStream connected to a Client upon the

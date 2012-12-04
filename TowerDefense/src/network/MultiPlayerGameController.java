@@ -1,6 +1,6 @@
 package network;
 
-import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,21 +11,23 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import resources.Res;
+
 import model.Delivery;
 import model.Drawable;
 import model.Game;
 import model.GameControllerInterface;
 import model.Player;
 import model.PurchaseOrder;
+import model.enemies.Buff;
 import model.enemies.Enemy;
 import model.enemies.Grunt;
+import model.enemies.Speedy;
 import model.towers.FireTower;
 import model.towers.IceTower;
 import model.towers.LightningTower;
 import model.towers.Tower;
-import resources.Res;
 import GUI.GameCanvas;
-import GUI.LogisticsPanel;
 import GUI.Map;
 
 public class MultiPlayerGameController implements GameControllerInterface {
@@ -54,7 +56,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	private int currentTileX;
 	private int currentTileY;
 	private int tower_count;
-
+	
 	public static void main(String[] args) {
 		MultiPlayerGameController game = new MultiPlayerGameController(
 				Server.SERVER_PLAYER);
@@ -79,7 +81,7 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public boolean hasLost() {
 		return game.gameOver();
 	}
-
+	
 	public void won() {
 		gameOver = true;
 		System.out.println("Winning conditions met");
@@ -96,11 +98,12 @@ public class MultiPlayerGameController implements GameControllerInterface {
 
 	public void updateLogisticSender() {
 		spawn_timer++;
-		if (spawn_timer >= 600) {
+		if (spawn_timer >= 1200) {
+			
 			System.out.println("Sending Logistics");
-			String log = "Player " + player + " has" + tower_count
+			String log = "System: player " + player + " has " + tower_count
 					+ " towers, " + thisPlayer.getMoney() + " funds, and "
-					+ thisPlayer.getHealth() + " health remaining.";
+					+ game.getPlayerHealth() + " health remaining.\n";
 			sendDelivery(new Delivery(log, player, false, false,
 					checkOnesidedTieConditions(), false, false));
 			spawn_timer = 0;
@@ -126,18 +129,18 @@ public class MultiPlayerGameController implements GameControllerInterface {
 		shop.connectToMap(gameCanvas);
 		networkPanel.setSize(networkPanel.PANEL_WIDTH,
 				networkPanel.PANEL_HEIGHT);
-		LogisticsPanel health = new LogisticsPanel();
 		shop.setSize(shop.PANEL_WIDTH, shop.PANEL_HEIGHT);
-//		gameCanvas.setLocation(20, 20);
-//		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
-//		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
+		gameCanvas.setLocation(20, 20);
+		networkPanel.setLocation(gameCanvas.PANEL_WIDTH + 40, 20);
+		shop.setLocation(80, gameCanvas.PANEL_HEIGHT + 40);
 		gui.setTitle("Game");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setSize(gameCanvas.PANEL_WIDTH + networkPanel.PANEL_WIDTH + 80,
 				gameCanvas.PANEL_HEIGHT + shop.PANEL_HEIGHT + 90);
-		gui.add(gameCanvas);
 		gui.add(networkPanel);
 		gui.add(shop);
+		gui.add(gameCanvas);
+		LogisticsPanel health = new LogisticsPanel();
 		gui.add(health);
 
 		JMenuBar menubar = new JMenuBar();
@@ -219,8 +222,15 @@ public class MultiPlayerGameController implements GameControllerInterface {
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_UPGRADE_TOWER) {
 
 			} else if (po.getItem().type == MultiPlayerShop.TYPE_PURCHASE_ENEMY) {
+
 				for (int i = 0; i < 5; i++) {
-					spawnQueue.add(new Grunt(gameCanvas.getPath()));
+					if (po.getItem().enemyType == Res.ENEMY_GRUNT_TYPE) {
+						spawnQueue.add(new Grunt(gameCanvas.getPath()));
+					} else if (po.getItem().enemyType == Res.ENEMY_SPEEDY_TYPE) {
+						spawnQueue.add(new Speedy(gameCanvas.getPath()));
+					} else if (po.getItem().enemyType == Res.ENEMY_BUFF_TYPE) {
+						spawnQueue.add(new Buff(gameCanvas.getPath()));
+					}
 				}
 				System.out.println("Player " + player
 						+ " enemy order processed.");
@@ -252,15 +262,20 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	public void gameUpdate() {
 		if (!hasLost()) {
 			game.update();
+			if (game.getFunds() != 0) {
+				thisPlayer.setMoney(thisPlayer.getMoney() + game.getFunds());
+				shop.updateWithMoney(thisPlayer.getMoney());
+			}
 			updateLogisticSender();
 			draw(game.getDrawable());
 			processOrders();
 			processSpawnQueue();
 		} else {
-			if(!gameOver){
-			sendDelivery(new Delivery("", player, false, true, false, false,
-					false));
-			gameOver = true;}
+			if (!gameOver) {
+				sendDelivery(new Delivery("", player, false, true, false,
+						false, false));
+				gameOver = true;
+			}
 		}
 	}
 
@@ -309,8 +324,9 @@ public class MultiPlayerGameController implements GameControllerInterface {
 	@Override
 	public void draw(ArrayList<Drawable> arr) {
 		// TODO Auto-generated method stub
-		if(arr!=null && gameCanvas!=null){
-		gameCanvas.drawDrawables(arr);}
+		if (arr != null && gameCanvas != null) {
+			gameCanvas.drawDrawables(arr);
+		}
 	}
 
 	@Override
